@@ -1,6 +1,7 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - CameraDeWish
     - Com.MyCompany.MyGame.GameManager
     - Com.MyCompany.MyGame.Launcher
     - Com.MyCompany.MyGame.MenuManager
@@ -30,9 +31,13 @@ ScriptsOnlyBuild:
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.Tilemap.Editor.dll:
+    - UnityEditor.Tilemaps.GridBrush
+    - UnityEditor.Tilemaps.GridPaintPaletteClipboard
+    - UnityEditor.Tilemaps.GridPaintPaletteWindow
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
     - UnityEditor.Tilemaps.GridPalettes
+    - UnityEditor.Tilemaps.PaintableSceneViewGrid
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.TileDragAndDropManager
     Unity.Rider.Editor.dll:
@@ -80,6 +85,8 @@ ScriptsOnlyBuild:
     - Class: 61
       Script: {instanceID: 0}
     - Class: 65
+      Script: {instanceID: 0}
+    - Class: 68
       Script: {instanceID: 0}
     - Class: 74
       Script: {instanceID: 0}
@@ -144,13 +151,13 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 14270}
     - Class: 114
-      Script: {instanceID: 14590}
+      Script: {instanceID: 14588}
     - Class: 114
-      Script: {instanceID: 14664}
+      Script: {instanceID: 14662}
     - Class: 114
-      Script: {instanceID: 14802}
+      Script: {instanceID: 14800}
     - Class: 114
-      Script: {instanceID: 14840}
+      Script: {instanceID: 14838}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -204,6 +211,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 66
       Script: {instanceID: 0}
+    - Class: 68
+      Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 104
@@ -223,6 +232,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12428}
     - Class: 114
+      Script: {instanceID: 12450}
+    - Class: 114
       Script: {instanceID: 12566}
     - Class: 114
       Script: {instanceID: 12840}
@@ -233,9 +244,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 14270}
     - Class: 114
-      Script: {instanceID: 14664}
+      Script: {instanceID: 14662}
     - Class: 114
-      Script: {instanceID: 14802}
+      Script: {instanceID: 14800}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -296,7 +307,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 14098}
     - Class: 114
-      Script: {instanceID: 14802}
+      Script: {instanceID: 14800}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -820,7 +831,7 @@ ScriptsOnlyBuild:
     className: SpriteShape
   - hash:
       serializedVersion: 2
-      Hash: e731c0c293a3b02d4a2bfe6f7d74796e
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CameraDeWish

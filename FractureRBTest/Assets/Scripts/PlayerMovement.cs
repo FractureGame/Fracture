@@ -81,7 +81,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         float extraHeightText = 0.1f;
         RaycastHit2D boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
             extraHeightText, platformLayerMask);
-        Debug.Log(boxCastHit.collider);
+        // Debug.Log(boxCastHit.collider);
         return boxCastHit.collider != null;
     }
 
