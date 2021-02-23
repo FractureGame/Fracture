@@ -16,17 +16,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
-    public Vector2 direction;
-    public Vector2 lastInterestingDir;
-    private bool facingRight = true;
-    private int nbFramesToFullSpeed = 6;
-    private int nbFramesToStop = 3;
+    private Vector2 direction;
+    private Vector2 lastInterestingDir;
+    // private bool facingRight = true;
+    // private int nbFramesToFullSpeed = 6;
+    // private int nbFramesToStop = 3;
     
     [Header("Vertical Movement")]
-    float jumpVelocity = 10f;
+    public float jumpVelocity = 10f;
     private float jumpTimer = 0f;
     public float nbJumpsAllowed = 1;
-    public float jumpDelay = 0.25f;
+    private float jumpDelay = 0.25f;
     private float nbJump = 0;
 
     [Header("Collision")] 
@@ -37,8 +37,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public float gravity = 1f;
     public float fallMultiplier = 5f;
     
-    
-
     private void Awake()
     {
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
@@ -157,3 +155,4 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
     }
 }
+

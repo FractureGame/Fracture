@@ -103,10 +103,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   moveSpeed: 10
-  direction: {x: 0, y: 0}
-  lastInterestingDir: {x: 0, y: 0}
+  jumpVelocity: 10
   nbJumpsAllowed: 2
-  jumpDelay: 0.25
   linearDrag: 4
   gravity: 1
   fallMultiplier: 5
