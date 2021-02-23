@@ -1,6 +1,4 @@
-﻿using System;
-using ExitGames.Client.Photon.StructWrapping;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
@@ -21,14 +19,7 @@ namespace Com.MyCompany.MyGame
 
 
         #region Private Fields
-
         
-        /// <summary>
-        /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon,
-        /// we need to keep track of this to properly adjust the behavior when we receive call back by Photon.
-        /// Typically this is used for the OnConnectedToMaster() callback.
-        /// </summary>
-        bool isConnecting;
         private bool publicGame;
         private string value;
         private bool creator;
@@ -109,9 +100,7 @@ namespace Com.MyCompany.MyGame
             launchGameButton.SetActive(false);
             joinPrivateGameMenu.SetActive(false);
             inviteCodeLabel.SetActive(false);
-            
         }
-
 
         #endregion
 
@@ -130,7 +119,7 @@ namespace Com.MyCompany.MyGame
 
         public string GenerateRandomCode()
         {
-            string code = "";
+            code = "";
             Random rand = new Random();
             for (int i = 0; i < CODE_LENGTH; i++)
             {
@@ -149,7 +138,7 @@ namespace Com.MyCompany.MyGame
             masterLabel.SetActive(true);
             player2Label.SetActive(true);
             masterLabel.GetComponent<Text>().text = PhotonNetwork.NickName;
-            string code = GenerateRandomCode();
+            code = GenerateRandomCode();
             PhotonNetwork.CreateRoom(code, new RoomOptions {MaxPlayers = maxPlayersPerRoom, IsVisible = false}, null,
                 new string[]{});
         }
@@ -228,23 +217,15 @@ namespace Com.MyCompany.MyGame
     
         #region MonoBehaviourPunCallbacks Callbacks
         
-        // public override void OnConnectedToMaster()
-        // {
-        //     DisplayPlayMenu();
-        // }
-
-
+        
         public override void OnDisconnected(DisconnectCause cause)
         {
-            isConnecting = false;
             progressLabel.SetActive(false);
-            // controlPanel.SetActive(true);
-            Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() was called by PUN with reason {0}", cause);
+            Debug.LogWarningFormat("OnDisconnected() was called by PUN with reason {0}", cause);
         }
 
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
-            // errorCreateLabel.GetComponentInChildren<Text>().text = "Error: Room already exists";
             code = GenerateRandomCode();
             PhotonNetwork.CreateRoom(code, new RoomOptions {MaxPlayers = maxPlayersPerRoom}, null,
                 new string[]{});
@@ -265,17 +246,14 @@ namespace Com.MyCompany.MyGame
             Debug.Log("OnJoinRoomFailed");
             if (!publicGame)
             {
-                // GameObject rr = joinPrivateGameMenu.transform.Find("Error Join Label").gameObject;
-                // rr.GetComponent<Text>().text = "Error: Room does not exist";
                 errorJoinLabel.GetComponent<Text>().text = "Error: Room does not exist";
                 DisplayJoinPrivateRoom();
-                
             }
         }
 
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
-            Debug.Log("PUN Basics Tutorial/Launcher:OnJoinRandomFailed() was called by PUN. No random room available, so we create one.\nCalling: PhotonNetwork.CreateRoom");
+            Debug.Log("OnJoinRandomFailed() was called by PUN. No random room available, so we create one.\nCalling: PhotonNetwork.CreateRoom");
 
             
             // #Critical: we failed to join a random room, maybe none exists or they are all full. No worries, we create a new room.
@@ -287,7 +265,7 @@ namespace Com.MyCompany.MyGame
         
         public override void OnJoinedRoom()
         {
-            Debug.Log("PUN Basics Tutorial/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
+            Debug.Log("OnJoinedRoom() called by PUN. Now this client is in a room.");
             if (PhotonNetwork.IsMasterClient && publicGame)
             {
                 progressLabel.GetComponent<Text>().text = "Connected. Waiting for my special someone...";
@@ -313,7 +291,7 @@ namespace Com.MyCompany.MyGame
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
-            Debug.Log("PUN Basics Tutorial/Launcher: OnPlayerEnteredRoom() called by PUN. Now this client is in a room.");
+            Debug.Log("OnPlayerEnteredRoom() called by PUN. Now this client is in a room.");
             if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && publicGame)
             {
                 Debug.Log("We load the 'MapGame");

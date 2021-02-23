@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections;
-
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-
-
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
@@ -158,15 +152,16 @@ namespace Com.MyCompany.MyGame
         {
             gameoverPanel.SetActive(false);
             gameoverReasonLabel.SetActive(false);
-            Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
+            // Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
+            Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiat
             if (PhotonNetwork.IsMasterClient)
             {
-                PhotonNetwork.Instantiate(this.playerTopPrefab.name, new Vector3(5f,5f,0f), Quaternion.identity, 0);
+                PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(5f,5f,0f), Quaternion.identity, 0);
             }
             else
             {
-                PhotonNetwork.Instantiate(this.playerBotPrefab.name, new Vector3(5f,-5f,0f), Quaternion.identity, 0);
+                PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(5f,-5f,0f), Quaternion.identity, 0);
             }
         }
     }

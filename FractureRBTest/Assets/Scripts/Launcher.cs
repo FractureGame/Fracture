@@ -1,10 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using Random = System.Random;
 
 
 namespace Com.MyCompany.MyGame
@@ -17,18 +13,12 @@ namespace Com.MyCompany.MyGame
 
 
         #region Private Fields
-
-
+        
         /// <summary>
         /// This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
         /// </summary>
         string gameVersion = "1";
-        /// <summary>
-        /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon,
-        /// we need to keep track of this to properly adjust the behavior when we receive call back by Photon.
-        /// Typically this is used for the OnConnectedToMaster() callback.
-        /// </summary>
-        // bool isConnecting;
+
 
         #endregion
 
@@ -36,21 +26,12 @@ namespace Com.MyCompany.MyGame
         #region Public Fields
 
         [Tooltip("The Ui Panel to let the user enter name, connect and play")]
-        [SerializeField]
-        private GameObject controlPanel;
-        // [Tooltip("Back Button")]
-        // [SerializeField]
-        // private GameObject backButton;
+        [SerializeField] private GameObject controlPanel;
 
         #endregion
 
 
         #region MonoBehaviour CallBacks
-
-        
-        /// <summary>
-        /// MonoBehaviour method called on GameObject by Unity during initialization phase.
-        /// </summary>
         void Start()
         {
             // Connect(); Called when pressing the Play Button
