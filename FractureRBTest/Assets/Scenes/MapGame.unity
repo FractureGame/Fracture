@@ -6132,7 +6132,7 @@ CompositeCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_GeometryType: 0
+  m_GeometryType: 1
   m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:
@@ -7157,7 +7157,7 @@ Rigidbody2D:
   m_Material: {fileID: 6200000, guid: ba3c14a624458a446a355fe0dc2e214b, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!1 &766632935
 GameObject:
@@ -8368,7 +8368,12 @@ PrefabInstance:
     - target: {fileID: 5077891665636311194, guid: f6e250eac467612478c7620ddc0b337e,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5077891665636311195, guid: f6e250eac467612478c7620ddc0b337e,
+        type: 3}
+      propertyPath: m_UsedByComposite
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5077891665636311202, guid: f6e250eac467612478c7620ddc0b337e,
         type: 3}
@@ -8423,6 +8428,11 @@ PrefabInstance:
     - target: {fileID: 5077891665636311202, guid: f6e250eac467612478c7620ddc0b337e,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5077891665636311206, guid: f6e250eac467612478c7620ddc0b337e,
+        type: 3}
+      propertyPath: m_PositionModel.ExtrapolateOption
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5077891665636311207, guid: f6e250eac467612478c7620ddc0b337e,

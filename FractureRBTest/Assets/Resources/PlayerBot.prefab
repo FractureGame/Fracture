@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 4322298872470792031}
   - component: {fileID: 4322298872470792030}
   - component: {fileID: 4322298872470792029}
-  - component: {fileID: 639864449586043236}
   m_Layer: 0
   m_Name: PlayerBot
   m_TagString: Untagged
@@ -33,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 4322298872470792028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.018, y: -3.551, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8086914, y: 0.8086914, z: 0.8401989}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -150,10 +149,10 @@ MonoBehaviour:
     TeleportEnabled: 1
     TeleportIfDistanceGreaterThan: 3
     InterpolateOption: 4
-    InterpolateMoveTowardsSpeed: 1
-    InterpolateLerpSpeed: 1
-    ExtrapolateOption: 0
-    ExtrapolateSpeed: 1
+    InterpolateMoveTowardsSpeed: 10
+    InterpolateLerpSpeed: 10
+    ExtrapolateOption: 1
+    ExtrapolateSpeed: 10
     ExtrapolateIncludingRoundTripTime: 1
     ExtrapolateNumberOfStoredPositions: 1
   m_RotationModel:
@@ -229,24 +228,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!68 &639864449586043236
-EdgeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4322298872470792028}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
-  m_Points:
-  - {x: -0.5, y: -0.4995017}
-  - {x: -0.4956932, y: 0.499501}
-  - {x: 0.4983735, y: 0.4905901}
-  - {x: 0.49319696, y: -0.4956212}
-  - {x: -0.50008535, y: -0.49922013}

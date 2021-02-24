@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public float linearDrag = 4f;
     public float gravity = 1f;
     public float fallMultiplier = 5f;
-    
+
     private void Awake()
     {
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
@@ -52,6 +52,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             jumpTimer = Time.time + jumpDelay;
             nbJump += 1;
         }
+
         onGround = IsGrounded();
         if (onGround)
             nbJump = 0;
@@ -150,5 +151,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             rigidbody2d.gravityScale = gravity * (fallMultiplier / 2);
         }
     }
+    
 }
 
