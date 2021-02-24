@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 90398774}
   - component: {fileID: 90398773}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: fracture text tmp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -516,7 +516,7 @@ GameObject:
   - component: {fileID: 1157783669}
   - component: {fileID: 1157783668}
   m_Layer: 5
-  m_Name: Background
+  m_Name: Background tmp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
