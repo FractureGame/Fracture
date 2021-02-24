@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NUnit.Framework.Constraints;
+using UnityEngine;
 using Photon.Pun;
 
 
@@ -28,15 +29,22 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Collision")] 
     private bool onGround = false;
 
-    [Header("Physics")]
-    public float linearDrag = 4f;
-    public float gravity = 1f;
-    public float fallMultiplier = 5f;
-
-    private void Awake()
+    [Header("Physics")] 
+    public float linearDrag;
+    public float gravity;
+    public float fallMultiplier;
+    
+    [Header("Dash")]
+    public float dashSpeed;
+    private float dashTime;
+    public float startDashTime;
+    private bool isDashing = false;
+    
+    private void Start()
     {
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
+        dashTime = startDashTime;
     }
     
     private void Update()
@@ -51,6 +59,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             jumpTimer = Time.time + jumpDelay;
             nbJump += 1;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            isDashing = true;
+            dashTime = startDashTime;
         }
 
         onGround = IsGrounded();
@@ -70,9 +84,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Move();
         
         // Handle Jump
-        if(jumpTimer > Time.time && nbJump < nbJumpsAllowed){
+        if(jumpTimer > Time.time && nbJump < nbJumpsAllowed)
+        {
             Jump();
         }
+
+        if (isDashing)
+        {
+            Dash();
+        }
+            
 
         modifyPhysics();
     }
@@ -138,19 +159,36 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         lastInterestingDir = direction;
     }
 
-    void modifyPhysics()
+    private void modifyPhysics()
     {
         rigidbody2d.gravityScale = gravity;
+        
+        // Drag can be used to slow down an object. The higher the drag the more the object slows down.
         rigidbody2d.drag = linearDrag * 0.15f;
+        // si le joueur descends, la force de gravité le fait descendre plus vite
         if (rigidbody2d.velocity.y < 0)
         {
             rigidbody2d.gravityScale = gravity * fallMultiplier;
         }
+        // si le joueur monte et que l'on maintient Jump, il flotte
         else if (rigidbody2d.velocity.y > 0 && !Input.GetButton("Jump"))
         {
             rigidbody2d.gravityScale = gravity * (fallMultiplier / 2);
         }
     }
-    
+
+    private void Dash()
+    {
+        if (dashTime <= 0)
+        {
+            isDashing = false;
+            rigidbody2d.velocity = Vector2.zero;
+        }
+        else
+        {
+            dashTime -= Time.deltaTime;
+            rigidbody2d.velocity = direction * dashSpeed;
+        }
+    }
 }
 

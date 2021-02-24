@@ -108,6 +108,8 @@ MonoBehaviour:
   linearDrag: 4
   gravity: 1
   fallMultiplier: 5
+  dashSpeed: 15
+  startDashTime: 0.25
 --- !u!114 &4322298872470792017
 MonoBehaviour:
   m_ObjectHideFlags: 0
