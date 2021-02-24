@@ -50,7 +50,7 @@ namespace Photon.Realtime
 
         /// <summary>Can be set to any of the Photon Cloud's region names to directly connect to that region.</summary>
         /// <remarks>if this IsNullOrEmpty() AND UseNameServer == true, use BestRegion. else, use a server</remarks>
-        public string FixedRegion;
+        public string FixedRegion = "eu";
 
         /// <summary>Set to a previous BestRegionSummary value before connecting.</summary>
         /// <remarks>

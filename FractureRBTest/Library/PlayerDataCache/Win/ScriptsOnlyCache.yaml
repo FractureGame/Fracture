@@ -6,6 +6,7 @@ ScriptsOnlyBuild:
     - Com.MyCompany.MyGame.Launcher
     - Com.MyCompany.MyGame.MenuManager
     - Com.MyCompany.MyGame.PlayerNameInputField
+    - PUN2_LagFreePlayerSync
     - PUN_Chat
     - PlayerMovement
     PhotonUnityNetworking.Demos.dll:
@@ -19,9 +20,6 @@ ScriptsOnlyBuild:
     - Photon.Pun.Demo.SlotRacer.PlayerControl
     - Photon.Pun.Demo.SlotRacer.Utils.SplineWalker
     PhotonUnityNetworking.Editor.dll:
-    - Photon.Pun.PhotonRigidbody2DViewEditor
-    - Photon.Pun.PhotonTransformViewClassicEditor
-    - Photon.Pun.PhotonViewInspector
     - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonAnimatorView
@@ -155,6 +153,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 14800}
     - Class: 114
       Script: {instanceID: 14838}
+    - Class: 114
+      Script: {instanceID: 19828}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -242,6 +242,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 14662}
     - Class: 114
       Script: {instanceID: 14800}
+    - Class: 114
+      Script: {instanceID: 19828}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -368,12 +370,6 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
     className: DocLinkButton
-  - hash:
-      serializedVersion: 2
-      Hash: ab039a385ef4459756519a3fe91dccc6
-    assemblyName: PhotonUnityNetworking.Utilities.dll
-    namespaceName: Photon.Pun.UtilityScripts
-    className: SmoothSyncMovement
   - hash:
       serializedVersion: 2
       Hash: c42672c997f8be6b1aa86a927ebea785
@@ -1730,6 +1726,18 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: ab039a385ef4459756519a3fe91dccc6
+    assemblyName: PhotonUnityNetworking.Utilities.dll
+    namespaceName: Photon.Pun.UtilityScripts
+    className: SmoothSyncMovement
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PUN2_LagFreePlayerSync
   platform: 5
   scenePathNames:
   - Assets/Scenes/Launcher.unity
