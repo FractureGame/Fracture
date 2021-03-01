@@ -2,6 +2,7 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - LaunchGame
+    - LobbiesMenu
     - MainMenu
     - OptionsMenu
     Unity.2D.Animation.Editor.dll:
@@ -40,9 +41,59 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.RectMask2D
     - UnityEngine.UI.ScrollRect
     - UnityEngine.UI.Scrollbar
-    - UnityEngine.UI.Text
     - UnityEngine.UI.Toggle
   sceneClasses:
+    Assets/Scenes/LobbiesMenu.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 11270}
+    - Class: 114
+      Script: {instanceID: 11294}
+    - Class: 114
+      Script: {instanceID: 11640}
+    - Class: 114
+      Script: {instanceID: 12314}
+    - Class: 114
+      Script: {instanceID: 13380}
+    - Class: 114
+      Script: {instanceID: 13714}
+    - Class: 114
+      Script: {instanceID: 13818}
+    - Class: 114
+      Script: {instanceID: 14286}
+    - Class: 114
+      Script: {instanceID: 14458}
+    - Class: 114
+      Script: {instanceID: 15824}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
     Assets/Scenes/Menu.unity:
     - Class: 1
       Script: {instanceID: 0}
@@ -65,49 +116,49 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11270}
     - Class: 114
-      Script: {instanceID: 11298}
+      Script: {instanceID: 11294}
     - Class: 114
-      Script: {instanceID: 11368}
+      Script: {instanceID: 11364}
     - Class: 114
-      Script: {instanceID: 11592}
+      Script: {instanceID: 11588}
     - Class: 114
-      Script: {instanceID: 11644}
+      Script: {instanceID: 11640}
     - Class: 114
-      Script: {instanceID: 11694}
+      Script: {instanceID: 11690}
     - Class: 114
-      Script: {instanceID: 11838}
+      Script: {instanceID: 11750}
     - Class: 114
-      Script: {instanceID: 11976}
+      Script: {instanceID: 11836}
     - Class: 114
-      Script: {instanceID: 12138}
+      Script: {instanceID: 11974}
     - Class: 114
-      Script: {instanceID: 12316}
+      Script: {instanceID: 12136}
     - Class: 114
-      Script: {instanceID: 12370}
+      Script: {instanceID: 12314}
     - Class: 114
-      Script: {instanceID: 12672}
+      Script: {instanceID: 12368}
     - Class: 114
-      Script: {instanceID: 12798}
+      Script: {instanceID: 12670}
     - Class: 114
-      Script: {instanceID: 13382}
+      Script: {instanceID: 12796}
     - Class: 114
-      Script: {instanceID: 13402}
+      Script: {instanceID: 13380}
     - Class: 114
-      Script: {instanceID: 13716}
+      Script: {instanceID: 13400}
     - Class: 114
-      Script: {instanceID: 13820}
+      Script: {instanceID: 13714}
     - Class: 114
-      Script: {instanceID: 14114}
+      Script: {instanceID: 13818}
     - Class: 114
-      Script: {instanceID: 14288}
+      Script: {instanceID: 14112}
     - Class: 114
-      Script: {instanceID: 14308}
+      Script: {instanceID: 14286}
     - Class: 114
-      Script: {instanceID: 14460}
+      Script: {instanceID: 14306}
     - Class: 114
-      Script: {instanceID: 14480}
+      Script: {instanceID: 14458}
     - Class: 114
-      Script: {instanceID: 16216}
+      Script: {instanceID: 14478}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -117,47 +168,6 @@ ScriptsOnlyBuild:
     - Class: 196
       Script: {instanceID: 0}
     - Class: 213
-      Script: {instanceID: 0}
-    - Class: 222
-      Script: {instanceID: 0}
-    - Class: 223
-      Script: {instanceID: 0}
-    - Class: 224
-      Script: {instanceID: 0}
-    Assets/Scenes/THEGAME.unity:
-    - Class: 1
-      Script: {instanceID: 0}
-    - Class: 4
-      Script: {instanceID: 0}
-    - Class: 20
-      Script: {instanceID: 0}
-    - Class: 21
-      Script: {instanceID: 0}
-    - Class: 28
-      Script: {instanceID: 0}
-    - Class: 48
-      Script: {instanceID: 0}
-    - Class: 81
-      Script: {instanceID: 0}
-    - Class: 104
-      Script: {instanceID: 0}
-    - Class: 114
-      Script: {instanceID: 11298}
-    - Class: 114
-      Script: {instanceID: 11588}
-    - Class: 114
-      Script: {instanceID: 12316}
-    - Class: 114
-      Script: {instanceID: 13820}
-    - Class: 114
-      Script: {instanceID: 14460}
-    - Class: 115
-      Script: {instanceID: 0}
-    - Class: 128
-      Script: {instanceID: 0}
-    - Class: 157
-      Script: {instanceID: 0}
-    - Class: 196
       Script: {instanceID: 0}
     - Class: 222
       Script: {instanceID: 0}
@@ -286,6 +296,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: GridLayoutGroup
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LaunchGame
   - hash:
       serializedVersion: 2
       Hash: 523ce309f50d9eee6a8fc0e2f86c9c97
@@ -879,9 +895,9 @@ ScriptsOnlyBuild:
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: LaunchGame
+    className: LobbiesMenu
   platform: 19
   scenePathNames:
   - Assets/Scenes/Menu.unity
-  - Assets/Scenes/THEGAME.unity
+  - Assets/Scenes/LobbiesMenu.unity
   playerPath: D:/Documents/Work/Fracture/Fracture UI/Build/Fracture UI.exe
