@@ -67,20 +67,28 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11640}
     - Class: 114
+      Script: {instanceID: 11690}
+    - Class: 114
+      Script: {instanceID: 11836}
+    - Class: 114
+      Script: {instanceID: 11974}
+    - Class: 114
       Script: {instanceID: 12314}
     - Class: 114
       Script: {instanceID: 13380}
     - Class: 114
-      Script: {instanceID: 13714}
+      Script: {instanceID: 13422}
     - Class: 114
-      Script: {instanceID: 13818}
+      Script: {instanceID: 13716}
     - Class: 114
-      Script: {instanceID: 14286}
+      Script: {instanceID: 13820}
     - Class: 114
-      Script: {instanceID: 14458}
+      Script: {instanceID: 14288}
     - Class: 114
-      Script: {instanceID: 15824}
+      Script: {instanceID: 14460}
     - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
@@ -146,19 +154,19 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13400}
     - Class: 114
-      Script: {instanceID: 13714}
+      Script: {instanceID: 13716}
     - Class: 114
-      Script: {instanceID: 13818}
+      Script: {instanceID: 13820}
     - Class: 114
-      Script: {instanceID: 14112}
+      Script: {instanceID: 14114}
     - Class: 114
-      Script: {instanceID: 14286}
+      Script: {instanceID: 14288}
     - Class: 114
-      Script: {instanceID: 14306}
+      Script: {instanceID: 14308}
     - Class: 114
-      Script: {instanceID: 14458}
+      Script: {instanceID: 14460}
     - Class: 114
-      Script: {instanceID: 14478}
+      Script: {instanceID: 14480}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -640,6 +648,12 @@ ScriptsOnlyBuild:
     className: TMP_TextSelector_A
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LobbiesMenu
+  - hash:
+      serializedVersion: 2
       Hash: c1933cc0a2f4ff6eb13333347497beb3
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
@@ -890,12 +904,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: LobbiesMenu
   platform: 19
   scenePathNames:
   - Assets/Scenes/Menu.unity
