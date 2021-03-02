@@ -1,0 +1,512 @@
+fileFormatVersion: 2
+guid: 58a9a503f66c37c44a8f3936529ad2a4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -183932870316537863
+    second: animation sheet blob violet_0
+  - first:
+      213: -3661989067708613601
+    second: animation sheet blob violet_1
+  - first:
+      213: -6525262987856375386
+    second: animation sheet blob violet_2
+  - first:
+      213: -1340298559691089340
+    second: animation sheet blob violet_3
+  - first:
+      213: -5083001691135671273
+    second: animation sheet blob violet_4
+  - first:
+      213: 5069841620892765078
+    second: animation sheet blob violet_5
+  - first:
+      213: 2588201511819837658
+    second: animation sheet blob violet_6
+  - first:
+      213: -1852503902450042308
+    second: animation sheet blob violet_7
+  - first:
+      213: 5339210649574546326
+    second: animation sheet blob violet_8
+  - first:
+      213: -4292573420221904928
+    second: animation sheet blob violet_9
+  - first:
+      213: -8140807552443977576
+    second: animation sheet blob violet_10
+  - first:
+      213: 995118409869635876
+    second: animation sheet blob violet_11
+  - first:
+      213: 4912579451717339114
+    second: animation sheet blob violet_12
+  - first:
+      213: -469775953393544899
+    second: animation sheet blob violet_13
+  - first:
+      213: 8423678883538545690
+    second: animation sheet blob violet_14
+  - first:
+      213: -4465792496832529120
+    second: animation sheet blob violet_15
+  - first:
+      213: -1879919442813945334
+    second: animation sheet blob violet_16
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: animation sheet blob violet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f7c34a670a827df0800000000000000
+      internalID: -183932870316537863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_1
+      rect:
+        serializedVersion: 2
+        x: 750
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1c3ddf48500e2dc0800000000000000
+      internalID: -3661989067708613601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_2
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a111d682eb9175a0800000000000000
+      internalID: -6525262987856375386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_3
+      rect:
+        serializedVersion: 2
+        x: 2250
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44a15a8af8d466de0800000000000000
+      internalID: -1340298559691089340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_4
+      rect:
+        serializedVersion: 2
+        x: 3000
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 714062f84ec8579b0800000000000000
+      internalID: -5083001691135671273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_5
+      rect:
+        serializedVersion: 2
+        x: 3750
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69bcdc0d712bb5640800000000000000
+      internalID: 5069841620892765078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_6
+      rect:
+        serializedVersion: 2
+        x: 4500
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad08627ef832be320800000000000000
+      internalID: 2588201511819837658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_7
+      rect:
+        serializedVersion: 2
+        x: 5250
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3ab07504859a46e0800000000000000
+      internalID: -1852503902450042308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_8
+      rect:
+        serializedVersion: 2
+        x: 6000
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69b9fd42ccfa81a40800000000000000
+      internalID: 5339210649574546326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_9
+      rect:
+        serializedVersion: 2
+        x: 6750
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e7c363a737bd64c0800000000000000
+      internalID: -4292573420221904928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_10
+      rect:
+        serializedVersion: 2
+        x: 7500
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89072c3b9aa060f80800000000000000
+      internalID: -8140807552443977576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_11
+      rect:
+        serializedVersion: 2
+        x: 8250
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4213bb1ebee5fcd00800000000000000
+      internalID: 995118409869635876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_12
+      rect:
+        serializedVersion: 2
+        x: 9000
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae7ce7ebbfcfc2440800000000000000
+      internalID: 4912579451717339114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_13
+      rect:
+        serializedVersion: 2
+        x: 9750
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3115f562450b79f0800000000000000
+      internalID: -469775953393544899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_14
+      rect:
+        serializedVersion: 2
+        x: 10500
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1c2643605be6e470800000000000000
+      internalID: 8423678883538545690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_15
+      rect:
+        serializedVersion: 2
+        x: 11250
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02d31b982615602c0800000000000000
+      internalID: -4465792496832529120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation sheet blob violet_16
+      rect:
+        serializedVersion: 2
+        x: 12000
+        y: 0
+        width: 750
+        height: 900
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0a79bc1a3f29e5e0800000000000000
+      internalID: -1879919442813945334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
