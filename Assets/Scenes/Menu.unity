@@ -1601,7 +1601,7 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     source: {fileID: 0}
-    loopable: 0
+    loopable: 1
 --- !u!4 &757473733
 Transform:
   m_ObjectHideFlags: 0

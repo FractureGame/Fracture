@@ -7,10 +7,20 @@ using UnityEngine.Audio;
 public class AudioManager : MonoBehaviour
 {
 
+    public static AudioManager instance;
     public Sound[] sounds;
     // Start is called before the first frame update
     void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
         DontDestroyOnLoad(gameObject);
         foreach (Sound snd in sounds)
         {
@@ -41,5 +51,10 @@ public class AudioManager : MonoBehaviour
             return;
         }
         snd.source.Stop();
+    }
+    
+    public void Start()
+    {
+        FindObjectOfType<AudioManager>().PlaySound("MenuTheme");
     }
 }
