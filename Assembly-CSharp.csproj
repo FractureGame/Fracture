@@ -12,7 +12,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{28804A34-4B0A-81BA-8C6D-885C9937B19B}</ProjectGuid>
+    <ProjectGuid>{8F1BECB9-5D21-0589-F493-E398BC17ECE1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -150,85 +150,85 @@
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
      <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />
  <Reference Include="Unity.Timeline.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.Animation.Runtime">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.Animation.Runtime.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.Animation.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.PixelPerfect.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.VSCode.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.SpriteShape.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.Path.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.Path.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.Path.Editor.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Timeline">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.Animation.Triangle.Runtime">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.Animation.Triangle.Runtime.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.Animation.Triangle.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="PsdPlugin">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/PsdPlugin.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/PsdPlugin.dll</HintPath>
  </Reference>
  <Reference Include="Unity.CollabProxy.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Rider.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Mathematics">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.Psdimporter.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.Psdimporter.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.Psdimporter.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.InternalAPIEngineBridge.001">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.Sprite.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.Common.Runtime">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.Common.Runtime.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.Common.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.Tilemap.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.SpriteShape.Runtime">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.PixelPerfect">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.Animation.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.Animation.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.Animation.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Mathematics.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="Unity.2D.Common.Editor">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.2D.Common.Editor.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.2D.Common.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.InternalAPIEditorBridge.001">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.UI">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.16f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -408,13 +408,13 @@
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.16f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
  </Reference>
  <Reference Include="Photon3Unity3D">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Assets/Photon/PhotonLibs/Photon3Unity3D.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Assets/Photon/PhotonLibs/Photon3Unity3D.dll</HintPath>
  </Reference>
  <Reference Include="websocket-sharp">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/PackageCache/com.unity.ext.nunit@1.0.5/net35/unity-custom/nunit.framework.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/PackageCache/com.unity.ext.nunit@1.0.5/net35/unity-custom/nunit.framework.dll</HintPath>
  </Reference>
  <Reference Include="netstandard">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.16f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
@@ -764,43 +764,43 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="PhotonUnityNetworking.Utilities.PhotonPlayer.Editor.csproj">
-      <Project>{7A820123-A78D-1DAC-83DE-45B5337B439C}</Project>
+      <Project>{E20ACA09-BD85-39FC-694A-5166D2313B49}</Project>
       <Name>PhotonUnityNetworking.Utilities.PhotonPlayer.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="PunDemos.DemoHubEditor.csproj">
-      <Project>{BD2E6D50-1CC7-D464-66AF-6341A18BA4FD}</Project>
+      <Project>{05BBFBEE-0583-BAF9-C0EE-76EE4D3140A6}</Project>
       <Name>PunDemos.DemoHubEditor</Name>
     </ProjectReference>
     <ProjectReference Include="PunDemos.DemoSlotcarEditor.csproj">
-      <Project>{2F433A9C-E42D-1CF4-1AF3-583270AD8807}</Project>
+      <Project>{F6E87FD7-BEE2-F262-F241-861E6AD87FA5}</Project>
       <Name>PunDemos.DemoSlotcarEditor</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.Demos.csproj">
-      <Project>{11645590-2D61-818F-8901-7BA3A40E9087}</Project>
+      <Project>{34C1921B-073A-698C-1425-BB813DAD4366}</Project>
       <Name>PhotonUnityNetworking.Demos</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.Utilities.csproj">
-      <Project>{39E59DD4-9B5C-B442-F0B5-8E181C79E2B4}</Project>
+      <Project>{B9A0CB47-C74F-3F66-171F-0A99B8769793}</Project>
       <Name>PhotonUnityNetworking.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonRealtime.csproj">
-      <Project>{70942350-87E2-9B9D-1F40-CF53C554081F}</Project>
+      <Project>{6A38434E-D06C-495C-E128-0B2CA85646E0}</Project>
       <Name>PhotonRealtime</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.csproj">
-      <Project>{C712018F-5392-D4A9-F978-26E9E36B8DF9}</Project>
+      <Project>{BFF7E386-A670-CE4A-27A9-01EC0CA965DD}</Project>
       <Name>PhotonUnityNetworking</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonChat.csproj">
-      <Project>{2A065359-42F1-91D8-0D87-8C23857DFBFC}</Project>
+      <Project>{560D00B0-4206-FA64-24D0-6EA017C2F3AA}</Project>
       <Name>PhotonChat</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.Utilities.Culling.Editor.csproj">
-      <Project>{863E4436-C11B-24ED-40ED-2B887288A1CE}</Project>
+      <Project>{A19B5E35-714B-143A-3092-9365C894F275}</Project>
       <Name>PhotonUnityNetworking.Utilities.Culling.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.Editor.csproj">
-      <Project>{82E4E632-9473-EF35-D9F5-591C1EC0957F}</Project>
+      <Project>{39A5D664-E19C-1361-386F-6E0EF7B89471}</Project>
       <Name>PhotonUnityNetworking.Editor</Name>
     </ProjectReference>
   </ItemGroup>

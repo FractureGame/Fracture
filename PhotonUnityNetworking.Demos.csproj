@@ -12,7 +12,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{11645590-2D61-818F-8901-7BA3A40E9087}</ProjectGuid>
+    <ProjectGuid>{34C1921B-073A-698C-1425-BB813DAD4366}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>PhotonUnityNetworking.Demos</AssemblyName>
@@ -166,10 +166,10 @@
      <None Include="Assets\Photon\PhotonUnityNetworking\Demos\Shared Assets\Skin\3dText.shader" />
      <None Include="Assets\Photon\PhotonUnityNetworking\Demos\DemoSlotRacer\Kenney Assets\Copyrights.txt" />
  <Reference Include="UnityEditor.UI">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.16f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -361,13 +361,13 @@
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.16f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll</HintPath>
  </Reference>
  <Reference Include="Photon3Unity3D">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Assets/Photon/PhotonLibs/Photon3Unity3D.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Assets/Photon/PhotonLibs/Photon3Unity3D.dll</HintPath>
  </Reference>
  <Reference Include="websocket-sharp">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
- <HintPath>C:/Users/Megaport/Desktop/epita/projet_s2/FractureRBTest/Library/PackageCache/com.unity.ext.nunit@1.0.5/net35/unity-custom/nunit.framework.dll</HintPath>
+ <HintPath>C:/Users/Megaport/Desktop/feur/Fracture/Library/PackageCache/com.unity.ext.nunit@1.0.5/net35/unity-custom/nunit.framework.dll</HintPath>
  </Reference>
  <Reference Include="netstandard">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.16f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
@@ -717,15 +717,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="PhotonRealtime.csproj">
-      <Project>{70942350-87E2-9B9D-1F40-CF53C554081F}</Project>
+      <Project>{6A38434E-D06C-495C-E128-0B2CA85646E0}</Project>
       <Name>PhotonRealtime</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.csproj">
-      <Project>{C712018F-5392-D4A9-F978-26E9E36B8DF9}</Project>
+      <Project>{BFF7E386-A670-CE4A-27A9-01EC0CA965DD}</Project>
       <Name>PhotonUnityNetworking</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.Utilities.csproj">
-      <Project>{39E59DD4-9B5C-B442-F0B5-8E181C79E2B4}</Project>
+      <Project>{B9A0CB47-C74F-3F66-171F-0A99B8769793}</Project>
       <Name>PhotonUnityNetworking.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
