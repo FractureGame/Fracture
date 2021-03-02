@@ -6,10 +6,9 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-
+    //the instance is used to check if there is another audio manager
     public static AudioManager instance;
     public Sound[] sounds;
-    // Start is called before the first frame update
     void Awake()
     {
         if (instance == null)
@@ -32,12 +31,12 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     public void PlaySound(string name)
     {
         Sound snd = Array.Find(sounds, sound => sound.name == name);
         if (snd == null)
         {
+            Debug.LogError("PlaySound: no sound found for " + snd.name);
             return;
         }
         snd.source.Play();
@@ -48,9 +47,11 @@ public class AudioManager : MonoBehaviour
         Sound snd = Array.Find(sounds, sound => sound.name == name);
         if (snd == null)
         {
+            Debug.LogError("StopSound: no sound found for " + snd.name);
             return;
         }
-        snd.source.Stop();
+        //snd.source.Stop();
+        Debug.Log("sound stopped");
     }
     
     public void Start()
