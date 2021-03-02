@@ -2530,6 +2530,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!1 &1295563075
 GameObject:
   m_ObjectHideFlags: 0
