@@ -24,6 +24,10 @@ namespace Com.MyCompany.MyGame
         [Tooltip("The prefab to use for representing the Enemy2")]
         public GameObject enemy2Prefab;
         
+        
+        [Tooltip("The prefab to use for representing the Blob")]
+        public GameObject blobPrefab;
+        
         [Tooltip("The gameover Panel")]
         [SerializeField]
         private GameObject gameoverPanel;
@@ -144,6 +148,7 @@ namespace Com.MyCompany.MyGame
                 
                 // Instanciate the enemies of the BOTTOM
                 PhotonNetwork.Instantiate(enemy1Prefab.name, new Vector3(enemy1Prefab.transform.position.x, enemy1Prefab.transform.position.y, 0f), Quaternion.identity, 0);
+                PhotonNetwork.Instantiate(blobPrefab.name, new Vector3(blobPrefab.transform.position.x, blobPrefab.transform.position.y, 0f), Quaternion.identity, 0);
             }
             
         }
