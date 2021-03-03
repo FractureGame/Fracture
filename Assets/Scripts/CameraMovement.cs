@@ -66,13 +66,13 @@ public class CameraMovement : MonoBehaviour
             
 
             // si la caméra dépasse 150 et que les deux joueurs sont dans la partie gauche on continue à follow
-            if (camPos >= 150 && (playerTopPos < camPos && playerBotPos < camPos))
+            if (camPos >= 158.13 && (playerTopPos < camPos && playerBotPos < camPos))
                 follow = true;
             
-            else if (camPos >= 150)
+            else if (camPos >= 158.13)
                 follow = false;
             
-            else if (distanceBetweenPlayers >= 40)
+            else if (distanceBetweenPlayers >= 25.11)
                 follow = false;
             
                         
