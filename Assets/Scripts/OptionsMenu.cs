@@ -5,25 +5,33 @@ using UnityEngine;
 
 public class OptionsMenu : MonoBehaviour
 {
-    public bool fullscreen;
-    public Tuple<int, int> resolution;
-    public static Tuple<int,int>[] resolutions = new Tuple<int,int>[2] {Tuple.Create(1920,1080),Tuple.Create(1440,1080)};
-    public void ChangeFullScreen(bool val)
+    public Resolution[] resolutions;
+
+    private int i;
+    private bool fullscreen;
+    public void SetRes(int val)
     {
-        fullscreen = val;
+        i = val;
     }
-    public void ChooseRes(int i)
+    public void SetScreenMode(bool b)
     {
-        resolution = resolutions[i];
+        fullscreen = b;
     }
-    public void ChangeRes()
+    public void ApplyChangeRes()
     {
-        Screen.SetResolution(resolution.Item1, resolution.Item2, fullscreen);
+        if (fullscreen)
+        {
+            Screen.SetResolution(resolutions[i].width,resolutions[i].height,FullScreenMode.FullScreenWindow);
+        }
+        else
+        {
+            Screen.SetResolution(resolutions[i].width,resolutions[i].height,FullScreenMode.Windowed);
+        }
     }
 
     public void Start()
     {
-        fullscreen = true;
-        resolution = resolutions[0];
+        //i = 1;
+        //fullscreen = false;
     }
 }

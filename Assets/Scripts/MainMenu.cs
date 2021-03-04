@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
 {
     public void Start()
     {
-        Screen.SetResolution(1920, 1080, true);
+        //Screen.SetResolution(1280,720,FullScreenMode.FullScreenWindow);
     }
 
     public void QuitGame()

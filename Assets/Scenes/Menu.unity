@@ -313,7 +313,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1996792990}
-        m_MethodName: ChangeFullScreen
+        m_MethodName: SetScreenMode
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -324,7 +324,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1996792990}
-        m_MethodName: ChangeRes
+        m_MethodName: ApplyChangeRes
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -334,7 +334,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1001 &64485127
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2458,18 +2458,18 @@ MonoBehaviour:
   m_Placeholder: {fileID: 0}
   m_ItemText: {fileID: 574400576}
   m_ItemImage: {fileID: 0}
-  m_Value: 0
+  m_Value: 1
   m_Options:
     m_Options:
     - m_Text: 1920x1080
       m_Image: {fileID: 0}
-    - m_Text: 1440x1080
+    - m_Text: 1280x720
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1996792990}
-        m_MethodName: ChooseRes
+        m_MethodName: SetRes
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2480,7 +2480,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1996792990}
-        m_MethodName: ChangeRes
+        m_MethodName: ApplyChangeRes
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4441,7 +4441,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 244cdf7d2b3548f4b9c6d53407e89673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fullscreen: 1
+  resolutions:
+  - width: 1920
+    height: 1080
+  - width: 1280
+    height: 720
 --- !u!1 &2041422654
 GameObject:
   m_ObjectHideFlags: 0
