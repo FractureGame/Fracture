@@ -7,6 +7,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public void Start()
+    {
+        //Screen.SetResolution(1280,720,FullScreenMode.FullScreenWindow);
+    }
+
     public void QuitGame()
     {
         Application.Quit();

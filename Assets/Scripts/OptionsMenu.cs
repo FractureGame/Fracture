@@ -1,19 +1,37 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class OptionsMenu : MonoBehaviour
 {
-    public void ChangeRes(int val)
+    public Resolution[] resolutions;
+
+    private int i;
+    private bool fullscreen;
+    public void SetRes(int val)
     {
-        switch (val)
+        i = val;
+    }
+    public void SetScreenMode(bool b)
+    {
+        fullscreen = b;
+    }
+    public void ApplyChangeRes()
+    {
+        if (fullscreen)
         {
-            case 0:
-                Screen.SetResolution(1920,1080,true);
-                return;
-            case 1:
-                Screen.SetResolution(1440,1080,true);
-                return;
+            Screen.SetResolution(resolutions[i].width,resolutions[i].height,FullScreenMode.FullScreenWindow);
         }
+        else
+        {
+            Screen.SetResolution(resolutions[i].width,resolutions[i].height,FullScreenMode.Windowed);
+        }
+    }
+
+    public void Start()
+    {
+        //i = 1;
+        //fullscreen = false;
     }
 }

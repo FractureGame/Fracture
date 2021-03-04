@@ -36,7 +36,7 @@ namespace Com.MyCompany.MyGame
         void Start()
         {
             // Connect(); Called when pressing the Play Button
-            Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+            //Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
             // controlPanel.SetActive(true);
         }
 
