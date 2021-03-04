@@ -1,19 +1,29 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class OptionsMenu : MonoBehaviour
 {
-    public void ChangeRes(int val)
+    public bool fullscreen;
+    public Tuple<int, int> resolution;
+    public static Tuple<int,int>[] resolutions = new Tuple<int,int>[2] {Tuple.Create(1920,1080),Tuple.Create(1440,1080)};
+    public void ChangeFullScreen(bool val)
     {
-        switch (val)
-        {
-            case 0:
-                Screen.SetResolution(1920,1080,true);
-                return;
-            case 1:
-                Screen.SetResolution(1440,1080,true);
-                return;
-        }
+        fullscreen = val;
+    }
+    public void ChooseRes(int i)
+    {
+        resolution = resolutions[i];
+    }
+    public void ChangeRes()
+    {
+        Screen.SetResolution(resolution.Item1, resolution.Item2, fullscreen);
+    }
+
+    public void Start()
+    {
+        fullscreen = true;
+        resolution = resolutions[0];
     }
 }
