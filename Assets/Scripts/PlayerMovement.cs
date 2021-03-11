@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.Tilemaps;
 
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
@@ -50,6 +51,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Orientation")]
     public Vector2 orientation = Vector2.right;
     
+    
     private void Start()
     {
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
@@ -92,6 +94,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isAttacking = true;
         }
 
+
+
         onGround = IsGrounded();
         if (onGround)
             nbJump = 0;
@@ -130,7 +134,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             Dash();
             dashCooldownStatus = DASH_COOLDOWN;
         }
-            
 
         modifyPhysics();
     }
@@ -254,6 +257,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             return;
         // Display the attack range in unity
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
+    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("WeakSpot"))
+        {
+            Jump();
+        }
     }
 }
 
