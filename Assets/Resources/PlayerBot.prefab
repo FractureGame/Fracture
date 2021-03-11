@@ -111,12 +111,14 @@ MonoBehaviour:
   fallMultiplier: 6
   dashSpeed: 42
   startDashTime: 0.1
+  DASH_COOLDOWN: 1
   attackPoint: {fileID: 4157558901811291684}
   attackRange: 1.23
   enemyLayers:
     serializedVersion: 2
     m_Bits: 256
   attackDamage: 40
+  orientation: {x: 1, y: 0}
 --- !u!114 &4157558901229393605
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -36,6 +36,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private float dashTime;
     public float startDashTime;
     private bool isDashing = false;
+    private Vector2 dashDirection = Vector2.right;
+    public float DASH_COOLDOWN = 1f;
+    private float dashCooldownStatus;
     
     [Header("Attack")]
     private bool isAttacking = false;
@@ -43,12 +46,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
     public int attackDamage = 40;
+
+    [Header("Orientation")]
+    public Vector2 orientation = Vector2.right;
     
     private void Start()
     {
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
+        dashCooldownStatus = 0f;
     }
     
     private void Update()
@@ -65,11 +72,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             nbJump += 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashCooldownStatus <= 0f)
         {
-            Debug.Log("Dashing");
             isDashing = true;
             dashTime = startDashTime;
+            dashDirection = orientation;
+            Debug.Log("Dashing");
+        }
+
+        if (dashCooldownStatus > 0)
+        {
+            dashCooldownStatus -= Time.deltaTime;
         }
 
 
@@ -83,6 +96,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (onGround)
             nbJump = 0;
         direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (direction != Vector2.zero)
+            orientation = direction;
     }
 
     private void FixedUpdate()
@@ -92,6 +107,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             return;
         }
+        
         // Handle Movement
         Move();
         
@@ -100,18 +116,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             Jump();
         }
-
-        //Handle dash
-        if (isDashing)
-        {
-            Dash();
-        }
-
+        
         // Handle attack
         if (isAttacking)
         {
             Attack();
             isAttacking = false;
+        }
+        
+        //Handle dash
+        if (isDashing)
+        {
+            Dash();
+            dashCooldownStatus = DASH_COOLDOWN;
         }
             
 
@@ -210,7 +227,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         else
         {
             dashTime -= Time.deltaTime;
-            rigidbody2d.velocity = direction * dashSpeed;
+            rigidbody2d.velocity = dashDirection * dashSpeed;
         }
     }
 
