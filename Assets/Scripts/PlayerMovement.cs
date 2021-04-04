@@ -1,7 +1,5 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
-using UnityEngine.Tilemaps;
 
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
@@ -51,6 +49,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Orientation")]
     public Vector2 orientation = Vector2.right;
     
+    [Header("Switch")] 
+    public GameObject playerTopprefab;
+    public GameObject playerBotprefab;
+    private GameObject playerTop;
+    private GameObject playerBot;
+    public GameObject switcherPrefab;
+    private GameObject switcher;
+    public bool isSwitching = true;
+    private Vector2 lastTopPos;
     
     private void Start()
     {
@@ -62,6 +69,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     private void Update()
     {
+
+
+        if (playerBot == null)
+        {
+            playerBot = GameObject.Find("PlayerBot(Clone)");
+        }
+
+        if (playerTop == null)
+        {
+            playerTop = GameObject.Find("PlayerTop(Clone)");
+        }
+
+
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)
         {
@@ -94,8 +114,31 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isAttacking = true;
         }
 
+        // if (Input.GetKeyDown(KeyCode.S) && gameObject.transform.position.y > 4f)
+        // {
+        //     Debug.Log("Switching");
+        //     PhotonView photonView = PhotonView.Get(this);
+        //     photonView.RPC("Switch", RpcTarget.All);
+        // }
 
 
+        if (playerTopprefab.transform.position.y > 4f)
+        {
+            lastTopPos = playerTop.transform.position;
+        }
+        else if (playerBotprefab.transform.position.y > 4f)
+        {
+            lastTopPos = playerBot.transform.position;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.S) && gameObject.transform.position.y > 4f)
+        {
+            Debug.Log("Switching");
+            isSwitching = false;
+            Switch();
+            PhotonNetwork.Instantiate(switcherPrefab.name, new Vector3(10f, 3f, 0f), Quaternion.identity, 0);
+        }
+        
         onGround = IsGrounded();
         if (onGround)
             nbJump = 0;
@@ -135,6 +178,22 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             dashCooldownStatus = DASH_COOLDOWN;
         }
 
+        if (GameObject.Find("Switcher(Clone)") != null && isSwitching)
+        {
+            gameObject.transform.position = lastTopPos;
+            isSwitching = false;
+
+        }
+
+        // if (GameObject.Find("Switcher(Clone)") != null && playerTop.transform.position.y > 4f ||
+        //     playerBot.transform.position.y > 4f && gameObject.transform.position.y < 4f)
+        // {
+        //     Debug.Log("Destroying switcher");
+        //     PhotonNetwork.Destroy(switcher);
+        //     isSwitching = true;
+        //
+        // }
+        
         modifyPhysics();
     }
 
@@ -199,6 +258,21 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         lastInterestingDir = direction;
     }
 
+    // [PunRPC]
+    private void Switch()
+    {
+        Vector3 playerTopPos = playerTop.transform.position;
+        Vector3 playerBotPos = playerBot.transform.position;
+        if (gameObject.transform.position == playerTopPos)
+        {
+            gameObject.transform.position = playerBotPos;
+        }
+        else if (gameObject.transform.position == playerBotPos)
+        {
+            gameObject.transform.position = playerTopPos;
+        }
+    }
+    
     private void modifyPhysics()
     {
         rigidbody2d.gravityScale = gravity;
