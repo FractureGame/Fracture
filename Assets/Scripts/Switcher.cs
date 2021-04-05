@@ -17,7 +17,7 @@ public class Switcher : MonoBehaviour
 
     private bool foo(Vector2 pos)
     {
-        if (SceneManager.GetActiveScene().name == "MapGame")
+        if (SceneManager.GetActiveScene().name[0] == 'H')
         {
             if (pos.y > 4f)
             {
@@ -25,7 +25,7 @@ public class Switcher : MonoBehaviour
             }
             
         }
-        if (SceneManager.GetActiveScene().name == "VerticalMapGame")
+        if (SceneManager.GetActiveScene().name[0] == 'V')
         {
             if (pos.x < 0f)
             {

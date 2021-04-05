@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
@@ -135,7 +134,7 @@ namespace Com.MyCompany.MyGame
             gameoverReasonLabel.SetActive(false);
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            if (SceneManager.GetActiveScene().name == "MapGame")
+            if (SceneManager.GetActiveScene().name == "HLevel1")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -153,7 +152,7 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(blobPrefab.name, new Vector3(blobPrefab.transform.position.x, blobPrefab.transform.position.y, 0f), Quaternion.identity, 0);
                 } 
             }
-            else if (SceneManager.GetActiveScene().name == "VerticalMapGame")
+            else if (SceneManager.GetActiveScene().name == "VLevel2")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {

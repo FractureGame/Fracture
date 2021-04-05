@@ -137,7 +137,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             Debug.Log("Switching");
             isSwitching = false;
             Switch();
-            if (SceneManager.GetActiveScene().name == "MapGame")
+            if (SceneManager.GetActiveScene().name[0] == 'H')
             {
                 PhotonNetwork.Instantiate(switcherPrefab.name, new Vector3(10f, 3f, 0f), Quaternion.identity, 0);
             }
@@ -158,7 +158,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private bool foo(Vector2 pos)
     {
-        if (SceneManager.GetActiveScene().name == "MapGame")
+        if (SceneManager.GetActiveScene().name[0] == 'H')
         {
             if (pos.y > 4f)
             {
@@ -166,7 +166,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             }
             
         }
-        if (SceneManager.GetActiveScene().name == "VerticalMapGame")
+        if (SceneManager.GetActiveScene().name[0] == 'V')
         {
             if (pos.x < 0f)
             {

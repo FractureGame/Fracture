@@ -24,7 +24,7 @@ namespace Com.MyCompany.MyGame
         private bool creator;
         private const int CODE_LENGTH = 4;
         private string code;
-        private string sceneName = "VerticalMapGame";
+        private string sceneName = "HLevel1";
 
         #endregion
 
