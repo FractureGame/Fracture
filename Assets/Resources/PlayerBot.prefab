@@ -119,9 +119,6 @@ MonoBehaviour:
     m_Bits: 256
   attackDamage: 40
   orientation: {x: 1, y: 0}
-  playerTopprefab: {fileID: 2369092048429108975, guid: f54d07dd076cbdd4897e5efeea201524,
-    type: 3}
-  playerBotprefab: {fileID: 4157558901229393600}
   switcherPrefab: {fileID: 1050994551916519404, guid: 21bab0e48e5c0277ab3d529ef5e704da,
     type: 3}
   isSwitching: 1

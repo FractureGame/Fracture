@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics;
+using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
-
+using Debug = UnityEngine.Debug;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
@@ -65,6 +66,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private Vector2 onWall;
     private bool isWallJumping;
     private bool isWallSliding;
+    // private Vector2 wallJumpAngle;
+    
+    
     [SerializeField] private LayerMask WallsLayerMask;
     
     
@@ -74,6 +78,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
         dashCooldownStatus = 0f;
+        // wallJumpAngle = new Vector2(1, 3);
+        // wallJumpAngle.Normalize();
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -348,7 +354,27 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void Jump()
     {
         rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, 0);
-        rigidbody2d.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+        if (isWallJumping)
+        {
+            if (direction == onWall || direction == Vector2.zero)
+            {
+                Debug.Log("LittlePush");
+                rigidbody2d.AddForce(new Vector2(jumpVelocity * -direction.x * 3f, jumpVelocity), ForceMode2D.Impulse);
+            }
+            else
+            {
+                Debug.Log("NoPush");
+                rigidbody2d.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+            }
+
+            isWallJumping = false;
+        }
+        else
+        {
+            Debug.Log("Normal JUmp");
+            rigidbody2d.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+        }
+        
         jumpTimer = 0;
         lastInterestingDir = direction;
     }
