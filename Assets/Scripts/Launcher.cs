@@ -25,9 +25,7 @@ namespace Com.MyCompany.MyGame
 
 
         #region Public Fields
-
-        // [Tooltip("The Ui Panel to let the user enter name and connect")]
-        // [SerializeField] private GameObject controlPanel;
+        
 
         #endregion
 
@@ -35,9 +33,9 @@ namespace Com.MyCompany.MyGame
         #region MonoBehaviour CallBacks
         void Start()
         {
-            // Connect(); Called when pressing the Play Button
             //Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
-            // controlPanel.SetActive(true);
+            PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.GameVersion = gameVersion;
         }
 
 
@@ -51,13 +49,14 @@ namespace Com.MyCompany.MyGame
         {
             if (PhotonNetwork.IsConnected)
             {
-                // OnConnectedToMaster();
+                LoadMenus();
             }
             else
             {
                 // Connect to Photon servers in Amsterdam (best region)
                 PhotonNetwork.ConnectUsingSettings();
                 PhotonNetwork.GameVersion = gameVersion;
+                LoadMenus();
             }
 
         }
@@ -66,7 +65,6 @@ namespace Com.MyCompany.MyGame
         {
             // Load Menus scene
             SceneManager.LoadScene("LobbiesMenu");
-            // PhotonNetwork.LoadLevel(1);
         }
         
         #endregion

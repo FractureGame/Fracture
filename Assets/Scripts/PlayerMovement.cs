@@ -1,7 +1,7 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
-
+using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
     private Vector2 direction;
+    private Vector2 oldDirection;
+    private bool facingRight = true;
     private Vector2 lastInterestingDir;
 
     [Header("Vertical Movement")]
@@ -36,6 +38,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private float dashTime;
     public float startDashTime;
     private bool isDashing = false;
+    private Vector2 dashDirection = Vector2.right;
+    public float DASH_COOLDOWN = 1f;
+    private float dashCooldownStatus;
     
     [Header("Attack")]
     private bool isAttacking = false;
@@ -43,16 +48,53 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
     public int attackDamage = 40;
+
+    [Header("Orientation")]
+    public Vector2 orientation = Vector2.right;
+    
+    [Header("Switch")]
+    private GameObject playerTop;
+    private GameObject playerBot;
+    public GameObject switcherPrefab;
+    private GameObject switcher;
+    public bool isSwitching = true;
+    private Vector2 lastTopPos;
+
+    [Header("WallJump")]
+    private Vector2 onWall;
+    private bool isWallJumping;
+    private bool isWallSliding;
+
+    
     
     private void Start()
     {
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
+        dashCooldownStatus = 0f;
     }
-    
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Player")) {
+            Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+        }
+    }
+
     private void Update()
     {
+        if (playerBot == null)
+        {
+            playerBot = GameObject.Find("PlayerBot(Clone)");
+        }
+
+        if (playerTop == null)
+        {
+            playerTop = GameObject.Find("PlayerTop(Clone)");
+        }
+
+
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)
         {
@@ -65,11 +107,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             nbJump += 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashCooldownStatus <= 0f)
         {
-            Debug.Log("Dashing");
             isDashing = true;
             dashTime = startDashTime;
+            dashDirection = orientation;
+            Debug.Log("Dashing");
+        }
+
+        if (dashCooldownStatus > 0)
+        {
+            dashCooldownStatus -= Time.deltaTime;
         }
 
 
@@ -79,12 +127,107 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isAttacking = true;
         }
 
+        // if (Input.GetKeyDown(KeyCode.S) && gameObject.transform.position.y > 4f)
+        // {
+        //     Debug.Log("Switching");
+        //     PhotonView photonView = PhotonView.Get(this);
+        //     photonView.RPC("Switch", RpcTarget.All);
+        // }
+
+
+        if (foo(playerTop.transform.position))
+        {
+            lastTopPos = playerTop.transform.position;
+        }
+        else if (foo(playerBot.transform.position))
+        {
+            lastTopPos = playerBot.transform.position;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.S) && foo(gameObject.transform.position))
+        {
+            Debug.Log("Switching");
+            isSwitching = false;
+            Switch();
+            if (SceneManager.GetActiveScene().name[0] == 'H')
+            {
+                PhotonNetwork.Instantiate(switcherPrefab.name, new Vector3(10f, 3f, 0f), Quaternion.identity, 0);
+            }
+            else
+            {
+                PhotonNetwork.Instantiate(switcherPrefab.name, new Vector3(2f, 3f, 0f), Quaternion.identity, 0);
+            }
+        }
+        
         onGround = IsGrounded();
         if (onGround)
+        {
             nbJump = 0;
+        }
+            
+
+        onWall = IsTouchingWalls();
+        if (Input.GetKey(KeyCode.C) && !onGround && onWall != Vector2.zero && rigidbody2d.velocity.y < 0)
+        {
+            Debug.Log("WallSliding");
+            isWallSliding = true;
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+        
+        if (isWallSliding && Input.GetKeyDown(KeyCode.Space))
+        {
+            isWallJumping = true;
+            isWallSliding = false;
+            jumpTimer = Time.time + jumpDelay;
+        }
+
+        if (direction != Vector2.zero)
+        {
+            oldDirection = direction;
+        }
+        
+        
         direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        
+        if (direction != oldDirection && direction != Vector2.zero && oldDirection != Vector2.zero)
+        {
+            Flip();
+        }
+        
+        if (direction != Vector2.zero)
+            orientation = direction;
     }
 
+    private void Flip()
+    {
+        Debug.Log("Flipped");
+        facingRight = !facingRight;
+        gameObject.transform.Rotate(0,180,0);
+
+    }
+    private bool foo(Vector2 pos)
+    {
+        if (SceneManager.GetActiveScene().name[0] == 'H')
+        {
+            if (pos.y > 4f)
+            {
+                return true;
+            }
+            
+        }
+        if (SceneManager.GetActiveScene().name[0] == 'V')
+        {
+            if (pos.x < 0f)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private void FixedUpdate()
     {
         // Check the view
@@ -92,30 +235,45 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             return;
         }
+        
         // Handle Movement
-        Move();
+        if (!isWallSliding)
+        {
+            Move();
+            modifyPhysics();
+        }
+        else
+        {
+            WallSlide();
+        }
         
         // Handle Jump
-        if(jumpTimer > Time.time && nbJump < nbJumpsAllowed)
+        if(jumpTimer > Time.time && (nbJump < nbJumpsAllowed || isWallJumping))
         {
             Jump();
         }
-
-        //Handle dash
-        if (isDashing)
-        {
-            Dash();
-        }
-
+        
         // Handle attack
-        if (isAttacking)
+        if (isAttacking && !isWallSliding)
         {
             Attack();
             isAttacking = false;
         }
-            
+        
+        //Handle dash
+        if (isDashing && !isWallSliding)
+        {
+            Dash();
+            dashCooldownStatus = DASH_COOLDOWN;
+        }
 
-        modifyPhysics();
+        if (GameObject.Find("Switcher(Clone)") != null && isSwitching)
+        {
+            gameObject.transform.position = lastTopPos;
+            isSwitching = false;
+        }
+
+
     }
 
     private bool IsGrounded()
@@ -127,6 +285,20 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         return boxCastHit.collider != null;
     }
 
+    private Vector2 IsTouchingWalls()
+    {
+        float extraHeightText = 0.2f;
+        RaycastHit2D boxCastHitRight = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.right,
+            extraHeightText, platformLayerMask);
+        if (boxCastHitRight.collider != null)
+            return Vector2.right;
+        RaycastHit2D boxCastHitLeft = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.left,
+            extraHeightText, platformLayerMask);
+        if (boxCastHitLeft.collider != null)
+            return Vector2.left;
+
+        return Vector2.zero;
+    }
 
     private void Move()
     {
@@ -174,30 +346,59 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void Jump()
     {
         rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, 0);
-        rigidbody2d.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+        if (isWallJumping)
+        {
+            if (direction == onWall || direction == Vector2.zero)
+            {
+                Debug.Log("LittlePush");
+                rigidbody2d.AddForce(new Vector2(jumpVelocity * -onWall.x * 3f, jumpVelocity), ForceMode2D.Impulse);
+                direction = new Vector2(-onWall.x, 0);
+            }
+            else
+            {
+                Debug.Log("NoPush");
+                rigidbody2d.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+            }
+
+            isWallJumping = false;
+        }
+        else
+        {
+            Debug.Log("Normal JUmp");
+            rigidbody2d.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+        }
+        
         jumpTimer = 0;
         lastInterestingDir = direction;
     }
 
+    // [PunRPC]
+    private void Switch()
+    {
+        Vector3 playerTopPos = playerTop.transform.position;
+        Vector3 playerBotPos = playerBot.transform.position;
+        if (gameObject.transform.position == playerTopPos)
+        {
+            gameObject.transform.position = playerBotPos;
+        }
+        else if (gameObject.transform.position == playerBotPos)
+        {
+            gameObject.transform.position = playerTopPos;
+        }
+    }
+    
     private void modifyPhysics()
     {
-        rigidbody2d.gravityScale = gravity;
-        
         // Drag can be used to slow down an object. The higher the drag the more the object slows down.
         rigidbody2d.drag = linearDrag;
         rigidbody2d.gravityScale = gravity * fallMultiplier;
         
-        // rigidbody2d.drag = linearDrag * 0.15f;
-        // // si le joueur descends, la force de gravité le fait descendre plus vite
-        // if (rigidbody2d.velocity.y < 0)
-        // {
-        //     rigidbody2d.gravityScale = gravity * fallMultiplier;
-        // }
-        // // si le joueur monte et que l'on maintient Jump, il flotte
-        // else if (rigidbody2d.velocity.y > 0 && !Input.GetButton("Jump"))
-        // {
-        //     rigidbody2d.gravityScale = gravity * (fallMultiplier / 2);
-        // }
+    }
+
+    private void WallSlide()
+    {
+        rigidbody2d.drag = linearDrag;
+        rigidbody2d.gravityScale = gravity / 2;
     }
 
     private void Dash()
@@ -210,7 +411,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         else
         {
             dashTime -= Time.deltaTime;
-            rigidbody2d.velocity = direction * dashSpeed;
+            rigidbody2d.velocity = dashDirection * dashSpeed;
         }
     }
 
@@ -237,6 +438,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             return;
         // Display the attack range in unity
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
+    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("WeakSpot"))
+        {
+            Jump();
+        }
     }
 }
 

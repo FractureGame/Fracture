@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
@@ -10,8 +9,6 @@ namespace Com.MyCompany.MyGame
 {
     public class GameManager : MonoBehaviourPunCallbacks
     {
-
-
         #region Public Fields
 
         [Tooltip("The prefab to use for representing the TopPlayer")]
@@ -19,8 +16,8 @@ namespace Com.MyCompany.MyGame
         [Tooltip("The prefab to use for representing the Botplayer")]
         public GameObject playerBotPrefab;
         
-        [Tooltip("The prefab to use for representing Enemy1")]
-        public GameObject enemy1Prefab;
+        // [Tooltip("The prefab to use for representing Enemy1")]
+        // public GameObject enemy1Prefab;
         [Tooltip("The prefab to use for representing the Enemy2")]
         public GameObject enemy2Prefab;
         
@@ -135,22 +132,35 @@ namespace Com.MyCompany.MyGame
             gameoverReasonLabel.SetActive(false);
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            if (PhotonNetwork.IsMasterClient)
+            if (SceneManager.GetActiveScene().name == "HLevel1")
             {
-                PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(playerTopPrefab.transform.position.x,playerTopPrefab.transform.position.y,0f), Quaternion.identity, 0);
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(8f, 7f,0f), Quaternion.identity, 0);
                 
-                // Instanciate the enemies of the TOP
-                PhotonNetwork.Instantiate(enemy2Prefab.name, new Vector3(enemy2Prefab.transform.position.x, enemy2Prefab.transform.position.y, 0f), Quaternion.identity, 0);
+                    // Instanciate the enemies of the TOP
+                    PhotonNetwork.Instantiate(enemy2Prefab.name, new Vector3(enemy2Prefab.transform.position.x, enemy2Prefab.transform.position.y, 0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(8f, 2f,0f), Quaternion.identity, 0);
+                
+                    // Instanciate the enemies of the BOTTOM
+                    // PhotonNetwork.Instantiate(enemy1Prefab.name, new Vector3(enemy1Prefab.transform.position.x, enemy1Prefab.transform.position.y, 0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(blobPrefab.name, new Vector3(blobPrefab.transform.position.x, blobPrefab.transform.position.y, 0f), Quaternion.identity, 0);
+                } 
             }
-            else
+            else if (SceneManager.GetActiveScene().name == "VLevel2")
             {
-                PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(playerBotPrefab.transform.position.x,playerBotPrefab.transform.position.y,0f), Quaternion.identity, 0);
-                
-                // Instanciate the enemies of the BOTTOM
-                PhotonNetwork.Instantiate(enemy1Prefab.name, new Vector3(enemy1Prefab.transform.position.x, enemy1Prefab.transform.position.y, 0f), Quaternion.identity, 0);
-                PhotonNetwork.Instantiate(blobPrefab.name, new Vector3(blobPrefab.transform.position.x, blobPrefab.transform.position.y, 0f), Quaternion.identity, 0);
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(-6f, -3f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(2f, -3f,0f), Quaternion.identity, 0);
+                }
             }
-            
         }
         
     }

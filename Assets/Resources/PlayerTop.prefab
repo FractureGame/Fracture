@@ -111,12 +111,17 @@ MonoBehaviour:
   fallMultiplier: 6
   dashSpeed: 42
   startDashTime: 0.1
+  DASH_COOLDOWN: 1
   attackPoint: {fileID: 2369092049488694683}
   attackRange: 1.23
   enemyLayers:
     serializedVersion: 2
     m_Bits: 256
   attackDamage: 42
+  orientation: {x: 1, y: 0}
+  switcherPrefab: {fileID: 1050994551916519404, guid: 21bab0e48e5c0277ab3d529ef5e704da,
+    type: 3}
+  isSwitching: 1
 --- !u!114 &2369092048429108978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,8 +170,8 @@ MonoBehaviour:
     ExtrapolateIncludingRoundTripTime: 1
     ExtrapolateNumberOfStoredPositions: 1
   m_RotationModel:
-    SynchronizeEnabled: 0
-    InterpolateOption: 1
+    SynchronizeEnabled: 1
+    InterpolateOption: 0
     InterpolateRotateTowardsSpeed: 180
     InterpolateLerpSpeed: 5
   m_ScaleModel:
@@ -261,7 +266,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2369092049488694680}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1631.8873}
+  m_LocalPosition: {x: 0.3, y: 0, z: -1631.8873}
   m_LocalScale: {x: 1.2305723, y: 1.2305723, z: 1.2305723}
   m_Children: []
   m_Father: {fileID: 2369092048429108983}
