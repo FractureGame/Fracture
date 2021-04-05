@@ -641,8 +641,6 @@ MonoBehaviour:
     type: 3}
   playerBotPrefab: {fileID: 4157558901229393600, guid: 485d2e97a4eb95d42b64ffa97a6eae46,
     type: 3}
-  enemy1Prefab: {fileID: 764251675414825664, guid: 4757ab7b7bcc1fd4cb2ffc1083a98a20,
-    type: 3}
   enemy2Prefab: {fileID: 7202288226908916868, guid: aada420fab5c10e46ad49962b0d4a523,
     type: 3}
   blobPrefab: {fileID: 6642292017263949507, guid: 9c25e8a76641a894bb1933c57dbef005,
@@ -786,6 +784,49 @@ Transform:
   - {fileID: 1423764485}
   m_Father: {fileID: 0}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1283872388
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1283872390}
+  - component: {fileID: 1283872389}
+  m_Layer: 0
+  m_Name: PUN2_Chat_Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1283872389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1283872388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6e31e6c4075f1438ad14fa318a374c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1283872390
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1283872388}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 23, y: 19, z: -35.82765}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1423764484
 GameObject:

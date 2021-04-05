@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -55,6 +54,7 @@ public class PUN_Chat : MonoBehaviourPun
 
     void OnGUI()
     {
+        GUI.contentColor = Color.black;
         if (!isChatting)
         {
             GUI.Label(new Rect(5, Screen.height - 25, 200, 25), "Press 'T' to chat");
@@ -71,7 +71,7 @@ public class PUN_Chat : MonoBehaviourPun
                 }
                 chatInput = "";
             }
-
+            
             GUI.SetNextControlName("ChatField");
             GUI.Label(new Rect(5, Screen.height - 25, 200, 25), "Say:");
             GUIStyle inputStyle = GUI.skin.GetStyle("box");
