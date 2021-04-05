@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
@@ -122,21 +123,29 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // }
 
 
-        if (playerTopprefab.transform.position.y > 4f)
+        if (foo(playerTop.transform.position))
         {
             lastTopPos = playerTop.transform.position;
         }
-        else if (playerBotprefab.transform.position.y > 4f)
+        else if (foo(playerBot.transform.position))
         {
             lastTopPos = playerBot.transform.position;
         }
         
-        if (Input.GetKeyDown(KeyCode.S) && gameObject.transform.position.y > 4f)
+        if (Input.GetKeyDown(KeyCode.S) && foo(gameObject.transform.position))
         {
             Debug.Log("Switching");
             isSwitching = false;
             Switch();
-            PhotonNetwork.Instantiate(switcherPrefab.name, new Vector3(10f, 3f, 0f), Quaternion.identity, 0);
+            if (SceneManager.GetActiveScene().name == "MapGame")
+            {
+                PhotonNetwork.Instantiate(switcherPrefab.name, new Vector3(10f, 3f, 0f), Quaternion.identity, 0);
+            }
+            else
+            {
+                PhotonNetwork.Instantiate(switcherPrefab.name, new Vector3(2f, 3f, 0f), Quaternion.identity, 0);
+            }
+            
         }
         
         onGround = IsGrounded();
@@ -147,6 +156,27 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             orientation = direction;
     }
 
+    private bool foo(Vector2 pos)
+    {
+        if (SceneManager.GetActiveScene().name == "MapGame")
+        {
+            if (pos.y > 4f)
+            {
+                return true;
+            }
+            
+        }
+        if (SceneManager.GetActiveScene().name == "VerticalMapGame")
+        {
+            if (pos.x < 0f)
+            {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
     private void FixedUpdate()
     {
         // Check the view

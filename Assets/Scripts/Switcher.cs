@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Photon.Pun;
+﻿using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Switcher : MonoBehaviour
 {
@@ -16,6 +15,28 @@ public class Switcher : MonoBehaviour
         
     }
 
+    private bool foo(Vector2 pos)
+    {
+        if (SceneManager.GetActiveScene().name == "MapGame")
+        {
+            if (pos.y > 4f)
+            {
+                return true;
+            }
+            
+        }
+        if (SceneManager.GetActiveScene().name == "VerticalMapGame")
+        {
+            if (pos.x < 0f)
+            {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+    
     // Update is called once per frame
     void Update()
     {
@@ -29,16 +50,16 @@ public class Switcher : MonoBehaviour
             playerTop = GameObject.Find("PlayerTop(Clone)");
         }
         
-        if (playerTop.transform.position.y > 4f || playerBot.transform.position.y > 4f)
+        if (foo(playerTop.transform.position) || foo(playerBot.transform.position))
         {
 
             Debug.Log("Destroying switcher");
             PhotonNetwork.Destroy(gameObject);
-            if (playerBot.transform.position.y < 4f)
+            if (foo(playerBot.transform.position) == false)
             {
                 playerBot.GetComponent<PlayerMovement>().isSwitching = true;
             }
-            else if (playerTop.transform.position.y < 4f)
+            else if (foo(playerTop.transform.position) == false)
             {
                 playerTop.GetComponent<PlayerMovement>().isSwitching = true;
             }

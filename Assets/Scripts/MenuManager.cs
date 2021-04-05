@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using TMPro;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = System.Random;
 
@@ -26,6 +24,7 @@ namespace Com.MyCompany.MyGame
         private bool creator;
         private const int CODE_LENGTH = 4;
         private string code;
+        private string sceneName = "VerticalMapGame";
 
         #endregion
 
@@ -174,8 +173,8 @@ namespace Com.MyCompany.MyGame
             Debug.Log("OnPlayerEnteredRoom() called by PUN. Now this client is in a room.");
             if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && publicGame)
             {
-                Debug.Log("We load the 'MapGame");
-                PhotonNetwork.LoadLevel("MapGame");
+                Debug.Log("We load the game scene");
+                PhotonNetwork.LoadLevel(sceneName);
             }
             else if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
