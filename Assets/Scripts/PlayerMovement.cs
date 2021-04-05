@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using ExitGames.Client.Photon.StructWrapping;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
@@ -192,6 +189,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             oldDirection = direction;
         }
         
+        
         direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         
         if (direction != oldDirection && direction != Vector2.zero && oldDirection != Vector2.zero)
@@ -350,10 +348,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, 0);
         if (isWallJumping)
         {
-            if (direction == onWall || direction == Vector2.zero || isWallSliding)
+            if (direction == onWall || direction == Vector2.zero)
             {
                 Debug.Log("LittlePush");
-                rigidbody2d.AddForce(new Vector2(jumpVelocity * -direction.x * 3f, jumpVelocity), ForceMode2D.Impulse);
+                rigidbody2d.AddForce(new Vector2(jumpVelocity * -onWall.x * 3f, jumpVelocity), ForceMode2D.Impulse);
+                direction = new Vector2(-onWall.x, 0);
             }
             else
             {

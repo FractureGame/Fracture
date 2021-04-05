@@ -4,9 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class Switcher : MonoBehaviour
 {
-    
-    public GameObject playerTopprefab;
-    public GameObject playerBotprefab;
     private GameObject playerTop;
     private GameObject playerBot;
     // Start is called before the first frame update
