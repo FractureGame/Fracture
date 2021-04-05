@@ -9,8 +9,6 @@ namespace Com.MyCompany.MyGame
 {
     public class GameManager : MonoBehaviourPunCallbacks
     {
-
-
         #region Public Fields
 
         [Tooltip("The prefab to use for representing the TopPlayer")]

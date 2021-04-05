@@ -125,6 +125,9 @@ MonoBehaviour:
   switcherPrefab: {fileID: 1050994551916519404, guid: 21bab0e48e5c0277ab3d529ef5e704da,
     type: 3}
   isSwitching: 1
+  WallsLayerMask:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!114 &4157558901229393605
 MonoBehaviour:
   m_ObjectHideFlags: 0
