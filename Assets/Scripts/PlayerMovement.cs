@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
@@ -61,15 +63,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public bool isSwitching = true;
     private Vector2 lastTopPos;
 
-    [Header("WallJump")] 
-    // private bool onWall;
+    [Header("WallJump")]
     private Vector2 onWall;
     private bool isWallJumping;
     private bool isWallSliding;
-    // private Vector2 wallJumpAngle;
-    
-    
-    [SerializeField] private LayerMask WallsLayerMask;
+
     
     
     private void Start()
@@ -78,8 +76,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
         dashCooldownStatus = 0f;
-        // wallJumpAngle = new Vector2(1, 3);
-        // wallJumpAngle.Normalize();
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -174,7 +170,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             
 
         onWall = IsTouchingWalls();
-        
         if (Input.GetKey(KeyCode.C) && !onGround && onWall != Vector2.zero && rigidbody2d.velocity.y < 0)
         {
             Debug.Log("WallSliding");
@@ -192,11 +187,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             jumpTimer = Time.time + jumpDelay;
         }
 
+        if (direction != Vector2.zero)
+        {
+            oldDirection = direction;
+        }
         
-        
-        oldDirection = direction;
         direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        if (direction != oldDirection)
+        
+        if (direction != oldDirection && direction != Vector2.zero && oldDirection != Vector2.zero)
         {
             Flip();
         }
@@ -207,9 +205,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void Flip()
     {
-        // wallJumpDirection *= -1;
+        Debug.Log("Flipped");
         facingRight = !facingRight;
-        
+        gameObject.transform.Rotate(0,180,0);
+
     }
     private bool foo(Vector2 pos)
     {
@@ -249,11 +248,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             WallSlide();
         }
-
         
-
-        
-
         // Handle Jump
         if(jumpTimer > Time.time && (nbJump < nbJumpsAllowed || isWallJumping))
         {
@@ -296,16 +291,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         float extraHeightText = 0.2f;
         RaycastHit2D boxCastHitRight = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.right,
-            extraHeightText, WallsLayerMask);
+            extraHeightText, platformLayerMask);
         if (boxCastHitRight.collider != null)
             return Vector2.right;
         RaycastHit2D boxCastHitLeft = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.left,
-            extraHeightText, WallsLayerMask);
+            extraHeightText, platformLayerMask);
         if (boxCastHitLeft.collider != null)
             return Vector2.left;
 
         return Vector2.zero;
-
     }
 
     private void Move()
@@ -356,7 +350,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, 0);
         if (isWallJumping)
         {
-            if (direction == onWall || direction == Vector2.zero)
+            if (direction == onWall || direction == Vector2.zero || isWallSliding)
             {
                 Debug.Log("LittlePush");
                 rigidbody2d.AddForce(new Vector2(jumpVelocity * -direction.x * 3f, jumpVelocity), ForceMode2D.Impulse);
@@ -404,20 +398,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void WallSlide()
     {
-        // Drag can be used to slow down an object. The higher the drag the more the object slows down.
-        // rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, wallSlideSpeed);
         rigidbody2d.drag = linearDrag;
         rigidbody2d.gravityScale = gravity / 2;
     }
 
-
-    // private void WallJump()
-    // {
-    //     rigidbody2d.AddForce(new Vector2(wallJumpForce * wallJumpDirection * wallJumpAngle.x, wallJumpForce * wallJumpAngle.y), ForceMode2D.Impulse);
-    //     isWallJumping = false;
-    //     
-    // }
-    
     private void Dash()
     {
         if (dashTime <= 0)
