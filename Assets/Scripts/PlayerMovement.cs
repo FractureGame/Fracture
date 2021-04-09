@@ -188,9 +188,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             oldDirection = direction;
         }
+
         
+        if (isWallSliding)
+        {
+            Vector2 temp = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            if (temp != Vector2.zero)
+                direction = temp;
+        }
+        else
+        {
+            direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        }
         
-        direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         
         if (direction != oldDirection && direction != Vector2.zero && oldDirection != Vector2.zero)
         {
@@ -352,12 +362,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             {
                 Debug.Log("LittlePush");
                 rigidbody2d.AddForce(new Vector2(jumpVelocity * -onWall.x * 3f, jumpVelocity), ForceMode2D.Impulse);
-                direction = new Vector2(-onWall.x, 0);
+                // direction = new Vector2(onWall.x, 0);
             }
             else
             {
                 Debug.Log("NoPush");
                 rigidbody2d.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+                // direction = new Vector2(-onWall.x, 0);
             }
 
             isWallJumping = false;

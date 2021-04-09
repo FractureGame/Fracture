@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
@@ -24,7 +24,7 @@ namespace Com.MyCompany.MyGame
         private bool creator;
         private const int CODE_LENGTH = 4;
         private string code;
-        private string sceneName = "HLevel1";
+        private string sceneName = "VLevel2";
 
         #endregion
 
