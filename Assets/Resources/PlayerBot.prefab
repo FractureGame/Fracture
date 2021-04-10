@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4157558901229393603}
   - component: {fileID: 4157558901229393602}
   - component: {fileID: 4157558901229393601}
+  - component: {fileID: -1934736523175923028}
   m_Layer: 0
   m_Name: PlayerBot
   m_TagString: Player
@@ -112,6 +113,10 @@ MonoBehaviour:
   dashSpeed: 42
   startDashTime: 0.1
   DASH_COOLDOWN: 1
+  dashParticleRight: {fileID: 7988900130007825293, guid: fa79b379c6f2fddf099ce325a87f201c,
+    type: 3}
+  dashParticleLeft: {fileID: 1693074252123155176, guid: a6d439f38bf3adddebc5a742c1a4ad88,
+    type: 3}
   attackPoint: {fileID: 4157558901811291684}
   attackRange: 1.23
   enemyLayers:
@@ -242,6 +247,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.2174425, y: 11.388661}
   m_EdgeRadius: 0
+--- !u!95 &-1934736523175923028
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4157558901229393600}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4157558901811291683
 GameObject:
   m_ObjectHideFlags: 0

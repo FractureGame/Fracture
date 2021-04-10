@@ -41,6 +41,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private Vector2 dashDirection = Vector2.right;
     public float DASH_COOLDOWN = 1f;
     private float dashCooldownStatus;
+    public GameObject dashParticleRight;
+    public GameObject dashParticleLeft;
     
     [Header("Attack")]
     private bool isAttacking = false;
@@ -216,6 +218,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Debug.Log("Flipped");
         facingRight = !facingRight;
         gameObject.transform.Rotate(0,180,0);
+        // dashParticle.transform.Rotate(0,180,0);
+        // dashParticle.GetComponent<ParticleSystem>().textureSheetAnimation.GetSprite(0);
 
     }
     private bool foo(Vector2 pos)
@@ -412,6 +416,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         rigidbody2d.gravityScale = gravity / 2;
     }
 
+    [PunRPC]
+    private void InstantiateParticle(Vector2 dashDir, Vector3 pos)
+    {
+        if (dashDir == Vector2.right)
+            Instantiate(dashParticleRight, pos, Quaternion.identity);
+        else if (dashDir == Vector2.left)
+            Instantiate(dashParticleLeft, pos, Quaternion.identity);
+    }
+
     private void Dash()
     {
         if (dashTime <= 0)
@@ -421,6 +434,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
+            photonView.RPC("InstantiateParticle", RpcTarget.All, dashDirection, gameObject.transform.position);
             dashTime -= Time.deltaTime;
             rigidbody2d.velocity = dashDirection * dashSpeed;
         }

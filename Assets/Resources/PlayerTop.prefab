@@ -112,6 +112,10 @@ MonoBehaviour:
   dashSpeed: 42
   startDashTime: 0.1
   DASH_COOLDOWN: 1
+  dashParticleRight: {fileID: 7988900130007825293, guid: fa79b379c6f2fddf099ce325a87f201c,
+    type: 3}
+  dashParticleLeft: {fileID: 1693074252123155176, guid: a6d439f38bf3adddebc5a742c1a4ad88,
+    type: 3}
   attackPoint: {fileID: 2369092049488694683}
   attackRange: 1.23
   enemyLayers:
