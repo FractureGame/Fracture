@@ -123,9 +123,6 @@ MonoBehaviour:
     m_Bits: 256
   attackDamage: 42
   orientation: {x: 1, y: 0}
-  switcherPrefab: {fileID: 1050994551916519404, guid: 21bab0e48e5c0277ab3d529ef5e704da,
-    type: 3}
-  isSwitching: 1
 --- !u!114 &2369092048429108978
 MonoBehaviour:
   m_ObjectHideFlags: 0
