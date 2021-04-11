@@ -5,12 +5,11 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
-
-    public HPBar thisBar;
-    public HPBar otherBar;
-
-    public uint maxHealth;
-    private uint currentHealth;
+    public GameObject thisBar;
+    public GameObject otherBar;
+    
+    public int maxHealth;
+    private int currentHealth;
     
     [Header("Components")]
     private Rigidbody2D rigidbody2d;
@@ -75,7 +74,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     private void Start()
     {
-        thisBar.SetMaxHealth(maxHealth);
+        // thisBar.SetMaxHealth(maxHealth);
         currentHealth = maxHealth;
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
@@ -195,15 +194,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            uint i = TakeDamage(20);
-            photonView.RPC("SetHealthBar",RpcTarget.All,thisBar,i);
+            Debug.Log("Damage");
+            int i = TakeDamage(20);
+            photonView.RPC("SetHealthBar",RpcTarget.All,i, thisBar.name);
         }
     }
 
-    public uint TakeDamage(uint dmg)
+    public int TakeDamage(int dmg)
     {
+        
         currentHealth -= dmg;
-        if (currentHealth > maxHealth)
+        if (currentHealth <= 0)
         {
             currentHealth = 0;
             PhotonNetwork.Destroy(gameObject);
@@ -211,10 +212,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         return currentHealth;
     }
 
+    // [PunRPC]
+    // public void SetHealthBar(HPBar bar,uint value)
+    // {
+    //     bar.SetHealth(value);
+    // }
+    
     [PunRPC]
-    public void SetHealthBar(HPBar bar,uint value)
+    public void SetHealthBar(int value, string barName)
     {
-        bar.SetHealth(value);
+        GameObject bar = GameObject.Find(barName);
+        bar.GetComponent<HPBar>().SetHealth(value);
     }
 
     private void Flip()
