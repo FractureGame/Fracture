@@ -5,6 +5,12 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
+
+    public HPBar thisBar;
+    public HPBar otherBar;
+
+    public uint maxHealth;
+    private uint currentHealth;
     
     [Header("Components")]
     private Rigidbody2D rigidbody2d;
@@ -69,6 +75,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     private void Start()
     {
+        thisBar.SetMaxHealth(maxHealth);
+        currentHealth = maxHealth;
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
@@ -184,6 +192,29 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (direction != Vector2.zero)
             orientation = direction;
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            uint i = TakeDamage(20);
+            photonView.RPC("SetHealthBar",RpcTarget.All,thisBar,i);
+        }
+    }
+
+    public uint TakeDamage(uint dmg)
+    {
+        currentHealth -= dmg;
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = 0;
+            PhotonNetwork.Destroy(gameObject);
+        }
+        return currentHealth;
+    }
+
+    [PunRPC]
+    public void SetHealthBar(HPBar bar,uint value)
+    {
+        bar.SetHealth(value);
     }
 
     private void Flip()

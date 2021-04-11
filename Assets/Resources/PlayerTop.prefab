@@ -100,6 +100,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d28cfb7e2996bf4c8948d13657b18a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisBar: {fileID: 4590895985146015875, guid: 13e6980c11d59b34c9e90adcaaed400a, type: 3}
+  otherBar: {fileID: 4590895985146015875, guid: 4ac5072547022a0459a99908e4a23b78,
+    type: 3}
+  maxHealth: 0
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 512
