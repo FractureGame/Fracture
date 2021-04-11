@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
     private Vector2 direction;
-    private Vector2 oldDirection;
+    private Vector2 oldDirection = Vector2.right;
     private bool facingRight = true;
     private Vector2 lastInterestingDir;
 

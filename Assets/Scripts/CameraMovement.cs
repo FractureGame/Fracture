@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -18,10 +16,26 @@ public class CameraMovement : MonoBehaviour
     private float playerTopPos;
     private float playerBotPos;
 
+    private bool horizontal;
+    public float endTilePos;
+    private float maxDistanceBetweenPlayers;
+
     // Start is called before the first frame update
     void Start()
     {
-        beginning = transform.position.x;
+        
+        if (SceneManager.GetActiveScene().name[0] == 'H')
+        {
+            horizontal = true;
+            maxDistanceBetweenPlayers = 22;
+            beginning = transform.position.x;
+        }
+        else if (SceneManager.GetActiveScene().name[0] == 'V')
+        {
+            horizontal = false;
+            maxDistanceBetweenPlayers = 22;
+            beginning = transform.position.y;
+        }
     }
 
     private void Update()
@@ -52,10 +66,19 @@ public class CameraMovement : MonoBehaviour
 
         if (playerTop != null && playerBot != null)
         {
+            if (horizontal)
+            {
+                camPos = transform.position.x;
+                playerTopPos = playerTop.transform.position.x;
+                playerBotPos = playerBot.transform.position.x;
+            }
+            else
+            {
+                camPos = transform.position.y;
+                playerTopPos = playerTop.transform.position.y;
+                playerBotPos = playerBot.transform.position.y;
+            }
             
-            camPos = transform.position.x;
-            playerTopPos = playerTop.transform.position.x;
-            playerBotPos = playerBot.transform.position.x;
             
             
             // Debug.Log(playerTop.transform.position.x);
@@ -66,13 +89,13 @@ public class CameraMovement : MonoBehaviour
             
 
             // si la caméra dépasse 150 et que les deux joueurs sont dans la partie gauche on continue à follow
-            if (camPos >= 158.17 && (playerTopPos < camPos && playerBotPos < camPos))
+            if (camPos >= endTilePos && (playerTopPos < camPos && playerBotPos < camPos))
                 follow = true;
             
-            else if (camPos >= 158.17)
+            else if (camPos >= endTilePos)
                 follow = false;
             
-            else if (distanceBetweenPlayers >= 22)
+            else if (distanceBetweenPlayers >= maxDistanceBetweenPlayers)
                 follow = false;
             
                         
@@ -103,7 +126,15 @@ public class CameraMovement : MonoBehaviour
 
             if (follow)
             {
-                temp.x = (playerTop.transform.position.x + playerBot.transform.position.x) / 2;
+                if (horizontal)
+                {
+                    temp.x = (playerTop.transform.position.x + playerBot.transform.position.x) / 2;
+                }
+                else
+                {
+                    temp.y = (playerTop.transform.position.y + playerBot.transform.position.y) / 2;
+                }
+                
                 transform.position = Vector3.MoveTowards(transform.position, temp, cameraSpeed * Time.deltaTime); 
             }
         }
