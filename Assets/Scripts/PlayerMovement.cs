@@ -5,6 +5,11 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
+    public GameObject thisBar;
+    public GameObject otherBar;
+    
+    public int maxHealth;
+    private int currentHealth;
     
     [Header("Components")]
     private Rigidbody2D rigidbody2d;
@@ -14,7 +19,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
     private Vector2 direction;
-    private Vector2 oldDirection;
+    private Vector2 oldDirection = Vector2.right;
     private bool facingRight = true;
     private Vector2 lastInterestingDir;
 
@@ -41,6 +46,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private Vector2 dashDirection = Vector2.right;
     public float DASH_COOLDOWN = 1f;
     private float dashCooldownStatus;
+    public GameObject dashParticleRight;
+    public GameObject dashParticleLeft;
     
     [Header("Attack")]
     private bool isAttacking = false;
@@ -55,10 +62,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Switch")]
     private GameObject playerTop;
     private GameObject playerBot;
-    public GameObject switcherPrefab;
-    private GameObject switcher;
-    public bool isSwitching = true;
-    private Vector2 lastTopPos;
+    private bool isSwitching = false;
+
 
     [Header("WallJump")]
     private Vector2 onWall;
@@ -69,6 +74,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     private void Start()
     {
+        // thisBar.SetMaxHealth(maxHealth);
+        currentHealth = maxHealth;
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
@@ -127,38 +134,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isAttacking = true;
         }
 
-        // if (Input.GetKeyDown(KeyCode.S) && gameObject.transform.position.y > 4f)
-        // {
-        //     Debug.Log("Switching");
-        //     PhotonView photonView = PhotonView.Get(this);
-        //     photonView.RPC("Switch", RpcTarget.All);
-        // }
-
-
-        if (foo(playerTop.transform.position))
-        {
-            lastTopPos = playerTop.transform.position;
-        }
-        else if (foo(playerBot.transform.position))
-        {
-            lastTopPos = playerBot.transform.position;
-        }
-        
-        if (Input.GetKeyDown(KeyCode.S) && foo(gameObject.transform.position))
+        if (Input.GetKeyDown(KeyCode.S) && (foo(playerTop.transform.position) != foo(playerBot.transform.position)))
         {
             Debug.Log("Switching");
-            isSwitching = false;
-            Switch();
-            if (SceneManager.GetActiveScene().name[0] == 'H')
-            {
-                PhotonNetwork.Instantiate(switcherPrefab.name, new Vector3(10f, 3f, 0f), Quaternion.identity, 0);
-            }
-            else
-            {
-                PhotonNetwork.Instantiate(switcherPrefab.name, new Vector3(2f, 3f, 0f), Quaternion.identity, 0);
-            }
+            isSwitching = true;
+            
         }
-        
+
         onGround = IsGrounded();
         if (onGround)
         {
@@ -188,9 +170,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             oldDirection = direction;
         }
+
         
+        if (isWallSliding)
+        {
+            Vector2 temp = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
+            if (temp != Vector2.zero)
+                direction = temp;
+        }
+        else
+        {
+            direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
+        }
         
-        direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         
         if (direction != oldDirection && direction != Vector2.zero && oldDirection != Vector2.zero)
         {
@@ -199,6 +191,38 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (direction != Vector2.zero)
             orientation = direction;
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("Damage");
+            int i = TakeDamage(20);
+            photonView.RPC("SetHealthBar",RpcTarget.All,i, thisBar.name);
+        }
+    }
+
+    public int TakeDamage(int dmg)
+    {
+        
+        currentHealth -= dmg;
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            PhotonNetwork.Destroy(gameObject);
+        }
+        return currentHealth;
+    }
+
+    // [PunRPC]
+    // public void SetHealthBar(HPBar bar,uint value)
+    // {
+    //     bar.SetHealth(value);
+    // }
+    
+    [PunRPC]
+    public void SetHealthBar(int value, string barName)
+    {
+        GameObject bar = GameObject.Find(barName);
+        bar.GetComponent<HPBar>().SetHealth(value);
     }
 
     private void Flip()
@@ -206,7 +230,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Debug.Log("Flipped");
         facingRight = !facingRight;
         gameObject.transform.Rotate(0,180,0);
-
     }
     private bool foo(Vector2 pos)
     {
@@ -267,13 +290,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             dashCooldownStatus = DASH_COOLDOWN;
         }
 
-        if (GameObject.Find("Switcher(Clone)") != null && isSwitching)
+        // Handle switch
+        if (isSwitching)
         {
-            gameObject.transform.position = lastTopPos;
-            isSwitching = false;
+            photonView.RPC("InstantiateSwitch", RpcTarget.All, gameObject.transform.position);
         }
-
-
     }
 
     private bool IsGrounded()
@@ -281,7 +302,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         float extraHeightText = 0.1f;
         RaycastHit2D boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
             extraHeightText, platformLayerMask);
-        // Debug.Log(boxCastHit.collider);
         return boxCastHit.collider != null;
     }
 
@@ -352,7 +372,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             {
                 Debug.Log("LittlePush");
                 rigidbody2d.AddForce(new Vector2(jumpVelocity * -onWall.x * 3f, jumpVelocity), ForceMode2D.Impulse);
-                direction = new Vector2(-onWall.x, 0);
             }
             else
             {
@@ -372,19 +391,35 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         lastInterestingDir = direction;
     }
 
-    // [PunRPC]
-    private void Switch()
+    [PunRPC]
+    private void InstantiateSwitch(Vector3 pos)
     {
         Vector3 playerTopPos = playerTop.transform.position;
         Vector3 playerBotPos = playerBot.transform.position;
-        if (gameObject.transform.position == playerTopPos)
+        Instantiate(dashParticleRight, playerTopPos, Quaternion.identity);
+        Instantiate(dashParticleRight, playerBotPos, Quaternion.identity);
+        if (foo(playerTopPos) && foo(pos))
         {
-            gameObject.transform.position = playerBotPos;
+            playerTop.transform.position = playerBot.transform.position;
+            playerBot.transform.position = playerTopPos;
         }
-        else if (gameObject.transform.position == playerBotPos)
+        else if (foo(playerTopPos) && !foo(pos))
         {
-            gameObject.transform.position = playerTopPos;
+            playerBot.transform.position = playerTop.transform.position;
+            playerTop.transform.position = playerBotPos;
         }
+        else if (foo(playerBotPos) && foo(pos))
+        {
+            playerBot.transform.position = playerTop.transform.position;
+            playerTop.transform.position = playerBotPos;
+        }
+        else if (foo(playerBotPos) && !foo(pos))
+        {
+            playerTop.transform.position = playerBot.transform.position;
+            playerBot.transform.position = playerTopPos;
+        }
+        
+        isSwitching = false;
     }
     
     private void modifyPhysics()
@@ -401,6 +436,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         rigidbody2d.gravityScale = gravity / 2;
     }
 
+    [PunRPC]
+    private void InstantiateParticle(Vector2 dashDir, Vector3 pos)
+    {
+        if (dashDir == Vector2.right)
+            Instantiate(dashParticleRight, pos, Quaternion.identity);
+        else if (dashDir == Vector2.left)
+            Instantiate(dashParticleLeft, pos, Quaternion.identity);
+    }
+
     private void Dash()
     {
         if (dashTime <= 0)
@@ -410,6 +454,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
+            photonView.RPC("InstantiateParticle", RpcTarget.All, dashDirection, gameObject.transform.position);
             dashTime -= Time.deltaTime;
             rigidbody2d.velocity = dashDirection * dashSpeed;
         }
