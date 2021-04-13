@@ -63,6 +63,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private GameObject playerTop;
     private GameObject playerBot;
     private bool isSwitching = false;
+    private float SWITCH_COOLDOWN = 0.5f;
+    public float switchCooldownStatus;
 
 
     [Header("WallJump")]
@@ -80,6 +82,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
         dashCooldownStatus = 0f;
+        switchCooldownStatus = 0f;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -134,12 +137,22 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isAttacking = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.S) && (foo(playerTop.transform.position) != foo(playerBot.transform.position)))
+        if (switchCooldownStatus > 0)
+        {
+            switchCooldownStatus -= Time.deltaTime;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.S) && switchCooldownStatus <= 0f)
         {
             Debug.Log("Switching");
             isSwitching = true;
-            
         }
+        
+        if (switchCooldownStatus > 0)
+        {
+            switchCooldownStatus -= Time.deltaTime;
+        }
+        
 
         onGround = IsGrounded();
         if (onGround)
@@ -394,6 +407,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [PunRPC]
     private void InstantiateSwitch(Vector3 pos)
     {
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
         Vector3 playerTopPos = playerTop.transform.position;
         Vector3 playerBotPos = playerBot.transform.position;
         Instantiate(dashParticleRight, playerTopPos, Quaternion.identity);
@@ -420,7 +435,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         
         isSwitching = false;
+        
     }
+    
     
     private void modifyPhysics()
     {
