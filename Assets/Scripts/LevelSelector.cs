@@ -7,23 +7,27 @@ using UnityEngine.SceneManagement;
 public class LevelSelector : MonoBehaviour
 {
     // Start is called before the first frame update
-    public int[] levels;
     public GameObject buttonPrefab;
     public Canvas canvas;
     public void Start()
     {
         int i = 0;
-        foreach (int level in levels)
+        foreach (KeyValuePair<string,string> kvp in Levels.scenes)
         {
+            
             GameObject button2 = Instantiate(buttonPrefab,canvas.transform) as GameObject;
-            Scene scene = SceneManager.GetSceneByBuildIndex(level);
+            button2.name = kvp.Key + " Button";
+            Scene scene = SceneManager.GetSceneByPath(kvp.Value);
             if (!scene.IsValid())
             {
                 Debug.Log("WARNING SCENE IS NULL MDRR");
             }
-            
-            Debug.Log(scene.name);
-            button2.GetComponentInChildren<TextMeshProUGUI>().text = scene.name;
+            button2.GetComponentInChildren<TextMeshProUGUI>().text = kvp.Key;
+            button2.GetComponent<LevelButton>().pathToScene = kvp.Value;
+            Vector3 pos = button2.transform.position;
+            pos.y -= i * 75;
+            button2.transform.position = pos;
+            i++;
         }
     }
 
