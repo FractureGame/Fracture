@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelButton : MonoBehaviour
 {
-    public string pathToScene;
+    public int buildIndex;
 
-    private void LoadLevel()
+    public void LoadLevel()
     {
-        SceneManager.LoadScene(pathToScene);
+        SceneManager.LoadScene(buildIndex);
     }
 }
