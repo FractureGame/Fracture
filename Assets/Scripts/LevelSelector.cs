@@ -17,11 +17,6 @@ public class LevelSelector : MonoBehaviour
             
             GameObject button2 = Instantiate(buttonPrefab,canvas.transform) as GameObject;
             button2.name = kvp.Key + " Button";
-            /*Scene scene = SceneManager.GetSceneByBuildIndex();
-            if (!scene.IsValid())
-            {
-                Debug.Log("WARNING SCENE IS NULL MDRR");
-            }*/
             button2.GetComponentInChildren<TextMeshProUGUI>().text = kvp.Key;
             button2.GetComponent<LevelButton>().buildIndex = kvp.Value;
             Vector3 pos = button2.transform.position;

@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/VLevel2.unity
     guid: 23d71fc21210f558c9b02509465e81fd
+  - enabled: 1
+    path: Assets/Scenes/VLevel3.unity
+    guid: 77fdf9724a9e9eca3a8a98376722e5a5
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
