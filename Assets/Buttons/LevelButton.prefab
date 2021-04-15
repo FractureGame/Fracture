@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ffeedc2ab802f046a6ab07c24d0f866, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathToScene: 
+  buildIndex: 0
 --- !u!1001 &1343314432422011217
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -254,7 +254,7 @@ PrefabInstance:
     - target: {fileID: 2578288555455029903, guid: 5dd0b19edb232134f95bbec4e58ecb6a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 126.23
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2578288555455029903, guid: 5dd0b19edb232134f95bbec4e58ecb6a,
         type: 3}
