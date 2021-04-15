@@ -105,6 +105,7 @@ namespace Com.MyCompany.MyGame
                 return;
             }
             PhotonNetwork.JoinRoom(value);
+            
         }
 
         public void LaunchGame()
@@ -176,6 +177,13 @@ namespace Com.MyCompany.MyGame
                 GameObject TM = GameObject.Find("Waiting Public");
                 TM.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
             }
+            else if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && !publicGame)
+            {
+                GameObject privateMenu = GameObject.Find("Join Private Menu");
+                privateMenu.SetActive(false);
+                GameObject TM = GameObject.Find("Waiting Private");
+                TM.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
+            }
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -189,7 +197,6 @@ namespace Com.MyCompany.MyGame
                 PhotonNetwork.AutomaticallySyncScene = false;
                 PhotonNetwork.LoadLevel(sceneName);
             }
-
             else if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 PhotonNetwork.AutomaticallySyncScene = false;
