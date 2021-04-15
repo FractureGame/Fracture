@@ -181,7 +181,9 @@ namespace Com.MyCompany.MyGame
             }
             else if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
-                launchGameButton.SetActive(true);
+                PhotonNetwork.AutomaticallySyncScene = false;
+                PhotonNetwork.LoadLevel(sceneName);
+                // launchGameButton.SetActive(true);
             }
         }
 
