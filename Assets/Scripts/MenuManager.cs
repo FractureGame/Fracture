@@ -1,6 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine.UI;
 using Random = System.Random;
 
@@ -168,6 +169,15 @@ namespace Com.MyCompany.MyGame
             }
         }
 
+        public override void OnJoinedRoom()
+        {
+            if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && publicGame)
+            {
+                GameObject TM = GameObject.Find("Waiting Public");
+                TM.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
+            }
+        }
+
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             Debug.Log("OnPlayerEnteredRoom() called by PUN. Now this client is in a room.");
@@ -179,6 +189,7 @@ namespace Com.MyCompany.MyGame
                 PhotonNetwork.AutomaticallySyncScene = false;
                 PhotonNetwork.LoadLevel(sceneName);
             }
+
             else if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 PhotonNetwork.AutomaticallySyncScene = false;
