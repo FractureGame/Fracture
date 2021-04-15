@@ -24,7 +24,7 @@ namespace Com.MyCompany.MyGame
         private bool creator;
         private const int CODE_LENGTH = 4;
         private string code;
-        private string sceneName = "VLevel2";
+        private string sceneName = "LevelSelector";
 
         #endregion
 
@@ -174,6 +174,9 @@ namespace Com.MyCompany.MyGame
             if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && publicGame)
             {
                 Debug.Log("We load the game scene");
+                
+                // PhotonNetwork.LoadLevel(sceneName);
+                PhotonNetwork.AutomaticallySyncScene = false;
                 PhotonNetwork.LoadLevel(sceneName);
             }
             else if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
