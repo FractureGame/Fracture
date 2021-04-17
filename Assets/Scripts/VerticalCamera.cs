@@ -7,7 +7,7 @@ public class VerticalCamera : MonoBehaviour
     public float endTilePos;
     public void FollowPlayer(GameObject player)
     {
-        if (transform.position.y < 10)
+        if (player.transform.position.y < endTilePos)
         {
             Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, -10);
             if (player.transform.position.y > 0)

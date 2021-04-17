@@ -172,6 +172,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             isWallSliding = false;
         }
+
+
         
         if (isWallSliding && Input.GetKeyDown(KeyCode.Space))
         {
@@ -180,28 +182,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             jumpTimer = Time.time + jumpDelay;
         }
 
-        if (direction != Vector2.zero)
-        {
-            oldDirection = direction;
-        }
+        direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0);;
+        
 
-        
-        if (isWallSliding)
-        {
-            Vector2 temp = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
-            if (temp != Vector2.zero)
-                direction = temp;
-        }
-        else
-        {
-            direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
-        }
-        
-        
         if (direction != oldDirection && direction != Vector2.zero && oldDirection != Vector2.zero)
         {
             Flip();
         }
+        if (direction != Vector2.zero)
+        {
+            oldDirection = direction;
+        }
+        
+        
         
         if (direction != Vector2.zero)
             orientation = direction;
@@ -377,6 +370,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             }
             else
             {
+                if (jumpTimer == 0 && isWallJumping)
+                {
+                    lastInterestingDir = orientation;
+                    isWallJumping = false;
+                }
+                Debug.Log(lastInterestingDir);
                 // No keys pressed, the player keeps going in the same direction while falling but slowly
                 if (lastInterestingDir == Vector2.left)
                     rigidbody2d.velocity = new Vector2(-moveSpeed/2, rigidbody2d.velocity.y);
@@ -404,7 +403,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                 rigidbody2d.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
             }
 
-            isWallJumping = false;
+            // isWallJumping = false;
         }
         else
         {

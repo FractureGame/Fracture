@@ -662,7 +662,7 @@ PrefabInstance:
     - target: {fileID: 4157558901229393600, guid: 485d2e97a4eb95d42b64ffa97a6eae46,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4157558901229393605, guid: 485d2e97a4eb95d42b64ffa97a6eae46,
         type: 3}
@@ -2771,4 +2771,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a46b0b7ac6c860cb183dd76c05014bf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endTilePos: 17
+  endTilePos: 18
