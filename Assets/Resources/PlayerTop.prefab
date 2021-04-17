@@ -127,7 +127,6 @@ MonoBehaviour:
     m_Bits: 256
   attackDamage: 42
   orientation: {x: 1, y: 0}
-  SWITCH_COOLDOWN: 0.2
   switchCooldownStatus: 0
 --- !u!114 &2369092048429108978
 MonoBehaviour:

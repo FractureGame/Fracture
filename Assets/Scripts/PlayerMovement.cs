@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
@@ -307,6 +308,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (isSwitching)
         {
             photonView.RPC("InstantiateSwitch", RpcTarget.All, gameObject.transform.position);
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (photonView.IsMine)
+        {
+            if (SceneManager.GetActiveScene().name[0] == 'V')
+            {
+                Camera.main.GetComponent<VerticalCamera>().FollowPlayer(gameObject);
+            }
         }
     }
 
