@@ -16,7 +16,7 @@ public class VerticalCamera : MonoBehaviour
             }
             else
             {
-                transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, Time.deltaTime);
+                transform.position = new Vector3(0, 0, -10);
             }
         }
     }
