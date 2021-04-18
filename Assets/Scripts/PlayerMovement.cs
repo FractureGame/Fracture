@@ -63,12 +63,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private GameObject playerTop;
     private GameObject playerBot;
     private bool isSwitching = false;
-
-
+    
     [Header("WallJump")]
     private Vector2 onWall;
     private bool isWallJumping;
     private bool isWallSliding;
+
+    [Header("Animation")] 
+    private Animator animator;
 
     
     
@@ -80,6 +82,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
         dashCooldownStatus = 0f;
+        animator = GetComponent<Animator>();
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -120,6 +123,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             dashTime = startDashTime;
             dashDirection = orientation;
             Debug.Log("Dashing");
+            animator.SetBool("dash", true);
         }
 
         if (dashCooldownStatus > 0)
@@ -144,6 +148,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         onGround = IsGrounded();
         if (onGround)
         {
+            animator.SetBool("jump", false);
             nbJump = 0;
         }
             
@@ -169,6 +174,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (direction != Vector2.zero)
         {
             oldDirection = direction;
+        }
+        
+        if (direction != Vector2.zero && onGround)
+            animator.SetBool("iswalking", true);
+        else
+        {
+            animator.SetBool("iswalking", false);
         }
 
         
@@ -273,6 +285,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle Jump
         if(jumpTimer > Time.time && (nbJump < nbJumpsAllowed || isWallJumping))
         {
+            animator.SetBool("jump", true);
             Jump();
         }
         
@@ -447,6 +460,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void Dash()
     {
+        Debug.Log(animator.name);
         if (dashTime <= 0)
         {
             isDashing = false;
@@ -458,6 +472,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             dashTime -= Time.deltaTime;
             rigidbody2d.velocity = dashDirection * dashSpeed;
         }
+        animator.SetBool("dash", false);
     }
 
     private void Attack()
