@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
         dashCooldownStatus = 0f;
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -123,7 +123,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             dashTime = startDashTime;
             dashDirection = orientation;
             Debug.Log("Dashing");
-            animator.SetBool("dash", true);
+            animator.SetTrigger("dash");
         }
 
         if (dashCooldownStatus > 0)
@@ -148,7 +148,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         onGround = IsGrounded();
         if (onGround)
         {
-            animator.SetBool("jump", false);
+            
             nbJump = 0;
         }
             
@@ -177,10 +177,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         
         if (direction != Vector2.zero && onGround)
-            animator.SetBool("iswalking", true);
+            animator.SetBool("isWalking", true);
         else
         {
-            animator.SetBool("iswalking", false);
+            animator.SetBool("isWalking", false);
         }
 
         
@@ -285,8 +285,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle Jump
         if(jumpTimer > Time.time && (nbJump < nbJumpsAllowed || isWallJumping))
         {
-            animator.SetBool("jump", true);
+            animator.SetTrigger("jump");
             Jump();
+            animator.SetTrigger("jump");
         }
         
         // Handle attack
@@ -402,6 +403,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         jumpTimer = 0;
         lastInterestingDir = direction;
+        
     }
 
     [PunRPC]
@@ -472,7 +474,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             dashTime -= Time.deltaTime;
             rigidbody2d.velocity = dashDirection * dashSpeed;
         }
-        animator.SetBool("dash", false);
+        animator.SetTrigger("dash");
     }
 
     private void Attack()

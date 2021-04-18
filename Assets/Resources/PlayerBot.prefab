@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!95 &7093083418853113261
+--- !u!95 &3773523343762908249
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
@@ -10,7 +10,7 @@ Animator:
   m_GameObject: {fileID: 2716605080517920562}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e2595e79590a69d368ecc25b679f1743, type: 2}
+  m_Controller: {fileID: 9100000, guid: 959988562b504b449b0f9621aee4e591, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -35,7 +35,6 @@ GameObject:
   - component: {fileID: 4157558901229393603}
   - component: {fileID: 4157558901229393602}
   - component: {fileID: 4157558901229393601}
-  - component: {fileID: -1934736523175923028}
   m_Layer: 0
   m_Name: PlayerBot
   m_TagString: Player
@@ -268,25 +267,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.2174425, y: 11.388661}
   m_EdgeRadius: 0
---- !u!95 &-1934736523175923028
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4157558901229393600}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e2595e79590a69d368ecc25b679f1743, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4157558901811291683
 GameObject:
   m_ObjectHideFlags: 0
