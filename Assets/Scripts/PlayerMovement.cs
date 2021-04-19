@@ -123,7 +123,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             dashTime = startDashTime;
             dashDirection = orientation;
             Debug.Log("Dashing");
-            animator.SetTrigger("dash");
         }
 
         if (dashCooldownStatus > 0)
@@ -158,10 +157,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             Debug.Log("WallSliding");
             isWallSliding = true;
+            // animator.SetTrigger("wallSlide");
+            animator.SetBool("isWallSliding", true);
         }
         else
         {
             isWallSliding = false;
+            animator.SetBool("isWallSliding", false);
         }
         
         if (isWallSliding && Input.GetKeyDown(KeyCode.Space))
@@ -176,13 +178,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             oldDirection = direction;
         }
         
-        if (direction != Vector2.zero && onGround)
+        if (direction != Vector2.zero)
             animator.SetBool("isWalking", true);
         else
         {
             animator.SetBool("isWalking", false);
         }
 
+        if (onGround)
+            animator.SetBool("isJumping", false);
         
         if (isWallSliding)
         {
@@ -274,6 +278,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle Movement
         if (!isWallSliding)
         {
+            
             Move();
             modifyPhysics();
         }
@@ -286,13 +291,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if(jumpTimer > Time.time && (nbJump < nbJumpsAllowed || isWallJumping))
         {
             animator.SetTrigger("jump");
+            animator.SetBool("isJumping", true);
             Jump();
-            animator.SetTrigger("jump");
         }
         
         // Handle attack
         if (isAttacking && !isWallSliding)
         {
+            animator.SetTrigger("attack");
             Attack();
             isAttacking = false;
         }
@@ -300,8 +306,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         //Handle dash
         if (isDashing && !isWallSliding)
         {
+            animator.SetTrigger("dash");
             Dash();
             dashCooldownStatus = DASH_COOLDOWN;
+            animator.SetTrigger("enddash");
+            
         }
 
         // Handle switch
@@ -474,7 +483,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             dashTime -= Time.deltaTime;
             rigidbody2d.velocity = dashDirection * dashSpeed;
         }
-        animator.SetTrigger("dash");
     }
 
     private void Attack()
