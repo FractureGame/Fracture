@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
@@ -67,11 +67,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private float SWITCH_COOLDOWN = 0.5f;
     public float switchCooldownStatus;
 
-
     [Header("WallJump")]
     private Vector2 onWall;
     private bool isWallJumping;
     private bool isWallSliding;
+
+    [Header("Animation")] 
+    private Animator animator;
 
     
     
@@ -83,6 +85,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
         dashCooldownStatus = 0f;
+        animator = GetComponentInChildren<Animator>();
         switchCooldownStatus = 0f;
     }
 
@@ -158,6 +161,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         onGround = IsGrounded();
         if (onGround)
         {
+            
             nbJump = 0;
         }
             
@@ -167,10 +171,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             Debug.Log("WallSliding");
             isWallSliding = true;
+            // animator.SetTrigger("wallSlide");
+            animator.SetBool("isWallSliding", true);
         }
         else
         {
             isWallSliding = false;
+            animator.SetBool("isWallSliding", false);
         }
 
 
@@ -182,7 +189,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             jumpTimer = Time.time + jumpDelay;
         }
 
+
+        if (direction != Vector2.zero)
+        {
+            oldDirection = direction;
+        }
+        
+        if (direction != Vector2.zero)
+            animator.SetBool("isWalking", true);
+        else
+        {
+            animator.SetBool("isWalking", false);
+        }
+
+        if (onGround)
+            animator.SetBool("isJumping", false);
+
         direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0);;
+
         
 
         if (direction != oldDirection && direction != Vector2.zero && oldDirection != Vector2.zero)
@@ -269,6 +293,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle Movement
         if (!isWallSliding)
         {
+            
             Move();
             modifyPhysics();
         }
@@ -280,12 +305,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle Jump
         if(jumpTimer > Time.time && (nbJump < nbJumpsAllowed || isWallJumping))
         {
+            animator.SetTrigger("jump");
+            animator.SetBool("isJumping", true);
             Jump();
         }
         
         // Handle attack
         if (isAttacking && !isWallSliding)
         {
+            animator.SetTrigger("attack");
             Attack();
             isAttacking = false;
         }
@@ -293,8 +321,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         //Handle dash
         if (isDashing && !isWallSliding)
         {
+            animator.SetTrigger("dash");
             Dash();
             dashCooldownStatus = DASH_COOLDOWN;
+            animator.SetTrigger("enddash");
+            
         }
 
         // Handle switch
@@ -413,6 +444,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         jumpTimer = 0;
         lastInterestingDir = direction;
+        
     }
 
     [PunRPC]
@@ -475,6 +507,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void Dash()
     {
+        Debug.Log(animator.name);
         if (dashTime <= 0)
         {
             isDashing = false;
