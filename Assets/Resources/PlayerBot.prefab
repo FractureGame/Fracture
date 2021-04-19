@@ -164,6 +164,7 @@ MonoBehaviour:
     m_Bits: 256
   attackDamage: 40
   orientation: {x: 1, y: 0}
+  switchCooldownStatus: 0
 --- !u!114 &4157558901229393605
 MonoBehaviour:
   m_ObjectHideFlags: 0

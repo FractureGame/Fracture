@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using System;
+using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
@@ -63,7 +64,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private GameObject playerTop;
     private GameObject playerBot;
     private bool isSwitching = false;
-    
+    private float SWITCH_COOLDOWN = 0.5f;
+    public float switchCooldownStatus;
+
     [Header("WallJump")]
     private Vector2 onWall;
     private bool isWallJumping;
@@ -83,6 +86,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         dashTime = startDashTime;
         dashCooldownStatus = 0f;
         animator = GetComponentInChildren<Animator>();
+        switchCooldownStatus = 0f;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -137,12 +141,22 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isAttacking = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.S) && (foo(playerTop.transform.position) != foo(playerBot.transform.position)))
+        if (switchCooldownStatus > 0)
+        {
+            switchCooldownStatus -= Time.deltaTime;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.S) && switchCooldownStatus <= 0f)
         {
             Debug.Log("Switching");
             isSwitching = true;
-            
         }
+        
+        if (switchCooldownStatus > 0)
+        {
+            switchCooldownStatus -= Time.deltaTime;
+        }
+        
 
         onGround = IsGrounded();
         if (onGround)
@@ -165,6 +179,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isWallSliding = false;
             animator.SetBool("isWallSliding", false);
         }
+
+
         
         if (isWallSliding && Input.GetKeyDown(KeyCode.Space))
         {
@@ -172,6 +188,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isWallSliding = false;
             jumpTimer = Time.time + jumpDelay;
         }
+
 
         if (direction != Vector2.zero)
         {
@@ -187,23 +204,21 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         if (onGround)
             animator.SetBool("isJumping", false);
+
+        direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0);;
+
         
-        if (isWallSliding)
-        {
-            Vector2 temp = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
-            if (temp != Vector2.zero)
-                direction = temp;
-        }
-        else
-        {
-            direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
-        }
-        
-        
+
         if (direction != oldDirection && direction != Vector2.zero && oldDirection != Vector2.zero)
         {
             Flip();
         }
+        if (direction != Vector2.zero)
+        {
+            oldDirection = direction;
+        }
+        
+        
         
         if (direction != Vector2.zero)
             orientation = direction;
@@ -320,6 +335,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
     }
 
+    private void LateUpdate()
+    {
+        if (photonView.IsMine)
+        {
+            if (SceneManager.GetActiveScene().name[0] == 'V')
+            {
+                Camera.main.GetComponent<VerticalCamera>().FollowPlayer(gameObject);
+            }
+        }
+    }
+
     private bool IsGrounded()
     {
         float extraHeightText = 0.1f;
@@ -375,6 +401,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             }
             else
             {
+                if (jumpTimer == 0 && isWallJumping)
+                {
+                    lastInterestingDir = orientation;
+                    isWallJumping = false;
+                }
+                Debug.Log(lastInterestingDir);
                 // No keys pressed, the player keeps going in the same direction while falling but slowly
                 if (lastInterestingDir == Vector2.left)
                     rigidbody2d.velocity = new Vector2(-moveSpeed/2, rigidbody2d.velocity.y);
@@ -402,7 +434,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                 rigidbody2d.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
             }
 
-            isWallJumping = false;
+            // isWallJumping = false;
         }
         else
         {
@@ -418,6 +450,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [PunRPC]
     private void InstantiateSwitch(Vector3 pos)
     {
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
         Vector3 playerTopPos = playerTop.transform.position;
         Vector3 playerBotPos = playerBot.transform.position;
         Instantiate(dashParticleRight, playerTopPos, Quaternion.identity);
@@ -444,7 +478,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         
         isSwitching = false;
+        
     }
+    
     
     private void modifyPhysics()
     {
