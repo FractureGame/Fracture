@@ -8,14 +8,15 @@ public class LevelSelector : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject buttonPrefab;
-    public Canvas canvas;
+    public GameObject parent;
     public void Start()
     {
+        parent.SetActive(true);
         int i = 0;
         foreach (KeyValuePair<string,int> kvp in Levels.scenes)
         {
             
-            GameObject button2 = Instantiate(buttonPrefab,canvas.transform) as GameObject;
+            GameObject button2 = Instantiate(buttonPrefab,parent.transform) as GameObject;
             button2.name = kvp.Key + " Button";
             button2.GetComponentInChildren<TextMeshProUGUI>().text = kvp.Key;
             button2.GetComponent<LevelButton>().buildIndex = kvp.Value;

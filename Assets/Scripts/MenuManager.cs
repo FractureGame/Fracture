@@ -2,6 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = System.Random;
 
@@ -19,7 +20,8 @@ namespace Com.MyCompany.MyGame
 
 
         #region Private Fields
-        
+
+        public GameObject TM;
         private bool publicGame;
         private string value;
         private bool creator;
@@ -69,6 +71,7 @@ namespace Com.MyCompany.MyGame
         {
             Debug.Log("PLAYONLINE");
             publicGame = true;
+            TM.GetComponent<TextMeshProUGUI>().text = "Waiting for my special someone...";
             PhotonNetwork.JoinRandomRoom();
         }
 
@@ -174,7 +177,6 @@ namespace Com.MyCompany.MyGame
         {
             if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && publicGame)
             {
-                GameObject TM = GameObject.Find("Waiting Public");
                 TM.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
             }
             else if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && !publicGame)
@@ -207,7 +209,13 @@ namespace Com.MyCompany.MyGame
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && !creator)
+            
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && !creator && publicGame)
+            {
+                leaveRoom();
+                TM.GetComponent<TextMeshProUGUI>().text = "Master left the room";
+            }
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && !creator)
             {
                 creator = true;
             }
