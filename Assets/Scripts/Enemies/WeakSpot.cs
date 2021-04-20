@@ -1,4 +1,5 @@
 ﻿
+using Photon.Pun;
 using UnityEngine;
 
 public class WeakSpot : MonoBehaviour
@@ -8,7 +9,7 @@ public class WeakSpot : MonoBehaviour
     {
         if(collision.gameObject.tag == "Player")
         {
-            Destroy(objectToDestroy);
+            PhotonNetwork.Destroy(objectToDestroy);
         }
     }
 }

@@ -25,14 +25,6 @@ namespace Com.MyCompany.MyGame
         [Tooltip("The prefab to use for representing the Blob")]
         public GameObject blobPrefab;
         
-        [Tooltip("The gameover Panel")]
-        [SerializeField]
-        private GameObject gameoverPanel;
-        [Tooltip("The gameover reason Label")]
-        [SerializeField]
-        private GameObject gameoverReasonLabel;
-
-
         #endregion
 
         #region Photon Callbacks
@@ -110,9 +102,9 @@ namespace Com.MyCompany.MyGame
                 {
                     PhotonNetwork.CurrentRoom.IsOpen = false;
                     PauseGame();
+                    GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
                     gameoverPanel.SetActive(true);
-                    gameoverReasonLabel.GetComponent<Text>().text = other.NickName + " left the room";
-                    gameoverReasonLabel.SetActive(true);
+                    gameoverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = other.NickName + " left the room";
                 }
             }
 
@@ -128,14 +120,13 @@ namespace Com.MyCompany.MyGame
 
         public void Start()
         {
-            gameoverPanel.SetActive(false);
-            gameoverReasonLabel.SetActive(false);
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
             if (SceneManager.GetActiveScene().name == "HLevel1")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
+                    
                     PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(8f, 7f,0f), Quaternion.identity, 0);
                 
                     // Instanciate the enemies of the TOP
@@ -143,6 +134,7 @@ namespace Com.MyCompany.MyGame
                 }
                 else
                 {
+                    
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(8f, 2f,0f), Quaternion.identity, 0);
                 
                     // Instanciate the enemies of the BOTTOM
@@ -162,8 +154,5 @@ namespace Com.MyCompany.MyGame
                 }
             }
         }
-        
     }
-    
-    
 }
