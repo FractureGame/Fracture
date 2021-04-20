@@ -177,6 +177,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isWallSliding = true;
             // animator.SetTrigger("wallSlide");
             animator.SetBool("isWallSliding", true);
+            animator.SetBool("isTurningHeadWallSlide", onWall != oldDirection);
         }
         else
         {
