@@ -54,6 +54,8 @@ MonoBehaviour:
   otherBar: {fileID: 4590895985146015872, guid: 4ac5072547022a0459a99908e4a23b78,
     type: 3}
   maxHealth: 150
+  canDoubleJump: 1
+  canDash: 0
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 512

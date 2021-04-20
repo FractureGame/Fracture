@@ -11,6 +11,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     public int maxHealth;
     private int currentHealth;
+
+    [Header("Abilities")] 
+    public bool canDoubleJump;
+    public bool canDash;
     
     [Header("Components")]
     private Rigidbody2D rigidbody2d;
@@ -121,7 +125,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             nbJump += 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dashCooldownStatus <= 0f)
+        if (canDash && Input.GetKeyDown(KeyCode.LeftShift) && dashCooldownStatus <= 0f)
         {
             isDashing = true;
             dashTime = startDashTime;

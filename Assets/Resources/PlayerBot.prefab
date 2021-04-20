@@ -141,12 +141,14 @@ MonoBehaviour:
   otherBar: {fileID: 4590895985146015872, guid: 13e6980c11d59b34c9e90adcaaed400a,
     type: 3}
   maxHealth: 150
+  canDoubleJump: 0
+  canDash: 1
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 512
   moveSpeed: 10
   jumpVelocity: 16
-  nbJumpsAllowed: 2
+  nbJumpsAllowed: 1
   linearDrag: 1
   gravity: 1
   fallMultiplier: 6

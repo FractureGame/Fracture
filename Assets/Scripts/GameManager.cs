@@ -134,8 +134,12 @@ namespace Com.MyCompany.MyGame
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
             if (SceneManager.GetActiveScene().name == "HLevel1")
             {
+                playerTopPrefab.GetComponent<PlayerMovement>().canDoubleJump = true;
+                playerBotPrefab.GetComponent<PlayerMovement>().canDash = true;
+                playerBotPrefab.GetComponent<PlayerMovement>().nbJumpsAllowed = 1;
                 if (PhotonNetwork.IsMasterClient)
                 {
+                    
                     PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(8f, 7f,0f), Quaternion.identity, 0);
                 
                     // Instanciate the enemies of the TOP
@@ -143,6 +147,7 @@ namespace Com.MyCompany.MyGame
                 }
                 else
                 {
+                    
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(8f, 2f,0f), Quaternion.identity, 0);
                 
                     // Instanciate the enemies of the BOTTOM
@@ -162,8 +167,5 @@ namespace Com.MyCompany.MyGame
                 }
             }
         }
-        
     }
-    
-    
 }
