@@ -21,10 +21,13 @@ namespace Com.MyCompany.MyGame
 
         #region Private Fields
 
-        public GameObject TM;
+        public GameObject textPublic;
+        public GameObject textPrivate;
+        public GameObject waitingPrivateMenu;
+        public GameObject privateMenu;
         private bool publicGame;
         private string value;
-        private bool creator;
+        //private bool creator;
         private const int CODE_LENGTH = 4;
         private string code;
         private string sceneName = "LevelSelector";
@@ -71,7 +74,7 @@ namespace Com.MyCompany.MyGame
         {
             Debug.Log("PLAYONLINE");
             publicGame = true;
-            TM.GetComponent<TextMeshProUGUI>().text = "Waiting for my special someone...";
+            textPublic.GetComponent<TextMeshProUGUI>().text = "Waiting for my special someone...";
             PhotonNetwork.JoinRandomRoom();
         }
 
@@ -90,7 +93,7 @@ namespace Com.MyCompany.MyGame
         public void CreatePrivateRoom()
         {
             publicGame = false;
-            creator = true;
+            //creator = true;
             code = GenerateRandomCode();
             PhotonNetwork.CreateRoom(code, new RoomOptions {MaxPlayers = maxPlayersPerRoom, IsVisible = false}, null,
                 new string[]{});
@@ -99,7 +102,7 @@ namespace Com.MyCompany.MyGame
         
         public void JoinPrivateRoom()
         {
-            creator = false;
+            //creator = false;
             publicGame = false;
             value = inputRoomNameToJoin.GetComponent<Text>().text;
             if (string.IsNullOrEmpty(value))
@@ -177,14 +180,13 @@ namespace Com.MyCompany.MyGame
         {
             if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && publicGame)
             {
-                TM.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
+                textPublic.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
             }
             else if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && !publicGame)
             {
-                GameObject privateMenu = GameObject.Find("Join Private Menu");
                 privateMenu.SetActive(false);
-                GameObject TM = GameObject.Find("Waiting Private");
-                TM.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
+                waitingPrivateMenu.SetActive(true);
+                textPrivate.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
             }
         }
 
@@ -210,15 +212,20 @@ namespace Com.MyCompany.MyGame
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && !creator && publicGame)
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 /*&& !creator*/ && publicGame)
             {
                 leaveRoom();
-                TM.GetComponent<TextMeshProUGUI>().text = "Master left the room";
+                textPublic.GetComponent<TextMeshProUGUI>().text = "Master left the room";
             }
-            else if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && !creator)
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 1 /*&& !creator*/ && !publicGame)
+
             {
-                creator = true;
+                textPrivate.GetComponent<TextMeshProUGUI>().text = "Master left the room";
             }
+            // else if (PhotonNetwork.CurrentRoom.PlayerCount == 1/* && !creator*/)
+            // {
+            //     //creator = true;
+            // }
         }
 
         #endregion
