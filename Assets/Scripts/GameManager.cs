@@ -25,12 +25,12 @@ namespace Com.MyCompany.MyGame
         [Tooltip("The prefab to use for representing the Blob")]
         public GameObject blobPrefab;
         
-        [Tooltip("The gameover Panel")]
-        [SerializeField]
-        private GameObject gameoverPanel;
-        [Tooltip("The gameover reason Label")]
-        [SerializeField]
-        private GameObject gameoverReasonLabel;
+        // [Tooltip("The gameover Panel")]
+        // [SerializeField]
+        // public GameObject gameoverPanel;
+        // [Tooltip("The gameover reason Label")]
+        // [SerializeField]
+        // public GameObject gameoverReasonLabel;
 
 
         #endregion
@@ -110,9 +110,9 @@ namespace Com.MyCompany.MyGame
                 {
                     PhotonNetwork.CurrentRoom.IsOpen = false;
                     PauseGame();
+                    GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
                     gameoverPanel.SetActive(true);
-                    gameoverReasonLabel.GetComponent<Text>().text = other.NickName + " left the room";
-                    gameoverReasonLabel.SetActive(true);
+                    gameoverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = other.NickName + " left the room";
                 }
             }
 
@@ -128,8 +128,6 @@ namespace Com.MyCompany.MyGame
 
         public void Start()
         {
-            gameoverPanel.SetActive(false);
-            gameoverReasonLabel.SetActive(false);
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
             if (SceneManager.GetActiveScene().name == "HLevel1")

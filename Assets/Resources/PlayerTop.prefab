@@ -292,6 +292,12 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 2
     Name: attack
+  - Type: 4
+    SynchronizeType: 2
+    Name: isTurningHeadWallSlide
+  - Type: 9
+    SynchronizeType: 2
+    Name: death
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0

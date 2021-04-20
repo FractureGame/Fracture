@@ -1,7 +1,10 @@
 using System;
+using System.Threading;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
@@ -9,8 +12,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public GameObject thisBar;
     public GameObject otherBar;
     
+    [Header("Health")]
     public int maxHealth;
     private int currentHealth;
+    private bool isDead;
 
     [Header("Abilities")] 
     public bool canDoubleJump;
@@ -79,11 +84,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Animation")] 
     private Animator animator;
 
-    
-    
     private void Start()
     {
-        // thisBar.SetMaxHealth(maxHealth);
         currentHealth = maxHealth;
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
@@ -102,6 +104,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        if (isDead)
+            return;
+        
         if (playerBot == null)
         {
             playerBot = GameObject.Find("PlayerBot(Clone)");
@@ -231,21 +236,40 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyCode.P))
         {
             Debug.Log("Damage");
-            int i = TakeDamage(20);
-            photonView.RPC("SetHealthBar",RpcTarget.All,i, thisBar.name);
+            if (currentHealth > 0)
+            {
+                int i = TakeDamage(20);
+                photonView.RPC("SetHealthBar",RpcTarget.All,i, thisBar.name);
+            }
         }
     }
 
     public int TakeDamage(int dmg)
     {
-        
         currentHealth -= dmg;
-        if (currentHealth <= 0)
+        if (currentHealth < 0)
         {
             currentHealth = 0;
-            PhotonNetwork.Destroy(gameObject);
+            Die();
         }
         return currentHealth;
+    }
+
+    public void Die()
+    {
+        animator.SetTrigger("death");
+        photonView.RPC("DisplayDeath", RpcTarget.All, PhotonNetwork.NickName);
+    }
+
+    [PunRPC]
+    public void DisplayDeath(string deadPlayerName)
+    {
+        GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+        gameoverPanel.SetActive(true);
+        gameoverPanel.transform.Find("gameover Reason").gameObject.GetComponent<Text>().text = deadPlayerName + " died";
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().isDead = true;
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().isDead = true;
+        // Time.timeScale = 0;
     }
 
     // [PunRPC]
@@ -289,6 +313,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     private void FixedUpdate()
     {
+        if (isDead)
+            return;
+        
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)
         {
@@ -342,6 +369,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void LateUpdate()
     {
+        if (isDead)
+            return;
+        
         if (photonView.IsMine)
         {
             if (SceneManager.GetActiveScene().name[0] == 'V')
