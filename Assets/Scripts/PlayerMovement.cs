@@ -90,10 +90,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         dashCooldownStatus = 0f;
         animator = GetComponentInChildren<Animator>();
         switchCooldownStatus = 0f;
-        
-
-
-
     }
 
     private void OnCollisionEnter2D(Collision2D other)
