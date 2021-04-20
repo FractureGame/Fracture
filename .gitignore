@@ -649,3 +649,12 @@ InitTestScene*.unity
 # Ionide (cross platform F# VS Code tools) working folder
 
 # End of https://www.toptal.com/developers/gitignore/api/unity,visualstudio,rider,csharp
+.vscode/solution-explorer/class.cs-template
+.vscode/solution-explorer/class.ts-template
+.vscode/solution-explorer/class.vb-template
+.vscode/solution-explorer/default.ts-template
+.vscode/solution-explorer/enum.cs-template
+.vscode/solution-explorer/interface.cs-template
+.vscode/solution-explorer/interface.ts-template
+.vscode/solution-explorer/template-list.json
+.vscode/solution-explorer/template-parameters.js
