@@ -289,7 +289,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         int i = ApplyDamage(dmg);
         photonView.RPC("SetHealthBar",RpcTarget.All,i, thisBar.name);
     }
-    
+
+    /*public override void OnTriggerEnter2D(Collider2D enemy)
+    {
+        if (enemy.gameObject.tag == "Enemies")
+        {
+            TakeDamage(20); // take 20 dmg
+        }
+        if (enemy.gameObject.tag == "Water")
+        {
+            TakeDamage(10);
+        }
+    }*/
+
     public int ApplyDamage(int dmg)
     {
         currentHealth -= dmg;
