@@ -1,6 +1,8 @@
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = System.Random;
 
@@ -18,13 +20,17 @@ namespace Com.MyCompany.MyGame
 
 
         #region Private Fields
-        
+
+        public GameObject textPublic;
+        public GameObject textPrivate;
+        public GameObject waitingPrivateMenu;
+        public GameObject privateMenu;
         private bool publicGame;
         private string value;
-        private bool creator;
+        //private bool creator;
         private const int CODE_LENGTH = 4;
         private string code;
-        private string sceneName = "HLevel1";
+        private string sceneName = "LevelSelector";
 
         #endregion
 
@@ -68,6 +74,7 @@ namespace Com.MyCompany.MyGame
         {
             Debug.Log("PLAYONLINE");
             publicGame = true;
+            textPublic.GetComponent<TextMeshProUGUI>().text = "Waiting for my special someone...";
             PhotonNetwork.JoinRandomRoom();
         }
 
@@ -86,7 +93,7 @@ namespace Com.MyCompany.MyGame
         public void CreatePrivateRoom()
         {
             publicGame = false;
-            creator = true;
+            //creator = true;
             code = GenerateRandomCode();
             PhotonNetwork.CreateRoom(code, new RoomOptions {MaxPlayers = maxPlayersPerRoom, IsVisible = false}, null,
                 new string[]{});
@@ -95,7 +102,7 @@ namespace Com.MyCompany.MyGame
         
         public void JoinPrivateRoom()
         {
-            creator = false;
+            //creator = false;
             publicGame = false;
             value = inputRoomNameToJoin.GetComponent<Text>().text;
             if (string.IsNullOrEmpty(value))
@@ -104,6 +111,7 @@ namespace Com.MyCompany.MyGame
                 return;
             }
             PhotonNetwork.JoinRoom(value);
+            
         }
 
         public void LaunchGame()
@@ -168,26 +176,56 @@ namespace Com.MyCompany.MyGame
             }
         }
 
+        public override void OnJoinedRoom()
+        {
+            if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && publicGame)
+            {
+                textPublic.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
+            }
+            else if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && !publicGame)
+            {
+                privateMenu.SetActive(false);
+                waitingPrivateMenu.SetActive(true);
+                textPrivate.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
+            }
+        }
+
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             Debug.Log("OnPlayerEnteredRoom() called by PUN. Now this client is in a room.");
             if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && publicGame)
             {
                 Debug.Log("We load the game scene");
+                
+                // PhotonNetwork.LoadLevel(sceneName);
+                PhotonNetwork.AutomaticallySyncScene = false;
                 PhotonNetwork.LoadLevel(sceneName);
             }
             else if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
-                launchGameButton.SetActive(true);
+                PhotonNetwork.AutomaticallySyncScene = false;
+                PhotonNetwork.LoadLevel(sceneName);
+                // launchGameButton.SetActive(true);
             }
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && !creator)
+            
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 /*&& !creator*/ && publicGame)
             {
-                creator = true;
+                leaveRoom();
+                textPublic.GetComponent<TextMeshProUGUI>().text = "Master left the room";
             }
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 1 /*&& !creator*/ && !publicGame)
+
+            {
+                textPrivate.GetComponent<TextMeshProUGUI>().text = "Master left the room";
+            }
+            // else if (PhotonNetwork.CurrentRoom.PlayerCount == 1/* && !creator*/)
+            // {
+            //     //creator = true;
+            // }
         }
 
         #endregion
