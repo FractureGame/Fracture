@@ -280,15 +280,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyCode.P))
         {
             Debug.Log("Damage");
-            if (currentHealth > 0)
-            {
-                int i = TakeDamage(20);
-                photonView.RPC("SetHealthBar",RpcTarget.All,i, thisBar.name);
-            }
+            TakeDamage(20);
         }
     }
 
-    public int TakeDamage(int dmg)
+    public void TakeDamage(int dmg)
+    {
+        int i = ApplyDamage(dmg);
+        photonView.RPC("SetHealthBar",RpcTarget.All,i, thisBar.name);
+    }
+    
+    public int ApplyDamage(int dmg)
     {
         currentHealth -= dmg;
         if (currentHealth < 0)
