@@ -1,22 +1,29 @@
 using System;
 using System.Threading;
+using JetBrains.Annotations;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
+using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
-    public GameObject thisBar;
-    public GameObject otherBar;
+
     
     [Header("Health")]
     public int maxHealth;
     private int currentHealth;
     private bool isDead;
+    public GameObject thisBar;
+    public GameObject otherBar;
 
+    [Header("Names on screen")]
+    private TextMeshProUGUI playerTopName;
+    private TextMeshProUGUI playerBotName;
+    
     [Header("Abilities")] 
     public bool canDoubleJump;
     public bool canDash;
@@ -93,6 +100,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         dashCooldownStatus = 0f;
         animator = GetComponentInChildren<Animator>();
         switchCooldownStatus = 0f;
+        playerTopName = GameObject.Find("PTopName").GetComponent<TextMeshProUGUI>();
+        if (SceneManager.GetActiveScene().name[0] == 'H')
+        {
+            playerBotName = GameObject.Find("HPBotName").GetComponent<TextMeshProUGUI>();
+            
+        }
+        else if (SceneManager.GetActiveScene().name[0] == 'V')
+        {
+            playerBotName = GameObject.Find("VPBotName").GetComponent<TextMeshProUGUI>();
+        }
+        playerTopName.text = PhotonNetwork.MasterClient.NickName;
+        playerBotName.text = PhotonNetwork.PlayerList[1].NickName;
+
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -487,6 +507,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
+
+        if (playerTopName.text == PhotonNetwork.MasterClient.NickName)
+        {
+            playerTopName.text = PhotonNetwork.PlayerList[1].NickName;
+            playerBotName.text = PhotonNetwork.MasterClient.NickName;
+        }
+        else
+        {
+            playerBotName.text = PhotonNetwork.PlayerList[1].NickName;
+            playerTopName.text = PhotonNetwork.MasterClient.NickName;
+        }
+        
+        
         Vector3 playerTopPos = playerTop.transform.position;
         Vector3 playerBotPos = playerBot.transform.position;
         Instantiate(dashParticleRight, playerTopPos, Quaternion.identity);
