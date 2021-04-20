@@ -1,10 +1,5 @@
-using System;
-using System.Threading;
-using JetBrains.Annotations;
 using UnityEngine;
 using Photon.Pun;
-using Photon.Pun.Demo.PunBasics;
-using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
@@ -20,13 +15,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public GameObject thisBar;
     public GameObject otherBar;
 
-    [Header("Names on screen")]
-    private TextMeshProUGUI playerTopName;
-    private TextMeshProUGUI playerBotName;
-    
-    [Header("Abilities")] 
-    public bool canDoubleJump;
+    [Header("Abilities")]
     public bool canDash;
+    public float nbJumpsAllowed = 1;
     
     [Header("Components")]
     private Rigidbody2D rigidbody2d;
@@ -43,7 +34,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Vertical Movement")]
     public float jumpVelocity = 10f;
     private float jumpTimer = 0f;
-    public float nbJumpsAllowed = 1;
     private float jumpDelay = 0.25f;
     private float nbJump = 0;
 
@@ -101,27 +91,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         animator = GetComponentInChildren<Animator>();
         switchCooldownStatus = 0f;
         
-        GameObject playerTopsign = new GameObject("playertop_label");          
-        playerTopsign.transform.rotation = Camera.main.transform.rotation; // Causes the text faces camera.
-        TextMesh tm1 = playerTopsign.AddComponent<TextMesh>();
-        tm1.text = PhotonNetwork.MasterClient.NickName;
-        tm1.color = new Color(0.8f, 0.8f, 0.8f);
-        tm1.fontStyle = FontStyle.Bold;
-        tm1.alignment = TextAlignment.Center;
-        tm1.anchor = TextAnchor.MiddleCenter;
-        tm1.characterSize = 0.065f;
-        tm1.fontSize = 40;
-        
-        GameObject playerBotsign = new GameObject("playerbot_label");          
-        playerBotsign.transform.rotation = Camera.main.transform.rotation; // Causes the text faces camera.
-        TextMesh tm2 = playerBotsign.AddComponent<TextMesh>();
-        tm2.text = PhotonNetwork.PlayerList[1].NickName;
-        tm2.color = new Color(0.8f, 0.8f, 0.8f);
-        tm2.fontStyle = FontStyle.Bold;
-        tm2.alignment = TextAlignment.Center;
-        tm2.anchor = TextAnchor.MiddleCenter;
-        tm2.characterSize = 0.065f;
-        tm2.fontSize = 40;
+
+
+
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -144,17 +116,59 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             playerTop = GameObject.Find("PlayerTop(Clone)");
         }
         
-        GameObject.Find("playertop_label").transform.position = playerTop.transform.position + Vector3.up * 1.5f;
-        GameObject.Find("playerbot_label").transform.position = playerBot.transform.position + Vector3.up * 1.5f;
-        
-        if (isDead)
-            return;
+
         
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)
         {
             return;
         }
+
+        GameObject playerTopsign = GameObject.Find("playertop_label");
+        if (playerTopsign == null)
+        {
+            playerTopsign = new GameObject("playertop_label");          
+            // playerTopsign.transform.rotation = Camera.main.transform.rotation; // Causes the text faces camera.
+            TextMesh tm1 = playerTopsign.AddComponent<TextMesh>();
+            tm1.text = PhotonNetwork.MasterClient.NickName;
+            tm1.color = new Color(0.8f, 0.8f, 0.8f);
+            tm1.fontStyle = FontStyle.Bold;
+            tm1.alignment = TextAlignment.Center;
+            tm1.anchor = TextAnchor.MiddleCenter;
+            tm1.characterSize = 0.065f;
+            tm1.fontSize = 40;
+        }
+        
+        GameObject playerBotsign = GameObject.Find("playerbot_label");
+        if (playerBotsign == null)
+        {
+            playerBotsign = new GameObject("playerbot_label");          
+            // playerBotsign.transform.rotation = Camera.main.transform.rotation; // Causes the text faces camera.
+            TextMesh tm2 = playerBotsign.AddComponent<TextMesh>();
+            tm2.text = PhotonNetwork.PlayerList[1].NickName;
+            tm2.color = new Color(0.8f, 0.8f, 0.8f);
+            tm2.fontStyle = FontStyle.Bold;
+            tm2.alignment = TextAlignment.Center;
+            tm2.anchor = TextAnchor.MiddleCenter;
+            tm2.characterSize = 0.065f;
+            tm2.fontSize = 40;
+        }
+        
+        
+        
+        if (gameObject == playerTop)
+        {
+            playerTopsign.transform.position = gameObject.transform.position + Vector3.up * 1.5f;
+            playerBotsign.transform.position = playerBot.transform.position + Vector3.up * 1.5f;   
+        }
+        else
+        {
+            playerBotsign.transform.position = gameObject.transform.position + Vector3.up * 1.5f;
+            playerTopsign.transform.position = playerTop.transform.position + Vector3.up * 1.5f;   
+        }
+        
+        if (isDead)
+            return;
 
         if (Input.GetKeyDown(KeyCode.Space) && nbJump < nbJumpsAllowed)
         {
@@ -198,11 +212,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             switchCooldownStatus -= Time.deltaTime;
         }
         
-
         onGround = IsGrounded();
         if (onGround)
         {
-            
             nbJump = 0;
         }
             
@@ -301,7 +313,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         gameoverPanel.transform.Find("gameover Reason").gameObject.GetComponent<Text>().text = deadPlayerName + " died";
         GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().isDead = true;
         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().isDead = true;
-        // Time.timeScale = 0;
     }
 
     // [PunRPC]

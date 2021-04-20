@@ -124,9 +124,6 @@ namespace Com.MyCompany.MyGame
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
             if (SceneManager.GetActiveScene().name == "HLevel1")
             {
-                playerTopPrefab.GetComponent<PlayerMovement>().canDoubleJump = true;
-                playerBotPrefab.GetComponent<PlayerMovement>().canDash = true;
-                playerBotPrefab.GetComponent<PlayerMovement>().nbJumpsAllowed = 1;
                 if (PhotonNetwork.IsMasterClient)
                 {
                     
