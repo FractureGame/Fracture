@@ -100,19 +100,28 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         dashCooldownStatus = 0f;
         animator = GetComponentInChildren<Animator>();
         switchCooldownStatus = 0f;
-        playerTopName = GameObject.Find("PTopName").GetComponent<TextMeshProUGUI>();
-        if (SceneManager.GetActiveScene().name[0] == 'H')
-        {
-            playerBotName = GameObject.Find("HPBotName").GetComponent<TextMeshProUGUI>();
-            
-        }
-        else if (SceneManager.GetActiveScene().name[0] == 'V')
-        {
-            playerBotName = GameObject.Find("VPBotName").GetComponent<TextMeshProUGUI>();
-        }
-        playerTopName.text = PhotonNetwork.MasterClient.NickName;
-        playerBotName.text = PhotonNetwork.PlayerList[1].NickName;
-
+        
+        GameObject playerTopsign = new GameObject("playertop_label");          
+        playerTopsign.transform.rotation = Camera.main.transform.rotation; // Causes the text faces camera.
+        TextMesh tm1 = playerTopsign.AddComponent<TextMesh>();
+        tm1.text = PhotonNetwork.MasterClient.NickName;
+        tm1.color = new Color(0.8f, 0.8f, 0.8f);
+        tm1.fontStyle = FontStyle.Bold;
+        tm1.alignment = TextAlignment.Center;
+        tm1.anchor = TextAnchor.MiddleCenter;
+        tm1.characterSize = 0.065f;
+        tm1.fontSize = 40;
+        
+        GameObject playerBotsign = new GameObject("playerbot_label");          
+        playerBotsign.transform.rotation = Camera.main.transform.rotation; // Causes the text faces camera.
+        TextMesh tm2 = playerBotsign.AddComponent<TextMesh>();
+        tm2.text = PhotonNetwork.PlayerList[1].NickName;
+        tm2.color = new Color(0.8f, 0.8f, 0.8f);
+        tm2.fontStyle = FontStyle.Bold;
+        tm2.alignment = TextAlignment.Center;
+        tm2.anchor = TextAnchor.MiddleCenter;
+        tm2.characterSize = 0.065f;
+        tm2.fontSize = 40;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -123,9 +132,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     }
 
     private void Update()
-    {
-        if (isDead)
-            return;
+    {        
         
         if (playerBot == null)
         {
@@ -136,8 +143,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             playerTop = GameObject.Find("PlayerTop(Clone)");
         }
-
-
+        
+        GameObject.Find("playertop_label").transform.position = playerTop.transform.position + Vector3.up * 1.5f;
+        GameObject.Find("playerbot_label").transform.position = playerBot.transform.position + Vector3.up * 1.5f;
+        
+        if (isDead)
+            return;
+        
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)
         {
@@ -507,18 +519,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
-
-        if (playerTopName.text == PhotonNetwork.MasterClient.NickName)
-        {
-            playerTopName.text = PhotonNetwork.PlayerList[1].NickName;
-            playerBotName.text = PhotonNetwork.MasterClient.NickName;
-        }
-        else
-        {
-            playerBotName.text = PhotonNetwork.PlayerList[1].NickName;
-            playerTopName.text = PhotonNetwork.MasterClient.NickName;
-        }
-        
         
         Vector3 playerTopPos = playerTop.transform.position;
         Vector3 playerBotPos = playerBot.transform.position;

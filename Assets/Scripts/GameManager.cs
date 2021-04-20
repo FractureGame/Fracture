@@ -25,14 +25,6 @@ namespace Com.MyCompany.MyGame
         [Tooltip("The prefab to use for representing the Blob")]
         public GameObject blobPrefab;
         
-        // [Tooltip("The gameover Panel")]
-        // [SerializeField]
-        // public GameObject gameoverPanel;
-        // [Tooltip("The gameover reason Label")]
-        // [SerializeField]
-        // public GameObject gameoverReasonLabel;
-
-
         #endregion
 
         #region Photon Callbacks
