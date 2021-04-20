@@ -1,15 +1,23 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
-    public GameObject thisBar;
-    public GameObject otherBar;
+
     
+    [Header("Health")]
     public int maxHealth;
     private int currentHealth;
+    private bool isDead;
+    public GameObject thisBar;
+    public GameObject otherBar;
+
+    [Header("Abilities")]
+    public bool canDash;
+    public float nbJumpsAllowed = 1;
     
     [Header("Components")]
     private Rigidbody2D rigidbody2d;
@@ -26,7 +34,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Vertical Movement")]
     public float jumpVelocity = 10f;
     private float jumpTimer = 0f;
-    public float nbJumpsAllowed = 1;
     private float jumpDelay = 0.25f;
     private float nbJump = 0;
 
@@ -63,23 +70,30 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private GameObject playerTop;
     private GameObject playerBot;
     private bool isSwitching = false;
-
+    private float SWITCH_COOLDOWN = 0.5f;
+    public float switchCooldownStatus;
 
     [Header("WallJump")]
     private Vector2 onWall;
     private bool isWallJumping;
     private bool isWallSliding;
 
-    
-    
+    [Header("Animation")] 
+    private Animator animator;
+
     private void Start()
     {
-        // thisBar.SetMaxHealth(maxHealth);
         currentHealth = maxHealth;
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
         dashCooldownStatus = 0f;
+        animator = GetComponentInChildren<Animator>();
+        switchCooldownStatus = 0f;
+        
+
+
+
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -90,7 +104,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     }
 
     private void Update()
-    {
+    {        
+        
         if (playerBot == null)
         {
             playerBot = GameObject.Find("PlayerBot(Clone)");
@@ -100,13 +115,60 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             playerTop = GameObject.Find("PlayerTop(Clone)");
         }
+        
 
-
+        
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)
         {
             return;
         }
+
+        GameObject playerTopsign = GameObject.Find("playertop_label");
+        if (playerTopsign == null)
+        {
+            playerTopsign = new GameObject("playertop_label");          
+            // playerTopsign.transform.rotation = Camera.main.transform.rotation; // Causes the text faces camera.
+            TextMesh tm1 = playerTopsign.AddComponent<TextMesh>();
+            tm1.text = PhotonNetwork.MasterClient.NickName;
+            tm1.color = new Color(0.8f, 0.8f, 0.8f);
+            tm1.fontStyle = FontStyle.Bold;
+            tm1.alignment = TextAlignment.Center;
+            tm1.anchor = TextAnchor.MiddleCenter;
+            tm1.characterSize = 0.065f;
+            tm1.fontSize = 40;
+        }
+        
+        GameObject playerBotsign = GameObject.Find("playerbot_label");
+        if (playerBotsign == null)
+        {
+            playerBotsign = new GameObject("playerbot_label");          
+            // playerBotsign.transform.rotation = Camera.main.transform.rotation; // Causes the text faces camera.
+            TextMesh tm2 = playerBotsign.AddComponent<TextMesh>();
+            tm2.text = PhotonNetwork.PlayerList[1].NickName;
+            tm2.color = new Color(0.8f, 0.8f, 0.8f);
+            tm2.fontStyle = FontStyle.Bold;
+            tm2.alignment = TextAlignment.Center;
+            tm2.anchor = TextAnchor.MiddleCenter;
+            tm2.characterSize = 0.065f;
+            tm2.fontSize = 40;
+        }
+        
+        
+        
+        if (gameObject == playerTop)
+        {
+            playerTopsign.transform.position = gameObject.transform.position + Vector3.up * 1.5f;
+            playerBotsign.transform.position = playerBot.transform.position + Vector3.up * 1.5f;   
+        }
+        else
+        {
+            playerBotsign.transform.position = gameObject.transform.position + Vector3.up * 1.5f;
+            playerTopsign.transform.position = playerTop.transform.position + Vector3.up * 1.5f;   
+        }
+        
+        if (isDead)
+            return;
 
         if (Input.GetKeyDown(KeyCode.Space) && nbJump < nbJumpsAllowed)
         {
@@ -114,7 +176,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             nbJump += 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dashCooldownStatus <= 0f)
+        if (canDash && Input.GetKeyDown(KeyCode.LeftShift) && dashCooldownStatus <= 0f)
         {
             isDashing = true;
             dashTime = startDashTime;
@@ -134,13 +196,22 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isAttacking = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.S) && (foo(playerTop.transform.position) != foo(playerBot.transform.position)))
+        if (switchCooldownStatus > 0)
+        {
+            switchCooldownStatus -= Time.deltaTime;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.S) && switchCooldownStatus <= 0f)
         {
             Debug.Log("Switching");
             isSwitching = true;
-            
         }
-
+        
+        if (switchCooldownStatus > 0)
+        {
+            switchCooldownStatus -= Time.deltaTime;
+        }
+        
         onGround = IsGrounded();
         if (onGround)
         {
@@ -153,11 +224,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             Debug.Log("WallSliding");
             isWallSliding = true;
+            // animator.SetTrigger("wallSlide");
+            animator.SetBool("isWallSliding", true);
+            animator.SetBool("isTurningHeadWallSlide", onWall != oldDirection);
         }
         else
         {
             isWallSliding = false;
+            animator.SetBool("isWallSliding", false);
         }
+
+
         
         if (isWallSliding && Input.GetKeyDown(KeyCode.Space))
         {
@@ -166,28 +243,36 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             jumpTimer = Time.time + jumpDelay;
         }
 
+
         if (direction != Vector2.zero)
         {
             oldDirection = direction;
         }
-
         
-        if (isWallSliding)
-        {
-            Vector2 temp = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
-            if (temp != Vector2.zero)
-                direction = temp;
-        }
+        if (direction != Vector2.zero)
+            animator.SetBool("isWalking", true);
         else
         {
-            direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
+            animator.SetBool("isWalking", false);
         }
+
+        if (onGround)
+            animator.SetBool("isJumping", false);
+
+        direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0);;
+
         
-        
+
         if (direction != oldDirection && direction != Vector2.zero && oldDirection != Vector2.zero)
         {
             Flip();
         }
+        if (direction != Vector2.zero)
+        {
+            oldDirection = direction;
+        }
+        
+        
         
         if (direction != Vector2.zero)
             orientation = direction;
@@ -195,21 +280,39 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyCode.P))
         {
             Debug.Log("Damage");
-            int i = TakeDamage(20);
-            photonView.RPC("SetHealthBar",RpcTarget.All,i, thisBar.name);
+            if (currentHealth > 0)
+            {
+                int i = TakeDamage(20);
+                photonView.RPC("SetHealthBar",RpcTarget.All,i, thisBar.name);
+            }
         }
     }
 
     public int TakeDamage(int dmg)
     {
-        
         currentHealth -= dmg;
-        if (currentHealth <= 0)
+        if (currentHealth < 0)
         {
             currentHealth = 0;
-            PhotonNetwork.Destroy(gameObject);
+            Die();
         }
         return currentHealth;
+    }
+
+    public void Die()
+    {
+        animator.SetTrigger("death");
+        photonView.RPC("DisplayDeath", RpcTarget.All, PhotonNetwork.NickName);
+    }
+
+    [PunRPC]
+    public void DisplayDeath(string deadPlayerName)
+    {
+        GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+        gameoverPanel.SetActive(true);
+        gameoverPanel.transform.Find("gameover Reason").gameObject.GetComponent<Text>().text = deadPlayerName + " died";
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().isDead = true;
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().isDead = true;
     }
 
     // [PunRPC]
@@ -253,6 +356,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     private void FixedUpdate()
     {
+        if (isDead)
+            return;
+        
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)
         {
@@ -262,6 +368,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle Movement
         if (!isWallSliding)
         {
+            
             Move();
             modifyPhysics();
         }
@@ -273,12 +380,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle Jump
         if(jumpTimer > Time.time && (nbJump < nbJumpsAllowed || isWallJumping))
         {
+            animator.SetTrigger("jump");
+            animator.SetBool("isJumping", true);
             Jump();
         }
         
         // Handle attack
         if (isAttacking && !isWallSliding)
         {
+            animator.SetTrigger("attack");
             Attack();
             isAttacking = false;
         }
@@ -286,14 +396,31 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         //Handle dash
         if (isDashing && !isWallSliding)
         {
+            animator.SetTrigger("dash");
             Dash();
             dashCooldownStatus = DASH_COOLDOWN;
+            animator.SetTrigger("enddash");
+            
         }
 
         // Handle switch
         if (isSwitching)
         {
             photonView.RPC("InstantiateSwitch", RpcTarget.All, gameObject.transform.position);
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (isDead)
+            return;
+        
+        if (photonView.IsMine)
+        {
+            if (SceneManager.GetActiveScene().name[0] == 'V')
+            {
+                Camera.main.GetComponent<VerticalCamera>().FollowPlayer(gameObject);
+            }
         }
     }
 
@@ -352,6 +479,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             }
             else
             {
+                if (jumpTimer == 0 && isWallJumping)
+                {
+                    lastInterestingDir = orientation;
+                    isWallJumping = false;
+                }
+                Debug.Log(lastInterestingDir);
                 // No keys pressed, the player keeps going in the same direction while falling but slowly
                 if (lastInterestingDir == Vector2.left)
                     rigidbody2d.velocity = new Vector2(-moveSpeed/2, rigidbody2d.velocity.y);
@@ -379,7 +512,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                 rigidbody2d.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
             }
 
-            isWallJumping = false;
+            // isWallJumping = false;
         }
         else
         {
@@ -389,11 +522,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         jumpTimer = 0;
         lastInterestingDir = direction;
+        
     }
 
     [PunRPC]
     private void InstantiateSwitch(Vector3 pos)
     {
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
+        
         Vector3 playerTopPos = playerTop.transform.position;
         Vector3 playerBotPos = playerBot.transform.position;
         Instantiate(dashParticleRight, playerTopPos, Quaternion.identity);
@@ -420,7 +557,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         
         isSwitching = false;
+        
     }
+    
     
     private void modifyPhysics()
     {
@@ -447,6 +586,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void Dash()
     {
+        Debug.Log(animator.name);
         if (dashTime <= 0)
         {
             isDashing = false;
