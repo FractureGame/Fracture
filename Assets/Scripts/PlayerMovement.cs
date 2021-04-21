@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using Photon.Pun;
+using UnityEditor.Experimental;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
@@ -70,7 +72,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private GameObject playerTop;
     private GameObject playerBot;
     private bool isSwitching = false;
-    private float SWITCH_COOLDOWN = 0.5f;
+    private float SWITCH_COOLDOWN = 1f;
     public float switchCooldownStatus;
 
     [Header("WallJump")]
@@ -84,7 +86,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Scene")]
     private float endTilePos;
     private bool horizontal;
-
+    
     private void Start()
     {
         currentHealth = maxHealth;
@@ -137,8 +139,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         GameObject playerTopsign = GameObject.Find("playertop_label");
         if (playerTopsign == null)
         {
-            playerTopsign = new GameObject("playertop_label");          
-            // playerTopsign.transform.rotation = Camera.main.transform.rotation; // Causes the text faces camera.
+            playerTopsign = new GameObject("playertop_label");
             TextMesh tm1 = playerTopsign.AddComponent<TextMesh>();
             tm1.text = PhotonNetwork.MasterClient.NickName;
             tm1.color = new Color(0.8f, 0.8f, 0.8f);
@@ -152,8 +153,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         GameObject playerBotsign = GameObject.Find("playerbot_label");
         if (playerBotsign == null)
         {
-            playerBotsign = new GameObject("playerbot_label");          
-            // playerBotsign.transform.rotation = Camera.main.transform.rotation; // Causes the text faces camera.
+            playerBotsign = new GameObject("playerbot_label");
             TextMesh tm2 = playerBotsign.AddComponent<TextMesh>();
             tm2.text = PhotonNetwork.PlayerList[1].NickName;
             tm2.color = new Color(0.8f, 0.8f, 0.8f);
@@ -164,17 +164,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             tm2.fontSize = 40;
         }
         
-        
-        
         if (gameObject == playerTop)
         {
             playerTopsign.transform.position = gameObject.transform.position + Vector3.up * 1.5f;
-            playerBotsign.transform.position = playerBot.transform.position + Vector3.up * 1.5f;   
+            playerBotsign.transform.position = playerBot.transform.position + Vector3.up * 1.5f;
         }
         else
         {
             playerBotsign.transform.position = gameObject.transform.position + Vector3.up * 1.5f;
-            playerTopsign.transform.position = playerTop.transform.position + Vector3.up * 1.5f;   
+            playerTopsign.transform.position = playerTop.transform.position + Vector3.up * 1.5f;
         }
         
         if (isDead)
@@ -216,6 +214,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             Debug.Log("Switching");
             isSwitching = true;
         }
+
+        if (switchCooldownStatus <= 0.3f)
+        {
+            playerTop.GetComponent<TrailRenderer>().time = 0.6f;
+            playerBot.GetComponent<TrailRenderer>().time = 0.6f;
+        }
         
         if (switchCooldownStatus > 0)
         {
@@ -226,6 +230,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (onGround)
         {
             nbJump = 0;
+            
         }
             
 
@@ -583,6 +588,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
         
+        playerTop.GetComponent<TrailRenderer>().time = -1f;
+        playerBot.GetComponent<TrailRenderer>().time = -1f;
+        
         Vector3 playerTopPos = playerTop.transform.position;
         Vector3 playerBotPos = playerBot.transform.position;
         Instantiate(dashParticleRight, playerTopPos, Quaternion.identity);
@@ -609,7 +617,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         
         isSwitching = false;
-        
     }
     
     
