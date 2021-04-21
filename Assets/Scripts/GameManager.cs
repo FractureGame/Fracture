@@ -153,6 +153,21 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(2f, -3f,0f), Quaternion.identity, 0);
                 }
             }
+            else if (SceneManager.GetActiveScene().name == "HLevel2")
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(6f, 7f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(6f, 0f,0f), Quaternion.identity, 0);
+                }
+            }
+            else if (SceneManager.GetActiveScene().name == "VLevel3")
+            {
+                
+            }
         }
     }
 }

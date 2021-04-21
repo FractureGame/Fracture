@@ -8,7 +8,8 @@ public static class Levels
     public static readonly Dictionary<string,int> scenes = new Dictionary<string,int>()
     {
         {"HLevel1",3},
-        {"Vlevel2",4}, 
-        {"VLevel3",5}
+        {"HLevel2",4},
+        {"VLevel2",5}, 
+        {"VLevel3",6}
     };
 }
