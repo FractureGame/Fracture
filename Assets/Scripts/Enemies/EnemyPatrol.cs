@@ -5,6 +5,8 @@ public class EnemyPatrol : MonoBehaviour
     public float speed;
     public Transform[] waypoints;
 
+    public int enemyDamage = 20; //dmg inflicted by enemy on player
+
     public SpriteRenderer graphics;
     private Transform target;
     private int destPoint;
@@ -26,6 +28,15 @@ public class EnemyPatrol : MonoBehaviour
             destPoint = (destPoint + 1) % waypoints.Length;
             target = waypoints[destPoint];
             graphics.flipX = !graphics.flipX;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.transform.CompareTag("Player"))
+        {
+            PlayerMovement hp = collision.transform.GetComponent<PlayerMovement>();
+            hp.TakeDamage(enemyDamage);
         }
     }
 }

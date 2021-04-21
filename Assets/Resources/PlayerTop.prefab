@@ -80,6 +80,12 @@ MonoBehaviour:
   attackDamage: 42
   orientation: {x: 1, y: 0}
   switchCooldownStatus: 0
+  body: {fileID: 2148739120314729393}
+  head: {fileID: 7145796864747952875}
+  leftArm: {fileID: 3146653190304206297}
+  rightArm: {fileID: 2250469240541468601}
+  leftLeg: {fileID: 8016887463451818556}
+  rightLeg: {fileID: 8940623958325527640}
 --- !u!114 &2369092048429108978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -611,6 +617,42 @@ GameObject:
 --- !u!4 &5065325781583308544 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2514300805540972587, guid: 08763992dea602948ab3e55453aeb8ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 1968299858974920917}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &2250469240541468601 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: -8904870375292401812, guid: 08763992dea602948ab3e55453aeb8ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 1968299858974920917}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &3146653190304206297 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: -5693704224160326388, guid: 08763992dea602948ab3e55453aeb8ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 1968299858974920917}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &7145796864747952875 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: -542061258078156226, guid: 08763992dea602948ab3e55453aeb8ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 1968299858974920917}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &8016887463451818556 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8363601116213357289, guid: 08763992dea602948ab3e55453aeb8ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 1968299858974920917}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &2148739120314729393 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: -8754693576941726876, guid: 08763992dea602948ab3e55453aeb8ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 1968299858974920917}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &8940623958325527640 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 7440989290604123277, guid: 08763992dea602948ab3e55453aeb8ae,
     type: 3}
   m_PrefabInstance: {fileID: 1968299858974920917}
   m_PrefabAsset: {fileID: 0}

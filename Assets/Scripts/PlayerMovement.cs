@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -81,6 +82,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Animation")] 
     private Animator animator;
 
+    [Header("Interaction")]
+    public SpriteRenderer body;
+    public SpriteRenderer head;
+    public SpriteRenderer leftArm;
+    public SpriteRenderer rightArm;
+    public SpriteRenderer leftLeg;
+    public SpriteRenderer rightLeg;
+
+    private bool isInvincible = false; // triggered when enemy contact
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -112,7 +123,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             playerTop = GameObject.Find("PlayerTop(Clone)");
         }
         
-
         
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)
@@ -280,10 +290,49 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
     }
 
+    public int GetHealth() // getter health
+    {
+        return currentHealth;
+    }
+
     public void TakeDamage(int dmg)
     {
-        int i = ApplyDamage(dmg);
-        photonView.RPC("SetHealthBar",RpcTarget.All,i, thisBar.name);
+        if(!isInvincible)
+        {
+            int i = ApplyDamage(dmg);
+            photonView.RPC("SetHealthBar", RpcTarget.All, i, thisBar.name);
+            isInvincible = true;
+            StartCoroutine(InvincibilityFlash());
+            StartCoroutine(HandleInvincibilityDelay());
+        }
+        
+    }
+
+    public IEnumerator InvincibilityFlash()
+    {
+        while(isInvincible)
+        {
+            body.color = new Color(1f, 1f, 1f, 0f);
+            head.color = new Color(1f, 1f, 1f, 0f);
+            leftArm.color = new Color(1f, 1f, 1f, 0f);
+            rightArm.color = new Color(1f, 1f, 1f, 0f);
+            leftLeg.color = new Color(1f, 1f, 1f, 0f);
+            rightLeg.color = new Color(1f, 1f, 1f, 0f);
+            yield return new WaitForSeconds(0.15f);
+            body.color = new Color(1f, 1f, 1f, 1f);
+            head.color = new Color(1f, 1f, 1f, 1f);
+            leftArm.color = new Color(1f, 1f, 1f, 1f);
+            rightArm.color = new Color(1f, 1f, 1f, 1f);
+            leftLeg.color = new Color(1f, 1f, 1f, 1f);
+            rightLeg.color = new Color(1f, 1f, 1f, 1f);
+            yield return new WaitForSeconds(0.15f);
+        }
+    }
+
+    public IEnumerator HandleInvincibilityDelay()
+    {
+        yield return new WaitForSeconds(2f);
+        isInvincible = false;
     }
 
     /*public override void OnTriggerEnter2D(Collider2D enemy)
