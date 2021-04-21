@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
@@ -163,17 +164,25 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             tm2.characterSize = 0.065f;
             tm2.fontSize = 40;
         }
-        
-        if (gameObject == playerTop)
+
+        try
         {
-            playerTopsign.transform.position = gameObject.transform.position + Vector3.up * 1.5f;
-            playerBotsign.transform.position = playerBot.transform.position + Vector3.up * 1.5f;
+            if (gameObject == playerTop)
+            {
+                playerTopsign.transform.position = gameObject.transform.position + Vector3.up * 1.5f;
+                playerBotsign.transform.position = playerBot.transform.position + Vector3.up * 1.5f;
+            }
+            else
+            {
+                playerBotsign.transform.position = gameObject.transform.position + Vector3.up * 1.5f;
+                playerTopsign.transform.position = playerTop.transform.position + Vector3.up * 1.5f;
+            }
         }
-        else
+        catch (Exception e)
         {
-            playerBotsign.transform.position = gameObject.transform.position + Vector3.up * 1.5f;
-            playerTopsign.transform.position = playerTop.transform.position + Vector3.up * 1.5f;
+            
         }
+
         
         if (isDead)
             return;
@@ -217,8 +226,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         if (switchCooldownStatus <= 0.3f)
         {
-            playerTop.GetComponent<TrailRenderer>().time = 0.6f;
-            playerBot.GetComponent<TrailRenderer>().time = 0.6f;
+            try
+            {playerTop.GetComponent<TrailRenderer>().time = 0.6f;
+                playerBot.GetComponent<TrailRenderer>().time = 0.6f;
+
+            }
+            catch (Exception e)
+            {
+                
+            }
+            
         }
         
         if (switchCooldownStatus > 0)
