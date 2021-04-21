@@ -80,6 +80,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     [Header("Animation")] 
     private Animator animator;
+    
+    [Header("Scene")]
+    private float endTilePos;
+    private bool horizontal;
 
     private void Start()
     {
@@ -90,6 +94,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         dashCooldownStatus = 0f;
         animator = GetComponentInChildren<Animator>();
         switchCooldownStatus = 0f;
+        if (SceneManager.GetActiveScene().name[0] == 'H')
+        {
+            horizontal = true;
+            endTilePos = GameObject.Find("Main Camera").GetComponent<CameraMovement>().endTilePos - 5f;
+        }
+        else if (SceneManager.GetActiveScene().name[0] == 'V')
+        {
+            horizontal = false;
+            endTilePos = GameObject.Find("Main Camera").GetComponent<VerticalCamera>().endTilePos - 5f;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -278,6 +292,33 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             Debug.Log("Damage");
             TakeDamage(20);
         }
+
+
+        if (horizontal)
+        {
+            if (playerTop.transform.position.x > endTilePos && playerBot.transform.position.x > endTilePos)
+            {
+                Victory();
+                isDead = true;
+            }
+        }
+        else
+        {
+            if (playerTop.transform.position.y > endTilePos && playerBot.transform.position.y > endTilePos)
+            {
+                Victory();
+                isDead = true;
+            }
+        }
+        
+    }
+
+    private void Victory()
+    {
+        GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+        gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
+        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "You win !";
+        gameOverPanel.SetActive(true);
     }
 
     public void TakeDamage(int dmg)
@@ -320,6 +361,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
         gameoverPanel.SetActive(true);
+        gameoverPanel.transform.Find("gameover Label").gameObject.GetComponent<Text>().text = "GAME OVER";
         gameoverPanel.transform.Find("gameover Reason").gameObject.GetComponent<Text>().text = deadPlayerName + " died";
         GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().isDead = true;
         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().isDead = true;

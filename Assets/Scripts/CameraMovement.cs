@@ -111,8 +111,6 @@ public class CameraMovement : MonoBehaviour
             else if (playerTopPos < beginning || playerBotPos < beginning && camPos <= beginning)
                 follow = false;
 
-
-            
             // else
             //     follow = false;
         }
