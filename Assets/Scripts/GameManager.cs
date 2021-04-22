@@ -10,11 +10,10 @@ namespace Com.MyCompany.MyGame
     public class GameManager : MonoBehaviourPunCallbacks
     {
         #region Public Fields
-
-        [Tooltip("The prefab to use for representing the TopPlayer")]
+        
         public GameObject playerTopPrefab;
-        [Tooltip("The prefab to use for representing the Botplayer")]
         public GameObject playerBotPrefab;
+        public GameObject Enemylifebar;
         
         
         #endregion
@@ -112,6 +111,15 @@ namespace Com.MyCompany.MyGame
 
         public void Start()
         {
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
+            foreach (var enemy in enemies)
+            {
+                GameObject e = Instantiate(Enemylifebar, GameObject.Find("Canvas").transform);
+                e.name = enemy.name + "LifeBar";
+                e.transform.position = new Vector3(enemy.GetComponentInChildren<BoxCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
+            }
+            
+            
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
             if (SceneManager.GetActiveScene().name == "HLevel1")

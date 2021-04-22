@@ -8,8 +8,9 @@ public class WeakSpot : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.tag == "Player")
-        {
-            PhotonNetwork.Destroy(objectToDestroy);
+        { 
+            // PhotonNetwork.Destroy(GameObject.Find(transform.parent.transform.parent.name + "LifeBar"));
+            // PhotonNetwork.Destroy(objectToDestroy);
         }
     }
 }

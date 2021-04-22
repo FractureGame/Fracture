@@ -65,6 +65,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
     public int attackDamage = 40;
+    private float ATTACK_COOLDOWN = 0.3f;
+    private float attackCooldownStatus;
 
     [Header("Orientation")]
     public Vector2 orientation = Vector2.right;
@@ -98,6 +100,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         dashTime = startDashTime;
         dashCooldownStatus = 0f;
+        attackCooldownStatus = 0f;
         animator = GetComponentInChildren<Animator>();
         switchCooldownStatus = 0f;
         if (SceneManager.GetActiveScene().name[0] == 'H')
@@ -209,12 +212,22 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             dashCooldownStatus -= Time.deltaTime;
         }
 
+        if (attackCooldownStatus > 0)
+        {
+            attackCooldownStatus -= Time.deltaTime;
+        }
+        else
+        {
+            animator.SetBool("isAttacking", false);
+        }
 
-        if (Input.GetKeyDown(KeyCode.A))
+
+        if (Input.GetKeyDown(KeyCode.A) && attackCooldownStatus <= 0f)
         {
             Debug.Log("Attacking");
             isAttacking = true;
         }
+
 
         if (switchCooldownStatus > 0)
         {
@@ -466,11 +479,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle attack
         if (isAttacking && !isWallSliding)
         {
-            animator.SetTrigger("attack");
+            animator.SetBool("isAttacking", true);
             Attack();
+            attackCooldownStatus = ATTACK_COOLDOWN;
             isAttacking = false;
         }
-        
+
         //Handle dash
         if (isDashing && !isWallSliding)
         {
@@ -487,7 +501,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             photonView.RPC("InstantiateSwitch", RpcTarget.All, gameObject.transform.position);
         }
     }
-
+    
     private void LateUpdate()
     {
         if (isDead)
@@ -687,22 +701,57 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         // Detect enemies in range of attack
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
-        
-        
+
         // Damage them
         foreach (var enemy in hitEnemies)
         {
-            Debug.Log("We hit " + enemy.name);
-            photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
-            photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name);
+            if (!boxCollider2d.bounds.Intersects(enemy.GetComponent<BoxCollider2D>().bounds))
+            {
+                Debug.Log("We hit " + enemy.transform.parent.name);
+                int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
+                photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
+            }
+            else
+            {
+                animator.SetBool("isAttacking", false);
+            }
+            
         }
+
+
     }
 
     [PunRPC]
-    private void DmgEnemy(string enemyName)
+    private void DmgEnemy(string enemyName, int enemyHealth)
+    {
+        if (enemyHealth > 0)
+        {
+            GameObject.Find(enemyName).GetComponentInChildren<Enemy>().currentHealth = enemyHealth;
+            GameObject bar = GameObject.Find(enemyName + "LifeBar");
+            bar.GetComponent<HPBar>().SetHealth(enemyHealth);
+        }
+        else
+        {
+            Debug.Log(enemyName);
+            // GameObject enemy = GameObject.Find(enemyName);
+            // Destroy(enemy);
+            GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
+            bar.GetComponent<HPBar>().SetHealth(0);
+            Destroy(bar);
+        }
+        
+    }
+
+    [PunRPC]
+    private void KillEnemy(string enemyName)
     {
         Debug.Log(enemyName);
-        GameObject.Find(enemyName).GetComponentInChildren<Enemy>().TakeDamage(attackDamage);
+        // GameObject enemy = GameObject.Find(enemyName);
+        // Destroy(enemy);
+        GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
+        bar.GetComponent<HPBar>().SetHealth(0);
+        Destroy(bar);
     }
 
     private void OnDrawGizmos()
@@ -717,6 +766,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         if(collision.CompareTag("WeakSpot"))
         {
+            animator.SetTrigger("jump");
+            animator.SetBool("isJumping", true);
             Jump();
         }
     }

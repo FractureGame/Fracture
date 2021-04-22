@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Health")]
     public int maxHealth = 100;
-    private float currentHealth;
+    public int currentHealth;
     private bool isGrounded = false;
-    
+    private GameObject lifebar;
+
     private Rigidbody2D rigidbody2d;
     private BoxCollider2D boxCollider2d;
     [SerializeField] private LayerMask platformLayerMask;
@@ -19,12 +19,15 @@ public class Enemy : MonoBehaviour
     public float gravity;
     public float fallMultiplier;
     
+
     // Start is called before the first frame update
     void Start()
     {
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         currentHealth = maxHealth;
+        Debug.Log(transform.parent.name);
+        // lifebar = GameObject.Find("Canvas").transform.Find(transform.parent.name + "LifeBar").gameObject;
     }
 
     private void Update()
@@ -34,6 +37,19 @@ public class Enemy : MonoBehaviour
         // so that the enemy does slide when moving
         rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
         modifyPhysics();
+
+
+        try
+        {
+            lifebar = GameObject.Find("Canvas").transform.Find(transform.parent.name + "LifeBar").gameObject;
+            lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
+        }
+        catch (Exception e)
+        {
+            
+        }
+        
+        
     }
     
     private bool IsGrounded()
@@ -54,23 +70,25 @@ public class Enemy : MonoBehaviour
         rigidbody2d.gravityScale = gravity * fallMultiplier;
     }
 
-    public void TakeDamage(int damage)
+    public int TakeDamage(int damage)
     {
         currentHealth -= damage;
+        lifebar.GetComponent<HPBar>().SetHealth(currentHealth);
         
         // Play hurt animation
-
+        
         if (currentHealth <= 0)
         {
             Die();
         }
-        
+
+        return currentHealth;
     }
 
     void Die()
     {
         Debug.Log("Enemy Died " + gameObject.name);
-        PhotonNetwork.Destroy(gameObject.transform.parent.gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
     
 }

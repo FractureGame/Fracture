@@ -705,10 +705,7 @@ MonoBehaviour:
     type: 3}
   playerBotPrefab: {fileID: 6439899078545751950, guid: 485d2e97a4eb95d42b64ffa97a6eae46,
     type: 3}
-  enemy2Prefab: {fileID: 7202288226908916868, guid: aada420fab5c10e46ad49962b0d4a523,
-    type: 3}
-  blobPrefab: {fileID: 6642292017263949507, guid: 9c25e8a76641a894bb1933c57dbef005,
-    type: 3}
+  Enemylifebar: {fileID: 0}
 --- !u!1001 &1062196186
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2739,8 +2736,8 @@ Canvas:
   m_GameObject: {fileID: 1587285945}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 2058915854}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -2749,7 +2746,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!1 &2054669199
 GameObject:
