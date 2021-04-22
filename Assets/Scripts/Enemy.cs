@@ -7,7 +7,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int maxHealth = 100;
-    private int currentHealth;
+    private float currentHealth;
     private bool isGrounded = false;
     
     private Rigidbody2D rigidbody2d;
@@ -52,18 +52,6 @@ public class Enemy : MonoBehaviour
         // Drag can be used to slow down an object. The higher the drag the more the object slows down.
         rigidbody2d.drag = linearDrag;
         rigidbody2d.gravityScale = gravity * fallMultiplier;
-        
-        // rigidbody2d.drag = linearDrag * 0.15f;
-        // // si le joueur descends, la force de gravité le fait descendre plus vite
-        // if (rigidbody2d.velocity.y < 0)
-        // {
-        //     rigidbody2d.gravityScale = gravity * fallMultiplier;
-        // }
-        // // si le joueur monte et que l'on maintient Jump, il flotte
-        // else if (rigidbody2d.velocity.y > 0 && !Input.GetButton("Jump"))
-        // {
-        //     rigidbody2d.gravityScale = gravity * (fallMultiplier / 2);
-        // }
     }
 
     public void TakeDamage(int damage)
@@ -82,13 +70,7 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         Debug.Log("Enemy Died " + gameObject.name);
-        
-        // Play die animation
-        
-        // Disable the enemy
-
-        // Really bad : player is thrown outside the map and keeps falling... but at least both players can't see him anymore
-        GetComponent<Transform>().position = new Vector2(-5f, -5f);
+        PhotonNetwork.Destroy(gameObject.transform.parent.gameObject);
     }
     
 }

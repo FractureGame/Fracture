@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f5e1e990a2e834da071f4009609eba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 30
+  maxHealth: 150
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 512

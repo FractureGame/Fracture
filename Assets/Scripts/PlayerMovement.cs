@@ -678,6 +678,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
+    private void InstantiateAttackParticle(Vector3 pos)
+    {
+        Instantiate(bloodEffect, pos, Quaternion.identity);
+    }
     private void Attack()
     {
         // Detect enemies in range of attack
@@ -688,9 +693,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         foreach (var enemy in hitEnemies)
         {
             Debug.Log("We hit " + enemy.name);
-            Instantiate(bloodEffect, enemy.transform.position, Quaternion.identity);
-            enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+            photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
+            photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name);
         }
+    }
+
+    [PunRPC]
+    private void DmgEnemy(string enemyName)
+    {
+        Debug.Log(enemyName);
+        GameObject.Find(enemyName).GetComponentInChildren<Enemy>().TakeDamage(attackDamage);
     }
 
     private void OnDrawGizmos()
