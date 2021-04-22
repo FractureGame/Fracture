@@ -751,8 +751,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         else
         {
             Debug.Log(enemyName);
-            // GameObject enemy = GameObject.Find(enemyName);
-            // Destroy(enemy);
             GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
             bar.GetComponent<HPBar>().SetHealth(0);
             Destroy(bar);
@@ -764,8 +762,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void KillEnemy(string enemyName)
     {
         Debug.Log(enemyName);
-        // GameObject enemy = GameObject.Find(enemyName);
-        // Destroy(enemy);
         GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
         bar.GetComponent<HPBar>().SetHealth(0);
         Destroy(bar);
@@ -786,6 +782,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             animator.SetTrigger("jump");
             animator.SetBool("isJumping", true);
             Jump();
+            photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.parent.name);
         }
     }
 }
