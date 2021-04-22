@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEditor.Experimental;
@@ -9,8 +10,6 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
-
-    
     [Header("Health")]
     public int maxHealth;
     private int currentHealth;
@@ -67,6 +66,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public int attackDamage = 40;
     private float ATTACK_COOLDOWN = 0.3f;
     private float attackCooldownStatus;
+    private bool hasAttacked;
 
     [Header("Orientation")]
     public Vector2 orientation = Vector2.right;
@@ -218,6 +218,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
+            hasAttacked = false;
             animator.SetBool("isAttacking", false);
         }
 
@@ -226,6 +227,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             Debug.Log("Attacking");
             isAttacking = true;
+            
         }
 
 
@@ -479,6 +481,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle attack
         if (isAttacking && !isWallSliding)
         {
+            animator.SetTrigger("attack");
             animator.SetBool("isAttacking", true);
             Attack();
             attackCooldownStatus = ATTACK_COOLDOWN;
@@ -697,29 +700,42 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         Instantiate(bloodEffect, pos, Quaternion.identity);
     }
+
+
+    // private void OnCollisionStay2D(Collision2D other)
+    // {
+    //     if (other.transform.parent.CompareTag("Enemies"))
+    //     {
+    //         animator.ResetTrigger("attack");
+    //     }
+    // }
+
     private void Attack()
     {
         // Detect enemies in range of attack
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
         // Damage them
+
+        List<string> enemyNames = new List<string>();
+        
+        Debug.Log(hitEnemies.Length);
         foreach (var enemy in hitEnemies)
         {
-            if (!boxCollider2d.bounds.Intersects(enemy.GetComponent<BoxCollider2D>().bounds))
+            if (enemyNames.Contains(enemy.name) == false)
             {
+                enemyNames.Add(enemy.name);
                 Debug.Log("We hit " + enemy.transform.parent.name);
-                int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
-                photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
-                photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
+                if (!hasAttacked)
+                {
+                    int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                    photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
+                    photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
+                    hasAttacked = true;
+                }
+                
             }
-            else
-            {
-                animator.SetBool("isAttacking", false);
-            }
-            
         }
-
-
     }
 
     [PunRPC]
