@@ -106,12 +106,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (SceneManager.GetActiveScene().name[0] == 'H')
         {
             horizontal = true;
-            endTilePos = GameObject.Find("Main Camera").GetComponent<CameraMovement>().endTilePos - 5f;
+            endTilePos = GameObject.Find("Main Camera").GetComponent<CameraMovement>().endTilePos;
         }
         else if (SceneManager.GetActiveScene().name[0] == 'V')
         {
             horizontal = false;
-            endTilePos = GameObject.Find("Main Camera").GetComponent<VerticalCamera>().endTilePos - 5f;
+            endTilePos = GameObject.Find("Main Camera").GetComponent<VerticalCamera>().endTilePos;
         }
     }
 
@@ -358,7 +358,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
         gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
-        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "You win !";
+        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " 
+            + PhotonNetwork.PlayerList[1].NickName + " won!";
         gameOverPanel.SetActive(true);
     }
 

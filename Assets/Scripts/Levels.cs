@@ -9,7 +9,6 @@ public static class Levels
     {
         {"HLevel1",3},
         {"HLevel2",4},
-        {"VLevel2",5}, 
-        {"VLevel3",6}
+        {"VLevel3",5}
     };
 }
