@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private Rigidbody2D rigidbody2d;
     private BoxCollider2D boxCollider2d;
     [SerializeField] private LayerMask platformLayerMask;
+    [SerializeField] private LayerMask dangerLayerMask;
     
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
@@ -89,8 +90,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public SpriteRenderer rightArm;
     public SpriteRenderer leftLeg;
     public SpriteRenderer rightLeg;
-
+    
+    [Header("Damage")]
     private bool isInvincible = false; // triggered when enemy contact
+    private int dangerousTilesDmg = 30;
 
     private void Start()
     {
@@ -288,6 +291,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             Debug.Log("Damage");
             TakeDamage(20);
         }
+
+
+
+            
     }
 
     public int GetHealth() // getter health
@@ -467,6 +474,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             photonView.RPC("InstantiateSwitch", RpcTarget.All, gameObject.transform.position);
         }
+        
+        if (Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size, 0f, Vector2.down,
+            0.2f, dangerLayerMask).collider != null)
+        {
+            TakeDamage(dangerousTilesDmg);
+        }
     }
 
     private void LateUpdate()
@@ -488,6 +501,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         float extraHeightText = 0.1f;
         RaycastHit2D boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
             extraHeightText, platformLayerMask);
+        if (boxCastHit.collider == null)
+        {
+            boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
+                extraHeightText, dangerLayerMask);
+        }
         return boxCastHit.collider != null;
     }
 

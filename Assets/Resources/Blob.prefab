@@ -140,6 +140,7 @@ MonoBehaviour:
   waypoints:
   - {fileID: 6642292018173894505}
   - {fileID: 6642292017638194478}
+  enemyDamage: 20
   graphics: {fileID: 6642292017535822514}
 --- !u!95 &6642292017535822512
 Animator:

@@ -153,6 +153,9 @@ MonoBehaviour:
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 512
+  dangerLayerMask:
+    serializedVersion: 2
+    m_Bits: 4096
   moveSpeed: 10
   jumpVelocity: 16
   linearDrag: 1
@@ -940,12 +943,6 @@ PrefabInstance:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 3223630795403419354, guid: 08763992dea602948ab3e55453aeb8ae,
     type: 3}
---- !u!1 &2716605080517920562 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -6197488814711518138, guid: 08763992dea602948ab3e55453aeb8ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 886445169096985460}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5860908877421444257 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2514300805540972587, guid: 08763992dea602948ab3e55453aeb8ae,
@@ -985,6 +982,12 @@ SpriteRenderer:
 --- !u!212 &7714381915298652153 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 7440989290604123277, guid: 08763992dea602948ab3e55453aeb8ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 886445169096985460}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2716605080517920562 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6197488814711518138, guid: 08763992dea602948ab3e55453aeb8ae,
     type: 3}
   m_PrefabInstance: {fileID: 886445169096985460}
   m_PrefabAsset: {fileID: 0}
