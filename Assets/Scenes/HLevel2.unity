@@ -933,6 +933,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endTilePos: 153
+  beginX: 161
+  endX: 161
+  beginY: -2
+  endY: 0.6
 --- !u!1 &1091677161
 GameObject:
   m_ObjectHideFlags: 0
@@ -21109,12 +21113,12 @@ PrefabInstance:
     - target: {fileID: 8868072558870671708, guid: 485d2e97a4eb95d42b64ffa97a6eae46,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8868072558870671708, guid: 485d2e97a4eb95d42b64ffa97a6eae46,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8868072558870671708, guid: 485d2e97a4eb95d42b64ffa97a6eae46,
         type: 3}

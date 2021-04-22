@@ -87,7 +87,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private Animator animator;
     
     [Header("Scene")]
-    private float endTilePos;
+    private float beginX;
+    private float endX;
+    private float beginY;
+    private float endY;
     private bool horizontal;
 
     [Header("Particles Systems")] 
@@ -106,13 +109,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (SceneManager.GetActiveScene().name[0] == 'H')
         {
             horizontal = true;
-            endTilePos = GameObject.Find("Main Camera").GetComponent<CameraMovement>().endTilePos;
         }
         else if (SceneManager.GetActiveScene().name[0] == 'V')
         {
             horizontal = false;
-            endTilePos = GameObject.Find("Main Camera").GetComponent<VerticalCamera>().endTilePos;
         }
+        beginX = GameObject.Find("Main Camera").GetComponent<CameraMovement>().beginX;
+        endX = GameObject.Find("Main Camera").GetComponent<CameraMovement>().endX;
+        beginY = GameObject.Find("Main Camera").GetComponent<CameraMovement>().beginY;
+        endY = GameObject.Find("Main Camera").GetComponent<CameraMovement>().endY;
+
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -337,7 +343,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         if (horizontal)
         {
-            if (playerTop.transform.position.x > endTilePos && playerBot.transform.position.x > endTilePos)
+            if (playerTop.transform.position.x > beginX && playerTop.transform.position.y > beginY && playerTop.transform.position.y < endY
+            && playerBot.transform.position.x > beginX && playerBot.transform.position.y > beginY && playerBot.transform.position.y < endY)
             {
                 Victory();
                 isDead = true;
@@ -345,7 +352,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
-            if (playerTop.transform.position.y > endTilePos && playerBot.transform.position.y > endTilePos)
+            if (playerTop.transform.position.y > beginY && playerTop.transform.position.x > beginX && playerTop.transform.position.x < endX
+             && playerBot.transform.position.y > beginY && playerBot.transform.position.x > beginX && playerBot.transform.position.x < endX)
             {
                 Victory();
                 isDead = true;
@@ -513,9 +521,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (photonView.IsMine)
         {
-            if (SceneManager.GetActiveScene().name[0] == 'V')
+            if (!horizontal)
             {
-                Camera.main.GetComponent<VerticalCamera>().FollowPlayer(gameObject);
+                Camera.main.GetComponent<CameraMovement>().FollowPlayer(gameObject);
             }
         }
     }

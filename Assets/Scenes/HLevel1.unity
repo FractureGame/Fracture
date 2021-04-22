@@ -429,6 +429,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endTilePos: 159
+  beginX: 162
+  endX: 162
+  beginY: 0
+  endY: 100
 --- !u!1 &590445940
 GameObject:
   m_ObjectHideFlags: 0

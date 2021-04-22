@@ -133,17 +133,6 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(8f, 2f,0f), Quaternion.identity, 0);
                 } 
             }
-            else if (SceneManager.GetActiveScene().name == "VLevel2")
-            {
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(-6f, -3f,0f), Quaternion.identity, 0);
-                }
-                else
-                {
-                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(2f, -3f,0f), Quaternion.identity, 0);
-                }
-            }
             else if (SceneManager.GetActiveScene().name == "HLevel2")
             {
                 if (PhotonNetwork.IsMasterClient)
@@ -157,7 +146,14 @@ namespace Com.MyCompany.MyGame
             }
             else if (SceneManager.GetActiveScene().name == "VLevel3")
             {
-                
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(250f, 5f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(264f, 5f,0f), Quaternion.identity, 0);
+                }
             }
         }
     }

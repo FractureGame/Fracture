@@ -8,7 +8,7 @@ public class CameraMovement : MonoBehaviour
     private Transform playerTop;
     private Transform playerBot;
     private bool follow = false;
-    private float beginning;
+    private Vector3 beginning;
     private float distanceBetweenPlayers;
     private float cameraSpeed = 10f;
 
@@ -19,6 +19,12 @@ public class CameraMovement : MonoBehaviour
     private bool horizontal;
     public float endTilePos;
     private float maxDistanceBetweenPlayers;
+    
+    
+    public float beginX;
+    public float endX;
+    public float beginY;
+    public float endY;
 
     // Start is called before the first frame update
     void Start()
@@ -28,119 +34,115 @@ public class CameraMovement : MonoBehaviour
         {
             horizontal = true;
             maxDistanceBetweenPlayers = 22;
-            beginning = transform.position.x;
         }
         else if (SceneManager.GetActiveScene().name[0] == 'V')
         {
             horizontal = false;
-            maxDistanceBetweenPlayers = 22;
-            beginning = transform.position.y;
         }
+        beginning = transform.position;
+
     }
 
     private void Update()
     {
-        if (playerTop == null)
-        {
-            try
+        if (horizontal)
+        { 
+            if (playerTop == null)
             {
-                playerTop = GameObject.Find("PlayerTop(Clone)").GetComponent<Transform>();
+                try
+                {
+                    playerTop = GameObject.Find("PlayerTop(Clone)").GetComponent<Transform>();
+                }
+                catch (NullReferenceException)
+                {
+                    
+                }
             }
-            catch (NullReferenceException)
-            {
-                
-            }
-        }
 
-        if (playerBot == null)
-        {
-            try
+            if (playerBot == null)
             {
-                playerBot = GameObject.Find("PlayerBot(Clone)").GetComponent<Transform>();
+                try
+                {
+                    playerBot = GameObject.Find("PlayerBot(Clone)").GetComponent<Transform>();
+                }
+                catch (NullReferenceException)
+                {
+                    
+                }
             }
-            catch (NullReferenceException)
-            {
-                
-            }
-        }
 
-        if (playerTop != null && playerBot != null)
-        {
-            if (horizontal)
+            if (playerTop != null && playerBot != null)
             {
                 camPos = transform.position.x;
                 playerTopPos = playerTop.transform.position.x;
                 playerBotPos = playerBot.transform.position.x;
+  
+                
+                // Debug.Log(playerTop.transform.position.x);
+                distanceBetweenPlayers = playerTopPos - playerBotPos;
+                if (distanceBetweenPlayers < 0)
+                    distanceBetweenPlayers = -distanceBetweenPlayers;
+
+                
+                // si la caméra dépasse 150 et que les deux joueurs sont dans la partie gauche on continue à follow
+                if (camPos >= endTilePos && (playerTopPos < camPos && playerBotPos < camPos))
+                    follow = true;
+                
+                else if (camPos >= endTilePos)
+                    follow = false;
+                
+                else if (distanceBetweenPlayers >= maxDistanceBetweenPlayers)
+                    follow = false;
+                
+                            
+                else if (camPos > beginning.x)
+                {
+                    follow = true;
+                }
+                            
+                else if (playerTopPos > beginning.x && playerBotPos > beginning.x && camPos <= beginning.x)
+                    follow = true;
+                
+                // si les deux joueurs sont à gauche de l'écran au début on ne follow pas
+                else if (playerTopPos < beginning.x || playerBotPos < beginning.x && camPos <= beginning.x)
+                    follow = false;
+                
+            }
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (horizontal)
+        {
+            if (playerTop != null && playerBot != null)
+            {
+                Vector3 temp = transform.position;
+
+                if (follow)
+                {
+                    temp.x = (playerTop.transform.position.x + playerBot.transform.position.x) / 2;
+                    transform.position = Vector3.MoveTowards(transform.position, temp, cameraSpeed * Time.deltaTime); 
+                }
+            }
+        }
+    }
+    
+    public void FollowPlayer(GameObject player)
+    {
+        if (player.transform.position.y < endTilePos)
+        {
+            Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, -10);
+            if (player.transform.position.y > beginning.y)
+            {
+                transform.position = temp;
             }
             else
             {
-                camPos = transform.position.y;
-                playerTopPos = playerTop.transform.position.y;
-                playerBotPos = playerBot.transform.position.y;
-            }
-            
-            
-            
-            // Debug.Log(playerTop.transform.position.x);
-            distanceBetweenPlayers = playerTopPos - playerBotPos;
-            if (distanceBetweenPlayers < 0)
-                distanceBetweenPlayers = -distanceBetweenPlayers;
-
-            
-
-            // si la caméra dépasse 150 et que les deux joueurs sont dans la partie gauche on continue à follow
-            if (camPos >= endTilePos && (playerTopPos < camPos && playerBotPos < camPos))
-                follow = true;
-            
-            else if (camPos >= endTilePos)
-                follow = false;
-            
-            else if (distanceBetweenPlayers >= maxDistanceBetweenPlayers)
-                follow = false;
-            
-                        
-            else if (camPos > beginning)
-            {
-                follow = true;
-            }
-                        
-            else if (playerTopPos > beginning && playerBotPos > beginning && camPos <= beginning)
-                follow = true;
-            
-            // si les deux joueurs sont à gauche de l'écran au début on ne follow pas
-            else if (playerTopPos < beginning || playerBotPos < beginning && camPos <= beginning)
-                follow = false;
-
-            // else
-            //     follow = false;
-        }
-    }
-
-    void FixedUpdate()
-    {
-        if (playerTop != null && playerBot != null)
-        {
-            Vector3 temp = transform.position;
-
-            if (follow)
-            {
-                if (horizontal)
-                {
-                    temp.x = (playerTop.transform.position.x + playerBot.transform.position.x) / 2;
-                }
-                else
-                {
-                    temp.y = (playerTop.transform.position.y + playerBot.transform.position.y) / 2;
-                }
-                
-                transform.position = Vector3.MoveTowards(transform.position, temp, cameraSpeed * Time.deltaTime); 
+                transform.position = new Vector3(beginning.x, beginning.y, -10);
             }
         }
     }
-
-    private void LateUpdate()
-    {
-
-    }
+    
     
 }
