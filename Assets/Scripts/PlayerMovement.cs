@@ -436,25 +436,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         facingRight = !facingRight;
         gameObject.transform.Rotate(0,180,0);
     }
-    private bool foo(Vector2 pos)
-    {
-        if (SceneManager.GetActiveScene().name[0] == 'H')
-        {
-            if (pos.y > 4f)
-            {
-                return true;
-            }
-            
-        }
-        if (SceneManager.GetActiveScene().name[0] == 'V')
-        {
-            if (pos.x < 0f)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
     
     private void FixedUpdate()
     {
@@ -641,27 +622,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Vector3 playerBotPos = playerBot.transform.position;
         Instantiate(dashParticleRight, playerTopPos, Quaternion.identity);
         Instantiate(dashParticleRight, playerBotPos, Quaternion.identity);
-        if (foo(playerTopPos) && foo(pos))
-        {
-            playerTop.transform.position = playerBot.transform.position;
-            playerBot.transform.position = playerTopPos;
-        }
-        else if (foo(playerTopPos) && !foo(pos))
-        {
-            playerBot.transform.position = playerTop.transform.position;
-            playerTop.transform.position = playerBotPos;
-        }
-        else if (foo(playerBotPos) && foo(pos))
-        {
-            playerBot.transform.position = playerTop.transform.position;
-            playerTop.transform.position = playerBotPos;
-        }
-        else if (foo(playerBotPos) && !foo(pos))
-        {
-            playerTop.transform.position = playerBot.transform.position;
-            playerBot.transform.position = playerTopPos;
-        }
         
+        playerTop.transform.position = playerBot.transform.position;
+        playerBot.transform.position = playerTopPos;
+
         isSwitching = false;
     }
     
