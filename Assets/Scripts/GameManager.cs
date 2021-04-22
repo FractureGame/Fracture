@@ -16,14 +16,6 @@ namespace Com.MyCompany.MyGame
         [Tooltip("The prefab to use for representing the Botplayer")]
         public GameObject playerBotPrefab;
         
-        // [Tooltip("The prefab to use for representing Enemy1")]
-        // public GameObject enemy1Prefab;
-        [Tooltip("The prefab to use for representing the Enemy2")]
-        public GameObject enemy2Prefab;
-        
-        
-        [Tooltip("The prefab to use for representing the Blob")]
-        public GameObject blobPrefab;
         
         #endregion
 
@@ -126,20 +118,11 @@ namespace Com.MyCompany.MyGame
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    
                     PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(8f, 7f,0f), Quaternion.identity, 0);
-                
-                    // Instanciate the enemies of the TOP
-                    PhotonNetwork.Instantiate(enemy2Prefab.name, new Vector3(enemy2Prefab.transform.position.x, enemy2Prefab.transform.position.y, 0f), Quaternion.identity, 0);
                 }
                 else
                 {
-                    
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(8f, 2f,0f), Quaternion.identity, 0);
-                
-                    // Instanciate the enemies of the BOTTOM
-                    // PhotonNetwork.Instantiate(enemy1Prefab.name, new Vector3(enemy1Prefab.transform.position.x, enemy1Prefab.transform.position.y, 0f), Quaternion.identity, 0);
-                    PhotonNetwork.Instantiate(blobPrefab.name, new Vector3(blobPrefab.transform.position.x, blobPrefab.transform.position.y, 0f), Quaternion.identity, 0);
                 } 
             }
             else if (SceneManager.GetActiveScene().name == "VLevel2")

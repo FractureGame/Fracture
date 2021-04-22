@@ -87,6 +87,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Scene")]
     private float endTilePos;
     private bool horizontal;
+
+    [Header("Particles Systems")] 
+    public ParticleSystem bloodEffect;
     
     private void Start()
     {
@@ -227,7 +230,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (switchCooldownStatus <= 0.3f)
         {
             try
-            {playerTop.GetComponent<TrailRenderer>().time = 0.6f;
+            {
+                playerTop.GetComponent<TrailRenderer>().time = 0.6f;
                 playerBot.GetComponent<TrailRenderer>().time = 0.6f;
 
             }
@@ -558,7 +562,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                     lastInterestingDir = orientation;
                     isWallJumping = false;
                 }
-                Debug.Log(lastInterestingDir);
                 // No keys pressed, the player keeps going in the same direction while falling but slowly
                 if (lastInterestingDir == Vector2.left)
                     rigidbody2d.velocity = new Vector2(-moveSpeed/2, rigidbody2d.velocity.y);
@@ -662,7 +665,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void Dash()
     {
-        Debug.Log(animator.name);
         if (dashTime <= 0)
         {
             isDashing = false;
@@ -678,9 +680,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void Attack()
     {
-        // Play an attack animation
-        
-        
         // Detect enemies in range of attack
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
         
@@ -689,6 +688,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         foreach (var enemy in hitEnemies)
         {
             Debug.Log("We hit " + enemy.name);
+            Instantiate(bloodEffect, enemy.transform.position, Quaternion.identity);
             enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
     }
