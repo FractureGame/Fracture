@@ -8,6 +8,8 @@ public class EnemyPatrol : MonoBehaviour
     public SpriteRenderer graphics;
     private Transform target;
     private int destPoint;
+    
+    public int enemyDamage = 30;
 
     // Start is called before the first frame update
     void Start()

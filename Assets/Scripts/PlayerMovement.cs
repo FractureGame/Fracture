@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private Rigidbody2D rigidbody2d;
     private BoxCollider2D boxCollider2d;
     [SerializeField] private LayerMask platformLayerMask;
+    [SerializeField] private LayerMask dangerLayerMask;
     
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
@@ -95,6 +96,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     [Header("Particles Systems")] 
     public ParticleSystem bloodEffect;
+    
+    
+    [Header(("Damaege"))]
+    private bool isInvincible = false; // triggered when enemy contact
+    private int dangerousTilesDmg = 30;
 
     private AudioManager am;
     private void Start()
@@ -362,6 +368,48 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
     }
 
+    
+    public void TakeDamage(int dmg)
+    {
+        if(!isInvincible)
+        {
+            ApplyDamage(dmg);
+            photonView.RPC("SetHealthBar", RpcTarget.All, currentHealth, thisBar.name);
+            isInvincible = true;
+            StartCoroutine(InvincibilityFlash(gameObject.name));
+            StartCoroutine(HandleInvincibilityDelay());
+        }
+    }
+    
+    
+    [PunRPC]
+    private void ChangeBodyVisibility(string playerName, float r, float g, float b, float a)
+    {
+        GameObject playerSprite = GameObject.Find(playerName).transform.GetChild(1).gameObject;
+        for (int i = 1; i <= 6; i++)
+        {
+            playerSprite.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
+        }
+    }
+    
+    public IEnumerator InvincibilityFlash(string playerName)
+    {
+        while(isInvincible)
+        {
+            photonView.RPC("ChangeBodyVisibility", RpcTarget.All, playerName, 1f, 1f, 1f, 0f);
+            yield return new WaitForSeconds(0.15f);
+            photonView.RPC("ChangeBodyVisibility", RpcTarget.All, playerName, 1f, 1f, 1f, 1f);
+            yield return new WaitForSeconds(0.15f);
+        }
+    }
+
+    public IEnumerator HandleInvincibilityDelay()
+    {
+        yield return new WaitForSeconds(2f);
+        isInvincible = false;
+    }
+    
+    
     private void Victory()
     {
         GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
@@ -369,12 +417,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " 
             + PhotonNetwork.PlayerList[1].NickName + " won!";
         gameOverPanel.SetActive(true);
-    }
-
-    public void TakeDamage(int dmg)
-    {
-        int i = ApplyDamage(dmg);
-        photonView.RPC("SetHealthBar",RpcTarget.All,i, thisBar.name);
     }
 
     /*public override void OnTriggerEnter2D(Collider2D enemy)
@@ -494,6 +536,21 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             photonView.RPC("InstantiateSwitch", RpcTarget.All, gameObject.transform.position);
         }
+        
+        if (Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size, 0f, Vector2.down,
+            0.2f, dangerLayerMask).collider != null)
+        {
+            TakeDamage(dangerousTilesDmg);
+        }
+
+        Collider2D onTouchEnemy = IsTouchingEnemy();
+        if (onTouchEnemy != null)
+        {
+            
+            TakeDamage(onTouchEnemy.transform.GetComponentInChildren<EnemyPatrol>().enemyDamage);
+        }
+        
+        
     }
     
     private void LateUpdate()
@@ -515,6 +572,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         float extraHeightText = 0.1f;
         RaycastHit2D boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
             extraHeightText, platformLayerMask);
+        if (boxCastHit.collider == null)
+        { 
+            boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
+                extraHeightText, dangerLayerMask);
+        }
+        
         return boxCastHit.collider != null;
     }
 
@@ -761,6 +824,30 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             Jump();
             photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.parent.name);
         }
+    }
+    
+    private Collider2D IsTouchingEnemy()
+    {
+        float extraHeightText = 0.1f;
+        RaycastHit2D boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
+            extraHeightText, enemyLayers);
+        if (boxCastHit.collider == null)
+        {
+            boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.up,
+                extraHeightText, enemyLayers);
+        }
+        if (boxCastHit.collider == null)
+        {
+            boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.right,
+                extraHeightText, enemyLayers);
+        }
+        if (boxCastHit.collider == null)
+        {
+            boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.left,
+                extraHeightText, enemyLayers);
+        }
+        
+        return boxCastHit.collider;
     }
 }
 
