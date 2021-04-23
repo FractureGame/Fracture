@@ -1795,6 +1795,35 @@ MonoBehaviour:
     pitch: 1
     source: {fileID: 0}
     loopable: 1
+    canOverlap: 0
+  - name: LevelMusic1
+    sound: {fileID: 8300000, guid: 576b204ec4f41234b840a6c8a066e12b, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loopable: 1
+    canOverlap: 0
+  - name: Jump
+    sound: {fileID: 8300000, guid: 1b7861dfcc7ad4bcb96a6c9366ad89a0, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loopable: 0
+    canOverlap: 1
+  - name: Walk
+    sound: {fileID: 8300000, guid: b002e8e56d2de9843ae1d0a5d5b1596b, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loopable: 1
+    canOverlap: 0
+  - name: Dash
+    sound: {fileID: 8300000, guid: e8b27cfc285264e5fad85ffe66197431, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loopable: 0
+    canOverlap: 0
 --- !u!4 &757473733
 Transform:
   m_ObjectHideFlags: 0

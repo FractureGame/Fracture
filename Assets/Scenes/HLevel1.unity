@@ -269,12 +269,12 @@ PrefabInstance:
     - target: {fileID: 4590895985146015873, guid: 4ac5072547022a0459a99908e4a23b78,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 296
+      value: 399.12
       objectReference: {fileID: 0}
     - target: {fileID: 4590895985146015873, guid: 4ac5072547022a0459a99908e4a23b78,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -201
+      value: -256.96
       objectReference: {fileID: 0}
     - target: {fileID: 4590895985146015873, guid: 4ac5072547022a0459a99908e4a23b78,
         type: 3}
@@ -11490,12 +11490,12 @@ PrefabInstance:
     - target: {fileID: 4590895985146015873, guid: 13e6980c11d59b34c9e90adcaaed400a,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 299
+      value: 399.12
       objectReference: {fileID: 0}
     - target: {fileID: 4590895985146015873, guid: 13e6980c11d59b34c9e90adcaaed400a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 196
+      value: 256.96
       objectReference: {fileID: 0}
     - target: {fileID: 4590895985146015873, guid: 13e6980c11d59b34c9e90adcaaed400a,
         type: 3}
@@ -11667,6 +11667,7 @@ GameObject:
   - component: {fileID: 1162505722}
   - component: {fileID: 1162505721}
   - component: {fileID: 1162505720}
+  - component: {fileID: 1162505724}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -11758,6 +11759,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1162505724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162505719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3e205da4e5fbf046807465c22e494bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1419218668 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 890756340360103663, guid: 2835d6f4b568275b4b03ba8502bbaa54,

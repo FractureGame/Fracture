@@ -9,7 +9,8 @@ public class MainMenu : MonoBehaviour
 {
     public void Start()
     {
-        //Screen.SetResolution(1280,720,FullScreenMode.FullScreenWindow);
+        FindObjectOfType<AudioManager>().PlaySound("MenuTheme");
+        FindObjectOfType<AudioManager>().StopSound("LevelMusic1");
     }
 
     public void QuitGame()

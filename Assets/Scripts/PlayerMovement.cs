@@ -95,9 +95,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     [Header("Particles Systems")] 
     public ParticleSystem bloodEffect;
-    
+
+    private AudioManager am;
     private void Start()
     {
+        am = FindObjectOfType<AudioManager>();
         currentHealth = maxHealth;
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
@@ -484,6 +486,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             animator.SetTrigger("dash");
             Dash();
             dashCooldownStatus = DASH_COOLDOWN;
+            am.PlaySound("Dash");
             animator.SetTrigger("enddash");
             
         }
@@ -606,7 +609,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         jumpTimer = 0;
         lastInterestingDir = direction;
-        
+        am.PlaySound("Jump");
     }
 
     [PunRPC]

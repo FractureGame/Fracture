@@ -39,6 +39,12 @@ public class AudioManager : MonoBehaviour
             Debug.LogError("PlaySound: no sound found for " + snd.name);
             return;
         }
+
+        if (snd.source.isPlaying && !snd.canOverlap)
+        {
+            Debug.Log("Sound is already playing");
+            return;
+        }
         snd.source.Play();
     }
 
@@ -56,6 +62,6 @@ public class AudioManager : MonoBehaviour
     
     public void Start()
     {
-        FindObjectOfType<AudioManager>().PlaySound("MenuTheme");
+        //FindObjectOfType<AudioManager>().PlaySound("MenuTheme");
     }
 }

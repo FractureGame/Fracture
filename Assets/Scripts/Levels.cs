@@ -7,8 +7,8 @@ public static class Levels
     // Start is called before the first frame update
     public static readonly Dictionary<string,int> scenes = new Dictionary<string,int>()
     {
-        {"HLevel1",3},
-        {"HLevel2",4},
-        {"VLevel3",5}
+        {"Level 1",3},
+        {"Level 2",4},
+        {"Level 3",5}
     };
 }
