@@ -176,12 +176,6 @@ MonoBehaviour:
   attackDamage: 40
   orientation: {x: 1, y: 0}
   switchCooldownStatus: 0
-  body: {fileID: 778099898537842704}
-  head: {fileID: 8374301700850385226}
-  leftArm: {fileID: 4374876519721031288}
-  rightArm: {fileID: 587370920925924376}
-  leftLeg: {fileID: 8672863918342152605}
-  rightLeg: {fileID: 7714381915298652153}
 --- !u!114 &4157558901229393605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -946,42 +940,6 @@ PrefabInstance:
 --- !u!4 &5860908877421444257 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2514300805540972587, guid: 08763992dea602948ab3e55453aeb8ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 886445169096985460}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &587370920925924376 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: -8904870375292401812, guid: 08763992dea602948ab3e55453aeb8ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 886445169096985460}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &4374876519721031288 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: -5693704224160326388, guid: 08763992dea602948ab3e55453aeb8ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 886445169096985460}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &8374301700850385226 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: -542061258078156226, guid: 08763992dea602948ab3e55453aeb8ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 886445169096985460}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &8672863918342152605 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 8363601116213357289, guid: 08763992dea602948ab3e55453aeb8ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 886445169096985460}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &778099898537842704 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: -8754693576941726876, guid: 08763992dea602948ab3e55453aeb8ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 886445169096985460}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &7714381915298652153 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 7440989290604123277, guid: 08763992dea602948ab3e55453aeb8ae,
     type: 3}
   m_PrefabInstance: {fileID: 886445169096985460}
   m_PrefabAsset: {fileID: 0}

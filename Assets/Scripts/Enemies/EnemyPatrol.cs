@@ -30,13 +30,5 @@ public class EnemyPatrol : MonoBehaviour
             graphics.flipX = !graphics.flipX;
         }
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.transform.CompareTag("Player"))
-        {
-            PlayerMovement hp = collision.transform.GetComponent<PlayerMovement>();
-            hp.TakeDamage(enemyDamage);
-        }
-    }
+    
 }

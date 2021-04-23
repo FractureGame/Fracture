@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using Photon.Pun;
@@ -82,14 +83,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     [Header("Animation")] 
     private Animator animator;
-
-    [Header("Interaction")]
-    public SpriteRenderer body;
-    public SpriteRenderer head;
-    public SpriteRenderer leftArm;
-    public SpriteRenderer rightArm;
-    public SpriteRenderer leftLeg;
-    public SpriteRenderer rightLeg;
     
     [Header("Damage")]
     private bool isInvincible = false; // triggered when enemy contact
@@ -162,7 +155,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             tm2.characterSize = 0.065f;
             tm2.fontSize = 40;
         }
-        
         
         
         if (gameObject == playerTop)
@@ -242,8 +234,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isWallSliding = false;
             animator.SetBool("isWallSliding", false);
         }
-
-
         
         if (isWallSliding && Input.GetKeyDown(KeyCode.Space))
         {
@@ -251,8 +241,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isWallSliding = false;
             jumpTimer = Time.time + jumpDelay;
         }
-
-
+        
         if (direction != Vector2.zero)
         {
             oldDirection = direction;
@@ -281,8 +270,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             oldDirection = direction;
         }
         
-        
-        
         if (direction != Vector2.zero)
             orientation = direction;
 
@@ -291,10 +278,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             Debug.Log("Damage");
             TakeDamage(20);
         }
-
-
-
-            
     }
 
     public int GetHealth() // getter health
@@ -306,32 +289,32 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         if(!isInvincible)
         {
-            int i = ApplyDamage(dmg);
-            photonView.RPC("SetHealthBar", RpcTarget.All, i, thisBar.name);
+            ApplyDamage(dmg);
+            photonView.RPC("SetHealthBar", RpcTarget.All, currentHealth, thisBar.name);
             isInvincible = true;
-            StartCoroutine(InvincibilityFlash());
+            StartCoroutine(InvincibilityFlash(gameObject.name));
             StartCoroutine(HandleInvincibilityDelay());
         }
-        
     }
-
-    public IEnumerator InvincibilityFlash()
+    
+    
+    [PunRPC]
+    private void ChangeBodyVisibility(string playerName, float r, float g, float b, float a)
+    {
+        GameObject playerSprite = GameObject.Find(playerName).transform.GetChild(1).gameObject;
+        for (int i = 1; i <= 6; i++)
+        {
+            playerSprite.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
+        }
+    }
+    
+    public IEnumerator InvincibilityFlash(string playerName)
     {
         while(isInvincible)
         {
-            body.color = new Color(1f, 1f, 1f, 0f);
-            head.color = new Color(1f, 1f, 1f, 0f);
-            leftArm.color = new Color(1f, 1f, 1f, 0f);
-            rightArm.color = new Color(1f, 1f, 1f, 0f);
-            leftLeg.color = new Color(1f, 1f, 1f, 0f);
-            rightLeg.color = new Color(1f, 1f, 1f, 0f);
+            photonView.RPC("ChangeBodyVisibility", RpcTarget.All, playerName, 1f, 1f, 1f, 0f);
             yield return new WaitForSeconds(0.15f);
-            body.color = new Color(1f, 1f, 1f, 1f);
-            head.color = new Color(1f, 1f, 1f, 1f);
-            leftArm.color = new Color(1f, 1f, 1f, 1f);
-            rightArm.color = new Color(1f, 1f, 1f, 1f);
-            leftLeg.color = new Color(1f, 1f, 1f, 1f);
-            rightLeg.color = new Color(1f, 1f, 1f, 1f);
+            photonView.RPC("ChangeBodyVisibility", RpcTarget.All, playerName, 1f, 1f, 1f, 1f);
             yield return new WaitForSeconds(0.15f);
         }
     }
@@ -342,29 +325,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         isInvincible = false;
     }
 
-    /*public override void OnTriggerEnter2D(Collider2D enemy)
-    {
-        if (enemy.gameObject.tag == "Enemies")
-        {
-            TakeDamage(20); // take 20 dmg
-        }
-        if (enemy.gameObject.tag == "Water")
-        {
-            TakeDamage(10);
-        }
-    }*/
-
-    public int ApplyDamage(int dmg)
+    public void ApplyDamage(int dmg)
     {
         currentHealth -= dmg;
-        if (currentHealth < 0)
+        if (currentHealth <= 0)
         {
             currentHealth = 0;
             Die();
         }
-        return currentHealth;
     }
-
+    
     public void Die()
     {
         animator.SetTrigger("death");
@@ -390,6 +360,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetHealthBar(int value, string barName)
     {
+        Debug.Log(value);
         GameObject bar = GameObject.Find(barName);
         bar.GetComponent<HPBar>().SetHealth(value);
     }
@@ -480,6 +451,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             TakeDamage(dangerousTilesDmg);
         }
+
+        Collider2D onTouchEnemy = IsTouchingEnemy();
+        if (onTouchEnemy != null)
+        {
+            
+            TakeDamage(onTouchEnemy.transform.GetComponentInChildren<EnemyPatrol>().enemyDamage);
+        }
     }
 
     private void LateUpdate()
@@ -561,7 +539,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                     lastInterestingDir = orientation;
                     isWallJumping = false;
                 }
-                Debug.Log(lastInterestingDir);
                 // No keys pressed, the player keeps going in the same direction while falling but slowly
                 if (lastInterestingDir == Vector2.left)
                     rigidbody2d.velocity = new Vector2(-moveSpeed/2, rigidbody2d.velocity.y);
@@ -593,7 +570,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
-            Debug.Log("Normal JUmp");
+            Debug.Log("Normal Jump");
             rigidbody2d.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
         }
         
@@ -663,7 +640,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void Dash()
     {
-        Debug.Log(animator.name);
         if (dashTime <= 0)
         {
             isDashing = false;
@@ -702,12 +678,28 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
     
-    private void OnTriggerEnter2D(Collider2D collision)
+    private Collider2D IsTouchingEnemy()
     {
-        if(collision.CompareTag("WeakSpot"))
+        float extraHeightText = 0.1f;
+        RaycastHit2D boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
+            extraHeightText, enemyLayers);
+        if (boxCastHit.collider == null)
         {
-            Jump();
+            boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.up,
+                extraHeightText, enemyLayers);
         }
+        if (boxCastHit.collider == null)
+        {
+            boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.right,
+                extraHeightText, enemyLayers);
+        }
+        if (boxCastHit.collider == null)
+        {
+            boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.left,
+                extraHeightText, enemyLayers);
+        }
+        
+        return boxCastHit.collider;
     }
 }
 
