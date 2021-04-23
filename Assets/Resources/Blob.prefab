@@ -140,6 +140,7 @@ MonoBehaviour:
   waypoints:
   - {fileID: 6642292018173894505}
   - {fileID: 6642292017638194478}
+  enemyDamage: 20
   graphics: {fileID: 6642292017535822514}
 --- !u!95 &6642292017535822512
 Animator:
@@ -213,7 +214,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.1116333, y: -1.617974}
+  m_Offset: {x: 0.03981042, y: -1.617974}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -224,7 +225,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 5.7023373, y: 5.7911506}
+  m_Size: {x: 5.39945, y: 5.7911506}
   m_EdgeRadius: 0
 --- !u!114 &6642292017535822524
 MonoBehaviour:
@@ -404,7 +405,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0000009536743, y: -0.25718185}
+  m_Offset: {x: -0.10601282, y: -0.25718188}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -415,7 +416,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.771176, y: 1.5143635}
+  m_Size: {x: 3.4687552, y: 1.5143635}
   m_EdgeRadius: 0
 --- !u!114 &6642292018439548281
 MonoBehaviour:

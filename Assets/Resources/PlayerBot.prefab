@@ -153,6 +153,9 @@ MonoBehaviour:
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 512
+  dangerLayerMask:
+    serializedVersion: 2
+    m_Bits: 4096
   moveSpeed: 10
   jumpVelocity: 16
   linearDrag: 1
