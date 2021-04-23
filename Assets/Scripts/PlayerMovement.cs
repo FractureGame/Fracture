@@ -617,7 +617,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().switchCooldownStatus = SWITCH_COOLDOWN;
-        
+        GameObject hpBarTop = GameObject.Find("HPBar Top");
+        GameObject hpBarBot = GameObject.Find("HPBar Bot");
+        Vector3 tmp = hpBarTop.transform.position;
+        hpBarTop.transform.position = hpBarBot.transform.position;
+        hpBarBot.transform.position = tmp;
         playerTop.GetComponent<TrailRenderer>().time = -1f;
         playerBot.GetComponent<TrailRenderer>().time = -1f;
         
