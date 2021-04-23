@@ -345,8 +345,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         if (horizontal)
         {
-            if (playerTop.transform.position.x > beginX && playerTop.transform.position.y > beginY && playerTop.transform.position.y < endY
-            && playerBot.transform.position.x > beginX && playerBot.transform.position.y > beginY && playerBot.transform.position.y < endY)
+            if (gameObject.transform.position.x > beginX && gameObject.transform.position.y > beginY && gameObject.transform.position.y < endY)
             {
                 Victory();
                 isDead = true;
@@ -354,8 +353,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
-            if (playerTop.transform.position.y > beginY && playerTop.transform.position.x > beginX && playerTop.transform.position.x < endX
-             && playerBot.transform.position.y > beginY && playerBot.transform.position.x > beginX && playerBot.transform.position.x < endX)
+            if (gameObject.transform.position.y > beginY && gameObject.transform.position.x > beginX && gameObject.transform.position.x < endX)
             {
                 Victory();
                 isDead = true;

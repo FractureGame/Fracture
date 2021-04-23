@@ -56,7 +56,7 @@ public class AudioManager : MonoBehaviour
             Debug.LogError("StopSound: no sound found for " + snd.name);
             return;
         }
-        //snd.source.Stop();
+        snd.source.Stop();
         Debug.Log("sound stopped");
     }
     
