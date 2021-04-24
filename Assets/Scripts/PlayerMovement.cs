@@ -602,14 +602,18 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             if (direction == Vector2.left)
             {
+                am.PlaySound("Walk");
+
                 rigidbody2d.velocity = new Vector2(-moveSpeed, rigidbody2d.velocity.y);
             }
             else if (direction == Vector2.right)
             {
+                am.PlaySound("Walk");
                 rigidbody2d.velocity = new Vector2(moveSpeed, rigidbody2d.velocity.y);
             }
             else
             {
+                am.StopSound("Walk");
                 // No keys pressed, the player does not slide
                 rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
             }
