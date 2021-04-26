@@ -9,8 +9,9 @@ public class MainMenu : MonoBehaviour
 {
     public void Start()
     {
+        FindObjectOfType<AudioManager>().StopAllSounds();
+
         FindObjectOfType<AudioManager>().PlaySound("MenuTheme");
-        FindObjectOfType<AudioManager>().StopSound("LevelMusic1");
     }
 
     public void QuitGame()
