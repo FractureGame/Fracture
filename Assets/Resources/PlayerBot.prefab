@@ -853,6 +853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 150
+  isDead: 0
   thisBar: {fileID: 4590895985146015872, guid: 4ac5072547022a0459a99908e4a23b78, type: 3}
   otherBar: {fileID: 4590895985146015872, guid: 13e6980c11d59b34c9e90adcaaed400a,
     type: 3}

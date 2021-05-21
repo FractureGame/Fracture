@@ -10395,6 +10395,7 @@ GameObject:
   - component: {fileID: 910495120}
   - component: {fileID: 910495119}
   - component: {fileID: 910495118}
+  - component: {fileID: 910495121}
   m_Layer: 0
   m_Name: Victory2
   m_TagString: Victory
@@ -10457,12 +10458,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 910495117}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 265.11, y: 76.98, z: -8.5390625}
+  m_LocalPosition: {x: 262.68, y: 76.98, z: -8.5390625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &910495121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910495117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6450694d4db9914a784edece903aca58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivated: 0
 --- !u!1 &956122504
 GameObject:
   m_ObjectHideFlags: 0
@@ -11173,6 +11187,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e205da4e5fbf046807465c22e494bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1388145058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1388145060}
+  - component: {fileID: 1388145059}
+  m_Layer: 0
+  m_Name: VictoryChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1388145059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1388145058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d14afa283deb041d19c44ea4642b0285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  victory1: {fileID: 2049727089}
+  victory2: {fileID: 910495121}
+--- !u!4 &1388145060
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1388145058}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 37.170536, y: 4.8011403, z: -17.203125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1419218667
 GameObject:
   m_ObjectHideFlags: 0
@@ -13447,6 +13506,7 @@ GameObject:
   - component: {fileID: 2049727088}
   - component: {fileID: 2049727087}
   - component: {fileID: 2049727086}
+  - component: {fileID: 2049727089}
   m_Layer: 0
   m_Name: Victory1
   m_TagString: Victory
@@ -13509,12 +13569,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2049727085}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 255.06, y: 77.19, z: -8.5390625}
+  m_LocalPosition: {x: 257.62, y: 77.19, z: -8.5390625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2049727089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049727085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6450694d4db9914a784edece903aca58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivated: 0
 --- !u!1001 &7361815415634525939
 PrefabInstance:
   m_ObjectHideFlags: 0

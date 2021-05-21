@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Health")]
     public int maxHealth;
     private int currentHealth;
-    private bool isDead;
+    public bool isDead;
     public GameObject thisBar;
     public GameObject otherBar;
 
@@ -210,10 +210,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             
         }
-
         
         if (isDead)
+        {
+            direction = Vector2.zero;
+            am.StopSound("Walk");
             return;
+        }
+            
 
         if (Input.GetKeyDown(KeyCode.Space) && nbJump < nbJumpsAllowed)
         {

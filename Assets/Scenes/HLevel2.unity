@@ -2388,6 +2388,51 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &497529452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 497529454}
+  - component: {fileID: 497529453}
+  m_Layer: 0
+  m_Name: VictoryChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &497529453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497529452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d14afa283deb041d19c44ea4642b0285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  victory1: {fileID: 1716709766}
+  victory2: {fileID: 1078390187}
+--- !u!4 &497529454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497529452}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 37.170536, y: 4.8011403, z: -17.203125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &530640325
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4476,6 +4521,7 @@ GameObject:
   - component: {fileID: 1078390186}
   - component: {fileID: 1078390185}
   - component: {fileID: 1078390184}
+  - component: {fileID: 1078390187}
   m_Layer: 0
   m_Name: Victory2
   m_TagString: Victory
@@ -4538,12 +4584,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1078390183}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 162.18, y: -1.61, z: -8.5390625}
+  m_LocalPosition: {x: 164.57, y: -1.61, z: -8.5390625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1078390187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078390183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6450694d4db9914a784edece903aca58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivated: 0
 --- !u!1 &1091677161
 GameObject:
   m_ObjectHideFlags: 0
@@ -14303,6 +14362,7 @@ GameObject:
   - component: {fileID: 1716709765}
   - component: {fileID: 1716709764}
   - component: {fileID: 1716709763}
+  - component: {fileID: 1716709766}
   m_Layer: 0
   m_Name: Victory1
   m_TagString: Victory
@@ -14365,12 +14425,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1716709762}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 162.17, y: 6.73, z: -8.5390625}
+  m_LocalPosition: {x: 164.56, y: 6.73, z: -8.5390625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1716709766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716709762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6450694d4db9914a784edece903aca58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActivated: 0
 --- !u!1001 &1766793428
 PrefabInstance:
   m_ObjectHideFlags: 0
