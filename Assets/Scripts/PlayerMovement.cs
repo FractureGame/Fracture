@@ -133,9 +133,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         if (other.gameObject.CompareTag("Victory"))
         {
-            Debug.Log("AMENO");
+            direction = Vector2.zero;
+            animator.SetBool(0, false);
             am.StopSound("Walk");
             isDead = true;
+            if (playerBot.GetComponent<PlayerMovement>().isDead && playerTop.GetComponent<PlayerMovement>().isDead)
+            {
+                Victory();
+            }
         }
     }
 
@@ -396,10 +401,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     private void Victory()
     {
+        // Ajouter des confettis
         GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
         gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
-        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " 
-            + PhotonNetwork.PlayerList[1].NickName + " won!";
+        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
         gameOverPanel.SetActive(true);
     }
 
