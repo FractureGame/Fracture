@@ -600,20 +600,41 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         if (onGround)
         {
+            
             if (direction == Vector2.left)
             {
-                am.PlaySound("Walk");
-
+                try
+                {
+                    am.PlaySound("Walk");
+                }
+                catch
+                {
+                    
+                }
                 rigidbody2d.velocity = new Vector2(-moveSpeed, rigidbody2d.velocity.y);
             }
             else if (direction == Vector2.right)
             {
-                am.PlaySound("Walk");
+                try
+                {
+                    am.PlaySound("Walk");
+                }
+                catch
+                {
+                    
+                }
                 rigidbody2d.velocity = new Vector2(moveSpeed, rigidbody2d.velocity.y);
             }
             else
             {
-                am.StopSound("Walk");
+                try
+                {
+                    am.StopSound("Walk");
+                }
+                catch
+                {
+                    
+                }
                 // No keys pressed, the player does not slide
                 rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
             }
