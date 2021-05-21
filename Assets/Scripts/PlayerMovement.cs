@@ -213,8 +213,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (isDead)
         {
-            direction = Vector2.zero;
-            am.StopSound("Walk");
+            // PhotonNetwork.Destroy(gameObject);
             return;
         }
             

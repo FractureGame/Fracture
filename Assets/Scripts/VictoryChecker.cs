@@ -29,8 +29,10 @@ public class VictoryChecker : MonoBehaviour
         gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
         gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
         gameOverPanel.SetActive(true);
-        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().isDead = true;
-        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().isDead = true;
+        Destroy(GameObject.Find("PlayerBot(Clone)"));
+        Destroy(GameObject.Find("PlayerTop(Clone)"));
+        // GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>();
+        // GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>();
 
     }
 }
