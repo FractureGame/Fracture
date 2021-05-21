@@ -131,17 +131,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
         }
 
-        if (other.gameObject.CompareTag("Victory"))
-        {
-            direction = Vector2.zero;
-            animator.SetBool(0, false);
-            am.StopSound("Walk");
-            isDead = true;
-            if (playerBot.GetComponent<PlayerMovement>().isDead && playerTop.GetComponent<PlayerMovement>().isDead)
-            {
-                Victory();
-            }
-        }
+        // if (other.gameObject.CompareTag("Victory"))
+        // {
+        //     direction = Vector2.zero;
+        //     animator.SetBool(0, false);
+        //     am.StopSound("Walk");
+        //     isDead = true;
+        //     if (playerBot.GetComponent<PlayerMovement>().isDead && playerTop.GetComponent<PlayerMovement>().isDead)
+        //     {
+        //         Victory();
+        //     }
+        // }
     }
 
     private void Update()
@@ -399,14 +399,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     }
     
     
-    private void Victory()
-    {
-        // Ajouter des confettis
-        GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
-        gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
-        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
-        gameOverPanel.SetActive(true);
-    }
+    // private void Victory()
+    // {
+    //     // Ajouter des confettis
+    //     GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+    //     gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
+    //     gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
+    //     gameOverPanel.SetActive(true);
+    // }
 
     /*public override void OnTriggerEnter2D(Collider2D enemy)
     {
