@@ -541,8 +541,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Collider2D onTouchEnemy = IsTouchingEnemy();
         if (onTouchEnemy != null)
         {
-            
-            TakeDamage(onTouchEnemy.transform.GetComponentInChildren<EnemyPatrol>().enemyDamage);
+            int enemyDmg;
+            if (onTouchEnemy.name.StartsWith("Harpie"))
+            {
+                enemyDmg = onTouchEnemy.GetComponent<HarpieAI>().enemyDamage;
+            }
+            else
+            {
+                enemyDmg = onTouchEnemy.transform.GetComponentInChildren<EnemyPatrol>().enemyDamage;
+            }
+            TakeDamage(enemyDmg);
         }
         
         

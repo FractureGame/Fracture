@@ -41,7 +41,15 @@ public class Enemy : MonoBehaviour
 
         try
         {
-            lifebar = GameObject.Find("Canvas").transform.Find(transform.parent.name + "LifeBar").gameObject;
+            if (name.StartsWith("Harpie"))
+            {
+                lifebar = GameObject.Find("Canvas").transform.Find(name + "LifeBar").gameObject;
+            }
+            else
+            {
+                lifebar = GameObject.Find("Canvas").transform.Find(transform.parent.name + "LifeBar").gameObject;
+            }
+            
             lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
         }
         catch (Exception e)
