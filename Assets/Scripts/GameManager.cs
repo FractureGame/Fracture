@@ -126,7 +126,7 @@ namespace Com.MyCompany.MyGame
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(8f, 7f,0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(8f, 9f,0f), Quaternion.identity, 0);
                 }
                 else
                 {

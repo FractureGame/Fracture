@@ -122,10 +122,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             horizontal = false;
         }
-        beginX = GameObject.Find("Main Camera").GetComponent<CameraMovement>().beginX;
-        endX = GameObject.Find("Main Camera").GetComponent<CameraMovement>().endX;
-        beginY = GameObject.Find("Main Camera").GetComponent<CameraMovement>().beginY;
-        endY = GameObject.Find("Main Camera").GetComponent<CameraMovement>().endY;
 
     }
 
@@ -133,6 +129,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         if (other.gameObject.CompareTag("Player")) {
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+        }
+
+        if (other.gameObject.CompareTag("Victory"))
+        {
+            Debug.Log("AMENO");
+            am.StopSound("Walk");
+            isDead = true;
         }
     }
 
@@ -347,25 +350,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             Debug.Log("Damage");
             TakeDamage(20);
         }
-
-
-        if (horizontal)
-        {
-            if (gameObject.transform.position.x > beginX && gameObject.transform.position.y > beginY && gameObject.transform.position.y < endY)
-            {
-                Victory();
-                isDead = true;
-            }
-        }
-        else
-        {
-            if (gameObject.transform.position.y > beginY && gameObject.transform.position.x > beginX && gameObject.transform.position.x < endX)
-            {
-                Victory();
-                isDead = true;
-            }
-        }
-        
     }
 
     
@@ -483,6 +467,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         if (isDead)
             return;
+        
+        
+        
         
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)

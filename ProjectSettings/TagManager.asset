@@ -6,6 +6,7 @@ TagManager:
   tags:
   - WeakSpot
   - Enemies
+  - Victory
   layers:
   - Default
   - TransparentFX
