@@ -794,12 +794,28 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             if (enemyNames.Contains(enemy.name) == false)
             {
                 enemyNames.Add(enemy.name);
-                Debug.Log("We hit " + enemy.transform.parent.name);
+                try
+                {
+                    Debug.Log("We hit " + enemy.transform.parent.name);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("We hit " + enemy.name);
+                }
+                
                 if (!hasAttacked)
                 {
                     int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
                     photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
-                    photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
+                    if (enemy.name.StartsWith("Harpie"))
+                    {
+                        Debug.Log("AMENO");
+                        photonView.RPC("DmgEnemy", RpcTarget.All, enemy.name, enemyHealth);
+                    }
+                    else
+                    {
+                        photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
+                    }
                     hasAttacked = true;
                 }
                 
@@ -810,7 +826,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [PunRPC]
     private void DmgEnemy(string enemyName, int enemyHealth)
     {
-        if (enemyHealth > 0)
+        if (enemyHealth > 0 )
         {
             GameObject.Find(enemyName).GetComponentInChildren<Enemy>().currentHealth = enemyHealth;
             GameObject bar = GameObject.Find(enemyName + "LifeBar");
@@ -847,10 +863,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         if(collision.CompareTag("WeakSpot"))
         {
+            Debug.Log("WEAAAAAAk");
             animator.SetTrigger("jump");
             animator.SetBool("isJumping", true);
             Jump();
-            photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.parent.name);
+            if (collision.transform.parent.name.StartsWith("Harpie"))
+            {
+                photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.name);
+            }
+            else
+            {
+                photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.parent.name);
+            }
+            
         }
     }
     

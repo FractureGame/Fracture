@@ -21,6 +21,7 @@ public class HarpieAI : MonoBehaviour
     void Start()
     {
         pos = transform.position;
+        direction = Vector2.right;
     }
 
     // Update is called once per frame
@@ -79,8 +80,6 @@ public class HarpieAI : MonoBehaviour
             direction = Vector2.right;
         }
         
-        Debug.Log(oldDir);
-        Debug.Log(direction);
         if (oldDir != direction && oldDir != Vector2.zero)
         {
             transform.Rotate(0, 180, 0);
