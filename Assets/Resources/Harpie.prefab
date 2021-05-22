@@ -261,6 +261,7 @@ MonoBehaviour:
   - {fileID: 2201281025638510494}
   enemyDamage: 30
   canPatrol: 1
+  facingRight: 1
 --- !u!50 &760436627108753203
 Rigidbody2D:
   serializedVersion: 4

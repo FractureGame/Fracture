@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class HarpieAI : MonoBehaviour
 {
-
     private Vector2 pos;
     private GameObject playerTop;
     private GameObject playerBot;
@@ -22,6 +21,8 @@ public class HarpieAI : MonoBehaviour
     private int destPoint;
     public int enemyDamage;
     public bool canPatrol;
+    public bool facingRight;
+    private Vector2 originDir;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +37,17 @@ public class HarpieAI : MonoBehaviour
         {
             isPatrolling = false;
         }
-        direction = Vector2.right;
+
+        if (facingRight)
+        {
+            direction = Vector2.right;
+        }
+        else
+        {
+            direction = Vector2.left;
+            transform.Rotate(0, 180, 0);
+        }
+        originDir = direction;
     }
 
     
@@ -73,6 +84,7 @@ public class HarpieAI : MonoBehaviour
         
         if (isPatrolling)
         {
+            destination = target.position;
             transform.position = Vector2.MoveTowards(transform.position, target.position, speedEnemy * Time.deltaTime);
             if(Vector2.Distance(transform.position,target.position)<0.3f)
             {
@@ -83,21 +95,33 @@ public class HarpieAI : MonoBehaviour
         
         if (Vector2.Distance(transform.position, playerToFollowPos) < distance && playerToFollow.GetComponent<PlayerMovement>().isDead == false)
         {
+            destination = playerToFollowPos;
             isPatrolling = false;
             transform.position = Vector2.MoveTowards(transform.position, playerToFollowPos, speedEnemy * Time.deltaTime);
         }
         else
         {
-            if (Vector2.Distance(transform.position, pos) <= 0 && canPatrol)
+            if (Vector2.Distance(transform.position, pos) < 0.3 && canPatrol)
             {
                 isPatrolling = true;
+                if (direction != originDir)
+                {
+                    transform.Rotate(0, 180, 0);
+                    direction = originDir;
+                }
             }
-            else if (Vector2.Distance(transform.position, pos) <= 0)
+            else if (Vector2.Distance(transform.position, pos) < 0.3)
             {
                 posThisFrame = posLastFrame;
+                if (direction != originDir)
+                {
+                    transform.Rotate(0, 180, 0);
+                    direction = originDir;
+                }
             }
             else if (isPatrolling == false)
             {
+                destination = pos;
                 transform.position = Vector2.MoveTowards(transform.position, pos, speedEnemy * Time.deltaTime);
             }
         }
@@ -105,33 +129,32 @@ public class HarpieAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
-        if (posThisFrame.x > posLastFrame.x)
+        if (!isShaking)
         {
-            if (direction != Vector2.right)
+            if (posThisFrame == posLastFrame)
             {
-                transform.Rotate(0, 180, 0);
-                direction = Vector2.right;
+                if (direction != originDir)
+                {
+                    transform.Rotate(0, 180, 0);
+                    direction = originDir;
+                }
+            }
+            else if (posThisFrame.x - posLastFrame.x >= 0.02)
+            {
+                if (direction != Vector2.right)
+                {
+                    transform.Rotate(0, 180, 0);
+                    direction = Vector2.right;
+                }
+            }
+            else if (posThisFrame.x - posLastFrame.x <= -0.02)
+            {
+                if (direction != Vector2.left)
+                {
+                    transform.Rotate(0, 180, 0);
+                    direction = Vector2.left;
+                }
             }
         }
-        else if (posThisFrame.x < posLastFrame.x)
-        {
-            if (direction != Vector2.left)
-            {
-                transform.Rotate(0, 180, 0);
-                direction = Vector2.left;
-            }
-        }
-        else
-        {
-            if (direction != Vector2.right)
-            {
-                transform.Rotate(0, 180, 0);
-                direction = Vector2.right;
-            }
-        }
-
-            
-
     }
 }
