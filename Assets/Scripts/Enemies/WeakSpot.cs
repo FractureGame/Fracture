@@ -11,8 +11,8 @@ public class WeakSpot : MonoBehaviour
         {
             if (transform.parent.parent.name.StartsWith("Harpie"))
             {
-                Debug.Log(transform.parent.parent.name);
-                if (collision.transform.position.y > transform.parent.parent.position.y)
+                Debug.LogFormat("WEASPOT {0}, playerY : {1} vs {0} : {2}", transform.parent.parent.name, collision.transform.position.y, transform.parent.parent.position.y);
+                if (collision.transform.position.y > transform.parent.position.y)
                     PhotonNetwork.Destroy(objectToDestroy);
             }
             else
