@@ -475,7 +475,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         if (isDead)
             return;
-        
+
+
+
         
         
         

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
@@ -116,6 +117,7 @@ namespace Com.MyCompany.MyGame
             {
                 GameObject e = Instantiate(Enemylifebar, GameObject.Find("Canvas").transform);
                 e.name = enemy.name + "LifeBar";
+                e.tag = "LifeBar";
                 e.transform.position = new Vector3(enemy.GetComponentInChildren<BoxCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
             }
             
@@ -155,6 +157,27 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(264f, 5f,0f), Quaternion.identity, 0);
                 }
             }
+        }
+
+        private void Update()
+        {
+            foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
+            {
+                if (GameObject.Find(enemy.name + "LifeBar") == null)
+                {
+                    PhotonNetwork.Destroy(enemy);
+                }
+            }
+            
+            foreach (var lifebar in GameObject.FindGameObjectsWithTag("LifeBar"))
+            {
+                if (GameObject.Find(lifebar.name.Replace("LifeBar", "")) == null)
+                {
+                    PhotonNetwork.Destroy(lifebar);
+                }
+            }
+            
+            
         }
     }
 }

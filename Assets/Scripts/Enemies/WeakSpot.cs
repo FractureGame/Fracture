@@ -9,7 +9,7 @@ public class WeakSpot : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            if (transform.parent.name.StartsWith("Harpie"))
+            if (transform.parent.parent.name.StartsWith("Harpie"))
             {
                 Debug.Log(transform.parent.parent.name);
                 if (collision.transform.position.y > transform.parent.parent.position.y)

@@ -7,6 +7,7 @@ TagManager:
   - WeakSpot
   - Enemies
   - Victory
+  - LifeBar
   layers:
   - Default
   - TransparentFX
