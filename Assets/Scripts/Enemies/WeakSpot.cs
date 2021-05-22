@@ -9,7 +9,15 @@ public class WeakSpot : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            PhotonNetwork.Destroy(objectToDestroy);
+            if (transform.parent.name.StartsWith("Harpie"))
+            {
+                if (collision.transform.position.y > transform.parent.position.y)
+                    PhotonNetwork.Destroy(objectToDestroy);
+            }
+            else
+            {
+                PhotonNetwork.Destroy(objectToDestroy);
+            }
         }
     }
 }

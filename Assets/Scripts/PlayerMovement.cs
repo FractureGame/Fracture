@@ -863,18 +863,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         if(collision.CompareTag("WeakSpot"))
         {
-            Debug.Log("WEAAAAAAk");
-            animator.SetTrigger("jump");
-            animator.SetBool("isJumping", true);
-            Jump();
             if (collision.transform.parent.name.StartsWith("Harpie"))
             {
-                photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.name);
+                if (transform.position.y > collision.transform.parent.position.y)
+                {
+                    photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.name);
+                }
+                else
+                {
+                    return;
+                }
             }
             else
             {
                 photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.parent.name);
             }
+            animator.SetTrigger("jump");
+            animator.SetBool("isJumping", true);
+            Jump();
             
         }
     }

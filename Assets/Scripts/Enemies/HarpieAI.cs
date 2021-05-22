@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HarpieAI : MonoBehaviour
 {
 
     private Vector2 pos;
+    private GameObject playerTop;
+    private GameObject playerBot;
     private Vector2 playerTopPos;
     private Vector2 playerBotPos;
-    private Vector2 playerToFollow;
+    private GameObject playerToFollow;
+    private Vector2 playerToFollowPos;
     private Vector2 oldposition;
     private Vector2 oldDir;
     private Vector2 direction;
@@ -27,33 +27,34 @@ public class HarpieAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         // Flipping to go to the right direction
         oldposition = transform.position;
-        
         
         playerTopPos = GameObject.Find("PlayerTop(Clone)").GetComponent<Transform>().position;
         playerBotPos = GameObject.Find("PlayerBot(Clone)").GetComponent<Transform>().position;
 
         if (pos.y > playerBotPos.y && playerTopPos.y > playerBotPos.y)
         {
-            playerToFollow = playerTopPos;
+            playerToFollow = GameObject.Find("PlayerTop(Clone)");
         }
         else if (pos.y > playerTopPos.y && playerBotPos.y > playerTopPos.y)
         {
-            playerToFollow = playerBotPos;
+            playerToFollow = GameObject.Find("PlayerBot(Clone)");
         }
         else if (pos.y < playerTopPos.y && playerBotPos.y < playerTopPos.y)
         {
-            playerToFollow = playerBotPos;
+            playerToFollow = GameObject.Find("PlayerBot(Clone)");
         }
         else if (pos.y < playerBotPos.y && playerTopPos.y < playerBotPos.y)
         {
-            playerToFollow = playerTopPos;
+            playerToFollow = GameObject.Find("PlayerTop(Clone)");
         }
-        
-        if (Vector2.Distance(transform.position, playerToFollow) < distance)
+
+        playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
+        if (Vector2.Distance(transform.position, playerToFollowPos) < distance && playerToFollow.GetComponent<PlayerMovement>().isDead == false)
         {
-            transform.position = Vector2.MoveTowards(transform.position, playerToFollow, speedEnemy * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, playerToFollowPos, speedEnemy * Time.deltaTime);
         }
         else
         {
@@ -66,6 +67,9 @@ public class HarpieAI : MonoBehaviour
                 transform.position = Vector2.MoveTowards(transform.position, pos, speedEnemy * Time.deltaTime);
             }
         }
+        
+        
+        
     }
 
     private void FixedUpdate()
