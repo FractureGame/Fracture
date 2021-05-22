@@ -193,12 +193,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5985998844229360683}
   - component: {fileID: 5593854525389692770}
+  - component: {fileID: 8314020947102869202}
   - component: {fileID: 760436627108753203}
   - component: {fileID: 1167877659538353855}
   - component: {fileID: 8405110886284905481}
   - component: {fileID: 3049380362610748619}
   - component: {fileID: 4463478433456188423}
-  - component: {fileID: 8314020947102869202}
   m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
@@ -242,6 +242,25 @@ MonoBehaviour:
   linearDrag: 1
   gravity: 0
   fallMultiplier: 0
+--- !u!114 &8314020947102869202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8851910184996108046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc3ead3afe0179265bf4085c96e612d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distance: 15
+  speedEnemy: 1.5
+  waypoints:
+  - {fileID: 8564931509833369960}
+  - {fileID: 2201281025638510494}
+  enemyDamage: 30
+  canPatrol: 1
 --- !u!50 &760436627108753203
 Rigidbody2D:
   serializedVersion: 4
@@ -362,24 +381,6 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 3
---- !u!114 &8314020947102869202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8851910184996108046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc3ead3afe0179265bf4085c96e612d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distance: 15
-  speedEnemy: 1.5
-  waypoints:
-  - {fileID: 8564931509833369960}
-  - {fileID: 2201281025638510494}
-  enemyDamage: 30
 --- !u!1001 &3461526493220732485
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -19,16 +19,23 @@ public class HarpieAI : MonoBehaviour
     public Transform[] waypoints;
     private Transform target;
     private bool isPatrolling;
-    private bool isChasing;
     private int destPoint;
     public int enemyDamage;
+    public bool canPatrol;
 
     // Start is called before the first frame update
     void Start()
     {
         pos = transform.position;
         target = waypoints[1];
-        isPatrolling = true;
+        if (canPatrol)
+        {
+            isPatrolling = true;
+        }
+        else
+        {
+            isPatrolling = false;
+        }
         direction = Vector2.right;
     }
 
@@ -36,7 +43,6 @@ public class HarpieAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         // Flipping to go to the right direction
         posLastFrame = posThisFrame;
         posThisFrame = transform.position;
@@ -82,9 +88,13 @@ public class HarpieAI : MonoBehaviour
         }
         else
         {
-            if (Vector2.Distance(transform.position, pos) <= 0)
+            if (Vector2.Distance(transform.position, pos) <= 0 && canPatrol)
             {
                 isPatrolling = true;
+            }
+            else if (Vector2.Distance(transform.position, pos) <= 0)
+            {
+                posThisFrame = posLastFrame;
             }
             else if (isPatrolling == false)
             {
@@ -95,8 +105,7 @@ public class HarpieAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-
+        
         if (posThisFrame.x > posLastFrame.x)
         {
             if (direction != Vector2.right)
@@ -105,12 +114,24 @@ public class HarpieAI : MonoBehaviour
                 direction = Vector2.right;
             }
         }
-        if (posThisFrame.x < posLastFrame.x)
+        else if (posThisFrame.x < posLastFrame.x)
+        {
             if (direction != Vector2.left)
             {
                 transform.Rotate(0, 180, 0);
                 direction = Vector2.left;
             }
+        }
+        else
+        {
+            if (direction != Vector2.right)
+            {
+                transform.Rotate(0, 180, 0);
+                direction = Vector2.right;
+            }
+        }
+
+            
 
     }
 }
