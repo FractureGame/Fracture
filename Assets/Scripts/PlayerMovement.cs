@@ -847,7 +847,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         if(collision.CompareTag("WeakSpot"))
         {
-            if (transform.position.y > collision.transform.parent.position.y)
+            Debug.Log(collision.transform.parent.parent.name);
+            if (transform.position.y > collision.transform.parent.parent.position.y)
             {
                 photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.parent.name);
                 animator.SetTrigger("jump");

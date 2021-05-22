@@ -84,7 +84,6 @@ public class HarpieAI : MonoBehaviour
         
         if (isPatrolling)
         {
-            destination = target.position;
             transform.position = Vector2.MoveTowards(transform.position, target.position, speedEnemy * Time.deltaTime);
             if(Vector2.Distance(transform.position,target.position)<0.3f)
             {
@@ -95,7 +94,6 @@ public class HarpieAI : MonoBehaviour
         
         if (Vector2.Distance(transform.position, playerToFollowPos) < distance && playerToFollow.GetComponent<PlayerMovement>().isDead == false)
         {
-            destination = playerToFollowPos;
             isPatrolling = false;
             transform.position = Vector2.MoveTowards(transform.position, playerToFollowPos, speedEnemy * Time.deltaTime);
         }
@@ -121,7 +119,6 @@ public class HarpieAI : MonoBehaviour
             }
             else if (isPatrolling == false)
             {
-                destination = pos;
                 transform.position = Vector2.MoveTowards(transform.position, pos, speedEnemy * Time.deltaTime);
             }
         }
@@ -129,31 +126,28 @@ public class HarpieAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isShaking)
+        if (posThisFrame == posLastFrame)
         {
-            if (posThisFrame == posLastFrame)
+            if (direction != originDir)
             {
-                if (direction != originDir)
-                {
-                    transform.Rotate(0, 180, 0);
-                    direction = originDir;
-                }
+                transform.Rotate(0, 180, 0);
+                direction = originDir;
             }
-            else if (posThisFrame.x - posLastFrame.x >= 0.02)
+        }
+        else if (posThisFrame.x - posLastFrame.x >= 0.02)
+        {
+            if (direction != Vector2.right)
             {
-                if (direction != Vector2.right)
-                {
-                    transform.Rotate(0, 180, 0);
-                    direction = Vector2.right;
-                }
+                transform.Rotate(0, 180, 0);
+                direction = Vector2.right;
             }
-            else if (posThisFrame.x - posLastFrame.x <= -0.02)
+        }
+        else if (posThisFrame.x - posLastFrame.x <= -0.02)
+        {
+            if (direction != Vector2.left)
             {
-                if (direction != Vector2.left)
-                {
-                    transform.Rotate(0, 180, 0);
-                    direction = Vector2.left;
-                }
+                transform.Rotate(0, 180, 0);
+                direction = Vector2.left;
             }
         }
     }
