@@ -11,7 +11,8 @@ public class HarpieAI : MonoBehaviour
     private Vector2 playerBotPos;
     private Vector2 playerToFollow;
     private Vector2 oldposition;
-    private SpriteRenderer spriteRenderer;
+    private Vector2 oldDir;
+    private Vector2 direction;
     public float distance;
     public float speedEnemy;
     public int enemyDamage;
@@ -20,7 +21,6 @@ public class HarpieAI : MonoBehaviour
     void Start()
     {
         pos = transform.position;
-        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -69,13 +69,21 @@ public class HarpieAI : MonoBehaviour
 
     private void FixedUpdate()
     {
+        oldDir = direction;
         if (oldposition.x > transform.position.x)
         {
-            spriteRenderer.flipX = true;
+            direction = Vector2.left;
         }
         else if (oldposition.x < transform.position.x)
         {
-            spriteRenderer.flipX = false;
+            direction = Vector2.right;
+        }
+        
+        Debug.Log(oldDir);
+        Debug.Log(direction);
+        if (oldDir != direction && oldDir != Vector2.zero)
+        {
+            transform.Rotate(0, 180, 0);
         }
     }
 }
