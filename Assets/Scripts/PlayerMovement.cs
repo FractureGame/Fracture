@@ -541,16 +541,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Collider2D onTouchEnemy = IsTouchingEnemy();
         if (onTouchEnemy != null)
         {
-            int enemyDmg;
-            if (onTouchEnemy.name.StartsWith("Harpie"))
+            if (onTouchEnemy.transform.parent.name.StartsWith("Harpie"))
             {
-                enemyDmg = onTouchEnemy.GetComponent<HarpieAI>().enemyDamage;
+                TakeDamage(onTouchEnemy.transform.GetComponentInChildren<HarpieAI>().enemyDamage);
             }
             else
             {
-                enemyDmg = onTouchEnemy.transform.GetComponentInChildren<EnemyPatrol>().enemyDamage;
+                TakeDamage(onTouchEnemy.transform.GetComponentInChildren<EnemyPatrol>().enemyDamage);
             }
-            TakeDamage(enemyDmg);
+            
         }
         
         
@@ -794,31 +793,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             if (enemyNames.Contains(enemy.name) == false)
             {
                 enemyNames.Add(enemy.name);
-                try
-                {
-                    Debug.Log("We hit " + enemy.transform.parent.name);
-                }
-                catch (Exception e)
-                {
-                    Debug.Log("We hit " + enemy.name);
-                }
-                
+
+                Debug.Log("We hit " + enemy.transform.parent.name);
+
                 if (!hasAttacked)
                 {
                     int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
                     photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
-                    if (enemy.name.StartsWith("Harpie"))
-                    {
-                        Debug.Log("AMENO");
-                        photonView.RPC("DmgEnemy", RpcTarget.All, enemy.name, enemyHealth);
-                    }
-                    else
-                    {
-                        photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
-                    }
+                    photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
                     hasAttacked = true;
                 }
-                
             }
         }
     }
@@ -863,25 +847,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         if(collision.CompareTag("WeakSpot"))
         {
-            if (collision.transform.parent.name.StartsWith("Harpie"))
-            {
-                if (transform.position.y > collision.transform.parent.position.y)
-                {
-                    photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.name);
-                }
-                else
-                {
-                    return;
-                }
-            }
-            else
+            if (transform.position.y > collision.transform.parent.position.y)
             {
                 photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.parent.name);
+                animator.SetTrigger("jump");
+                animator.SetBool("isJumping", true);
+                Jump();
             }
-            animator.SetTrigger("jump");
-            animator.SetBool("isJumping", true);
-            Jump();
-            
         }
     }
     
