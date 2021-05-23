@@ -507,8 +507,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle Jump
         if(jumpTimer > Time.time && (nbJump < nbJumpsAllowed || isWallJumping))
         {
-            animator.SetTrigger("jump");
             animator.SetBool("isJumping", true);
+            animator.SetTrigger("jump");
+            
             Jump();
         }
         
@@ -858,8 +859,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             if (transform.position.y > collision.transform.parent.position.y)
             {
                 photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.parent.name);
-                animator.SetTrigger("jump");
                 animator.SetBool("isJumping", true);
+                animator.SetTrigger("jump");
+                
                 Jump();
             }
         }
