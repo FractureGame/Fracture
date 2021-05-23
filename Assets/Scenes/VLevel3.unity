@@ -11150,7 +11150,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 21
+  m_SortingOrder: 22
   m_TargetDisplay: 0
 --- !u!224 &1162505723
 RectTransform:
@@ -11218,6 +11218,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   victory1: {fileID: 2049727089}
   victory2: {fileID: 910495121}
+  confetti: {fileID: 5907559814512820751, guid: b33f0b312335d4727a6ed2b990ea41cd,
+    type: 3}
 --- !u!4 &1388145060
 Transform:
   m_ObjectHideFlags: 0

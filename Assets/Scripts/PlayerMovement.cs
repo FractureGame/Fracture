@@ -125,6 +125,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     }
 
+    private void OnDestroy()
+    {
+        am.StopSound("Walk");
+    }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Player")) {
