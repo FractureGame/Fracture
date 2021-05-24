@@ -136,17 +136,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
         }
 
-        // if (other.gameObject.CompareTag("Victory"))
-        // {
-        //     direction = Vector2.zero;
-        //     animator.SetBool(0, false);
-        //     am.StopSound("Walk");
-        //     isDead = true;
-        //     if (playerBot.GetComponent<PlayerMovement>().isDead && playerTop.GetComponent<PlayerMovement>().isDead)
-        //     {
-        //         Victory();
-        //     }
-        // }
+        if (other.gameObject.CompareTag("Pieds"))
+        {
+            Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+        }
     }
 
     private void Update()
@@ -443,6 +436,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         animator.SetTrigger("death");
         photonView.RPC("DisplayDeath", RpcTarget.All, PhotonNetwork.NickName);
+    }
+
+
+    public void NowDead()
+    {
+        direction = Vector2.zero;
+        rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+        animator.SetBool("isWalking", false);
+        am.StopSound("Walk");
+        isDead = true;
     }
 
     [PunRPC]

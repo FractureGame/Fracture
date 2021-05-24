@@ -4,12 +4,12 @@ using UnityEngine;
 public class StrongSpot : MonoBehaviourPunCallbacks
 {
 
-    private Animator animator;
+    private BoxCollider2D boxCollider2d;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        boxCollider2d = GetComponent<BoxCollider2D>();
     }
 
     // Update is called once per frame
@@ -33,4 +33,19 @@ public class StrongSpot : MonoBehaviourPunCallbacks
             
         }
     }
+    
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Player")) {
+            Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+        }
+
+        if (other.gameObject.CompareTag("Pieds"))
+        {
+            Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+        }
+    }
 }
+
+
+

@@ -9,6 +9,8 @@ public class VictoryChecker : MonoBehaviour
     public Activation victory2;
 
     public ParticleSystem confetti;
+
+    private bool yet;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +20,7 @@ public class VictoryChecker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (victory1.isActivated && victory2.isActivated)
+        if (victory1.isActivated && victory2.isActivated && !yet)
         {
             Victory();
         }
@@ -36,9 +38,9 @@ public class VictoryChecker : MonoBehaviour
         gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
         gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
         gameOverPanel.SetActive(true);
-        Destroy(GameObject.Find("PlayerBot(Clone)"));
-        Destroy(GameObject.Find("PlayerTop(Clone)"));
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
         
-
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
+        yet = true;
     }
 }
