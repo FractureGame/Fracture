@@ -23,7 +23,14 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
+        try
+        {
+            rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
+        }
+        catch (Exception e)
+        {
+        }
+        
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         currentHealth = maxHealth;
         Debug.Log(transform.parent.name);
@@ -35,8 +42,16 @@ public class Enemy : MonoBehaviour
         isGrounded = IsGrounded();
         
         // so that the enemy does slide when moving
-        rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
-        modifyPhysics();
+        try
+        {
+            rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+            modifyPhysics();
+        }
+        catch (Exception e)
+        {
+        }
+        
+        
 
 
         try

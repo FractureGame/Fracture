@@ -6,6 +6,9 @@ TagManager:
   tags:
   - WeakSpot
   - Enemies
+  - Victory
+  - LifeBar
+  - Pieds
   layers:
   - Default
   - TransparentFX

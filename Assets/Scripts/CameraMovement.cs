@@ -20,11 +20,6 @@ public class CameraMovement : MonoBehaviour
     public float endTilePos;
     private float maxDistanceBetweenPlayers;
     
-    
-    public float beginX;
-    public float endX;
-    public float beginY;
-    public float endY;
 
     // Start is called before the first frame update
     void Start()

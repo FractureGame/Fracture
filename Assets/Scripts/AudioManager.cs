@@ -36,13 +36,13 @@ public class AudioManager : MonoBehaviour
         Sound snd = Array.Find(sounds, sound => sound.name == name);
         if (snd == null)
         {
-            Debug.LogError("PlaySound: no sound found for " + snd.name);
+            // Debug.LogError("PlaySound: no sound found for " + snd.name);
             return;
         }
 
         if (snd.source.isPlaying && !snd.canOverlap)
         {
-            Debug.Log("Sound is already playing");
+            // Debug.Log("Sound is already playing");
             return;
         }
         snd.source.Play();
@@ -53,11 +53,11 @@ public class AudioManager : MonoBehaviour
         Sound snd = Array.Find(sounds, sound => sound.name == name);
         if (snd == null)
         {
-            Debug.LogError("StopSound: no sound found for " + snd.name);
+            // Debug.LogError("StopSound: no sound found for " + snd.name);
             return;
         }
         snd.source.Stop();
-        Debug.Log("sound stopped");
+        // Debug.Log("sound stopped");
     }
 
     public void StopAllSounds()

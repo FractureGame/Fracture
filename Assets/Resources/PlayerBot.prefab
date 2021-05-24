@@ -1,5 +1,75 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &558083928354096124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3966990695042531283}
+  - component: {fileID: 8647359306431269779}
+  - component: {fileID: 5354627903969746815}
+  m_Layer: 0
+  m_Name: pieds
+  m_TagString: Pieds
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3966990695042531283
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558083928354096124}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8868072558870671708}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &8647359306431269779
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558083928354096124}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.59012103, y: -5.45042}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 5.9291844, y: 0.8360987}
+  m_EdgeRadius: 0
+--- !u!114 &5354627903969746815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558083928354096124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea78de549f297c74d8737f41533b559f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1357750315614451161
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,7 +560,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4757306611542903147}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.2649999, y: 6.58, z: 0}
+  m_LocalPosition: {x: -3.85, y: 0.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4697361560984343453}
@@ -535,7 +605,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: -6690893701684619459, guid: 08763992dea602948ab3e55453aeb8ae,
+  m_Sprite: {fileID: 7845997869734685258, guid: 56f46f12d9a3d934dbd907518fe3843a,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -560,12 +630,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RootBone: {fileID: 2079615622159326823}
-  m_BoneTransforms:
-  - {fileID: 6947597938963767823}
-  - {fileID: 2079615622159326823}
+  m_BoneTransforms: []
   m_Bounds:
-    m_Center: {x: 0.016775131, y: -3.8446724, z: 0}
-    m_Extent: {x: 2.0150611, y: 1.3116882, z: 0}
+    m_Center: {x: 1.6017742, y: 2.0853276, z: 0}
+    m_Extent: {x: 2.0150611, y: 1.3116883, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
 --- !u!1 &5223809558376049171
@@ -837,6 +905,7 @@ Transform:
   m_Children:
   - {fileID: 4626149726235125792}
   - {fileID: 4697361560984343453}
+  - {fileID: 3966990695042531283}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -853,6 +922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 150
+  isDead: 0
   thisBar: {fileID: 4590895985146015872, guid: 4ac5072547022a0459a99908e4a23b78, type: 3}
   otherBar: {fileID: 4590895985146015872, guid: 13e6980c11d59b34c9e90adcaaed400a,
     type: 3}
@@ -866,6 +936,7 @@ MonoBehaviour:
     m_Bits: 4096
   moveSpeed: 10
   jumpVelocity: 16
+  onGround: 0
   linearDrag: 1
   gravity: 1
   fallMultiplier: 6
@@ -884,8 +955,10 @@ MonoBehaviour:
   attackDamage: 40
   orientation: {x: 1, y: 0}
   switchCooldownStatus: 0
+  animator: {fileID: 0}
   bloodEffect: {fileID: 1242838869165408022, guid: 937499e39a50e6832a0634db6ac798bb,
     type: 3}
+  am: {fileID: 0}
 --- !u!114 &2667090133608679285
 MonoBehaviour:
   m_ObjectHideFlags: 0
