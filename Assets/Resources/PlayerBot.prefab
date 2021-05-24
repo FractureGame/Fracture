@@ -560,7 +560,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4757306611542903147}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.2649999, y: 6.58, z: 0}
+  m_LocalPosition: {x: -3.85, y: 0.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4697361560984343453}
@@ -605,7 +605,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: -6690893701684619459, guid: 08763992dea602948ab3e55453aeb8ae,
+  m_Sprite: {fileID: 7845997869734685258, guid: 56f46f12d9a3d934dbd907518fe3843a,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -630,12 +630,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RootBone: {fileID: 2079615622159326823}
-  m_BoneTransforms:
-  - {fileID: 6947597938963767823}
-  - {fileID: 2079615622159326823}
+  m_BoneTransforms: []
   m_Bounds:
-    m_Center: {x: 0.016775131, y: -3.8446724, z: 0}
-    m_Extent: {x: 2.0150611, y: 1.3116882, z: 0}
+    m_Center: {x: 1.6017742, y: 2.0853276, z: 0}
+    m_Extent: {x: 2.0150611, y: 1.3116883, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
 --- !u!1 &5223809558376049171
