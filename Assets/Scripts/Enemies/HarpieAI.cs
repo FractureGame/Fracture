@@ -102,7 +102,7 @@ public class HarpieAI : MonoBehaviour
             if (Vector2.Distance(transform.position, pos) < 0.3 && canPatrol)
             {
                 isPatrolling = true;
-                if (direction != originDir)
+                if (direction != originDir && facingRight)
                 {
                     transform.Rotate(0, 180, 0);
                     direction = originDir;
