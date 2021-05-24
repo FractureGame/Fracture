@@ -139,11 +139,11 @@ namespace Com.MyCompany.MyGame
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(6f, 7f,0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(6f, 11f,0f), Quaternion.identity, 0);
                 }
                 else
                 {
-                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(6f, 0f,0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(6f, 1f,0f), Quaternion.identity, 0);
                 }
             }
             else if (SceneManager.GetActiveScene().name == "VLevel3")
