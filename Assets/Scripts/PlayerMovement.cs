@@ -102,7 +102,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private bool isInvincible = false; // triggered when enemy contact
     private int dangerousTilesDmg = 30;
 
-    private AudioManager am;
+    public AudioManager am;
     private void Start()
     {
         am = FindObjectOfType<AudioManager>();
@@ -452,8 +452,22 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         gameoverPanel.SetActive(true);
         gameoverPanel.transform.Find("gameover Label").gameObject.GetComponent<Text>().text = "GAME OVER";
         gameoverPanel.transform.Find("gameover Reason").gameObject.GetComponent<Text>().text = deadPlayerName + " died";
+        
+        
+        
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().direction = Vector2.zero;
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().animator.SetBool("isWalking", false);
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().am.StopSound("Walk");
         GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().isDead = true;
+        
+        
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().direction = Vector2.zero;
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().animator.SetBool("isWalking", false);
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().am.StopSound("Walk");
         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().isDead = true;
+        
     }
 
     // [PunRPC]
