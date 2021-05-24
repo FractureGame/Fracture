@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private float nbJump = 0;
 
     [Header("Collision")] 
-    private bool onGround = false;
+    public bool onGround = false;
 
     [Header("Physics")] 
     public float linearDrag;
@@ -85,7 +85,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private bool isWallSliding;
 
     [Header("Animation")] 
-    private Animator animator;
+    public Animator animator;
     
     [Header("Scene")]
     private float beginX;
@@ -431,7 +431,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public int ApplyDamage(int dmg)
     {
         currentHealth -= dmg;
-        if (currentHealth < 0)
+        if (currentHealth <= 0)
         {
             currentHealth = 0;
             Die();
@@ -693,7 +693,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
     }
     
-    private void Jump()
+    public void Jump()
     {
         rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, 0);
         if (isWallJumping)
@@ -865,21 +865,21 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
     
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.CompareTag("WeakSpot"))
-        {
-            Debug.Log(collision.transform.parent.parent.name);
-            if (transform.position.y > collision.transform.parent.position.y)
-            {
-                photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.parent.name);
-                animator.SetBool("isJumping", true);
-                animator.SetTrigger("jump");
-                
-                Jump();
-            }
-        }
-    }
+    // private void OnTriggerEnter2D(Collider2D collision)
+    // {
+    //     if(collision.CompareTag("WeakSpot"))
+    //     {
+    //         Debug.Log(collision.transform.parent.parent.name);
+    //         if (transform.position.y > collision.transform.parent.position.y )
+    //         {
+    //             photonView.RPC("KillEnemy", RpcTarget.All, collision.transform.parent.parent.name);
+    //             animator.SetBool("isJumping", true);
+    //             animator.SetTrigger("jump");
+    //             
+    //             Jump();
+    //         }
+    //     }
+    // }
     
     private Collider2D IsTouchingEnemy()
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HarpieAI : MonoBehaviour
 {
@@ -23,11 +24,38 @@ public class HarpieAI : MonoBehaviour
     public bool canPatrol;
     public bool facingRight;
     private Vector2 originDir;
+    private bool followPlayerTop;
+    private bool horizontal;
 
     // Start is called before the first frame update
     void Start()
     {
         pos = transform.position;
+        if (SceneManager.GetActiveScene().name[0] == 'H')
+        {
+            horizontal = true;
+            Debug.LogFormat("CAMERA Y : {0} vs {1}", GameObject.Find("Main Camera").transform.position.y, pos.y);
+            if (pos.y > GameObject.Find("Main Camera").transform.position.y)
+            {
+                followPlayerTop = true;
+            }
+            else
+            {
+                followPlayerTop = false;
+            }
+        }
+        else
+        {
+            horizontal = false;
+            if (pos.x > GameObject.Find("Main Camera").transform.position.x)
+            {
+                followPlayerTop = true;
+            }
+            else
+            {
+                followPlayerTop = false;
+            }
+        }
         target = waypoints[1];
         if (canPatrol)
         {
@@ -36,6 +64,7 @@ public class HarpieAI : MonoBehaviour
         else
         {
             isPatrolling = false;
+            transform.position = Vector2.MoveTowards(transform.position, target.position, speedEnemy * Time.deltaTime);
         }
 
         if (facingRight)
@@ -57,25 +86,51 @@ public class HarpieAI : MonoBehaviour
         // Flipping to go to the right direction
         posLastFrame = posThisFrame;
         posThisFrame = transform.position;
-        
+
+
         playerTopPos = GameObject.Find("PlayerTop(Clone)").GetComponent<Transform>().position;
         playerBotPos = GameObject.Find("PlayerBot(Clone)").GetComponent<Transform>().position;
 
-        if (pos.y > playerBotPos.y && playerTopPos.y > playerBotPos.y)
+        
+
+        if (horizontal)
         {
-            playerToFollow = GameObject.Find("PlayerTop(Clone)");
+            if (followPlayerTop && playerTopPos.y > playerBotPos.y)
+            {
+                Debug.Log("That's right");
+                playerToFollow = GameObject.Find("PlayerTop(Clone)");
+            }
+            else if (followPlayerTop && playerTopPos.y < playerBotPos.y)
+            {
+                playerToFollow = GameObject.Find("PlayerBot(Clone)");
+            }
+            else if (!followPlayerTop && playerTopPos.y > playerBotPos.y)
+            {
+                playerToFollow = GameObject.Find("PlayerBot(Clone)");
+            }
+            else if (!followPlayerTop && playerTopPos.y < playerBotPos.y)
+            {
+                playerToFollow = GameObject.Find("PlayerTop(Clone)");
+            }
         }
-        else if (pos.y > playerTopPos.y && playerBotPos.y > playerTopPos.y)
+        else
         {
-            playerToFollow = GameObject.Find("PlayerBot(Clone)");
-        }
-        else if (pos.y < playerTopPos.y && playerBotPos.y < playerTopPos.y)
-        {
-            playerToFollow = GameObject.Find("PlayerBot(Clone)");
-        }
-        else if (pos.y < playerBotPos.y && playerTopPos.y < playerBotPos.y)
-        {
-            playerToFollow = GameObject.Find("PlayerTop(Clone)");
+            if (followPlayerTop && playerTopPos.x > playerBotPos.x)
+            {
+                playerToFollow = GameObject.Find("PlayerTop(Clone)");
+            }
+            else if (followPlayerTop && playerTopPos.x < playerBotPos.x)
+            {
+                playerToFollow = GameObject.Find("PlayerBot(Clone)");
+            }
+            else if (!followPlayerTop && playerTopPos.x > playerBotPos.x)
+            {
+                playerToFollow = GameObject.Find("PlayerBot(Clone)");
+            }
+            else if (!followPlayerTop && playerTopPos.x < playerBotPos.x)
+            {
+                playerToFollow = GameObject.Find("PlayerTop(Clone)");
+            }
         }
 
 
@@ -84,6 +139,8 @@ public class HarpieAI : MonoBehaviour
         
         if (isPatrolling)
         {
+            Debug.Log("TARGET  ??");
+            Debug.Log(target.position);
             transform.position = Vector2.MoveTowards(transform.position, target.position, speedEnemy * Time.deltaTime);
             if(Vector2.Distance(transform.position,target.position)<0.3f)
             {

@@ -8,6 +8,7 @@ TagManager:
   - Enemies
   - Victory
   - LifeBar
+  - Pieds
   layers:
   - Default
   - TransparentFX
