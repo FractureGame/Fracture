@@ -10,32 +10,13 @@ namespace Com.MyCompany.MyGame
 {
     public class GameManager : MonoBehaviourPunCallbacks
     {
-
-
         #region Public Fields
-
-        [Tooltip("The prefab to use for representing the TopPlayer")]
+        
         public GameObject playerTopPrefab;
-        [Tooltip("The prefab to use for representing the Botplayer")]
         public GameObject playerBotPrefab;
-        
-        [Tooltip("The prefab to use for representing Enemy1")]
-        public GameObject enemy1Prefab;
-        [Tooltip("The prefab to use for representing the Enemy2")]
-        public GameObject enemy2Prefab;
+        public GameObject Enemylifebar;
         
         
-        [Tooltip("The prefab to use for representing the Blob")]
-        public GameObject blobPrefab;
-        
-        [Tooltip("The gameover Panel")]
-        [SerializeField]
-        private GameObject gameoverPanel;
-        [Tooltip("The gameover reason Label")]
-        [SerializeField]
-        private GameObject gameoverReasonLabel;
-
-
         #endregion
 
         #region Photon Callbacks
@@ -113,9 +94,9 @@ namespace Com.MyCompany.MyGame
                 {
                     PhotonNetwork.CurrentRoom.IsOpen = false;
                     PauseGame();
+                    GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
                     gameoverPanel.SetActive(true);
-                    gameoverReasonLabel.GetComponent<Text>().text = other.NickName + " left the room";
-                    gameoverReasonLabel.SetActive(true);
+                    gameoverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = other.NickName + " left the room";
                 }
             }
 
@@ -131,29 +112,72 @@ namespace Com.MyCompany.MyGame
 
         public void Start()
         {
-            gameoverPanel.SetActive(false);
-            gameoverReasonLabel.SetActive(false);
-            Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
-            // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            if (PhotonNetwork.IsMasterClient)
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
+            foreach (var enemy in enemies)
             {
-                PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(playerTopPrefab.transform.position.x,playerTopPrefab.transform.position.y,0f), Quaternion.identity, 0);
-                
-                // Instanciate the enemies of the TOP
-                PhotonNetwork.Instantiate(enemy2Prefab.name, new Vector3(enemy2Prefab.transform.position.x, enemy2Prefab.transform.position.y, 0f), Quaternion.identity, 0);
-            }
-            else
-            {
-                PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(playerBotPrefab.transform.position.x,playerBotPrefab.transform.position.y,0f), Quaternion.identity, 0);
-                
-                // Instanciate the enemies of the BOTTOM
-                PhotonNetwork.Instantiate(enemy1Prefab.name, new Vector3(enemy1Prefab.transform.position.x, enemy1Prefab.transform.position.y, 0f), Quaternion.identity, 0);
-                PhotonNetwork.Instantiate(blobPrefab.name, new Vector3(blobPrefab.transform.position.x, blobPrefab.transform.position.y, 0f), Quaternion.identity, 0);
+                GameObject e = Instantiate(Enemylifebar, GameObject.Find("Canvas").transform);
+                e.name = enemy.name + "LifeBar";
+                e.tag = "LifeBar";
+                e.transform.position = new Vector3(enemy.GetComponentInChildren<BoxCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
             }
             
+            
+            Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
+            // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
+            if (SceneManager.GetActiveScene().name == "HLevel1")
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(8f, 9f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(8f, 2f,0f), Quaternion.identity, 0);
+                } 
+            }
+            else if (SceneManager.GetActiveScene().name == "HLevel2")
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(6f, 11f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(6f, 1f,0f), Quaternion.identity, 0);
+                }
+            }
+            else if (SceneManager.GetActiveScene().name == "VLevel3")
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(6.5f, 2.5f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(22f, 2.5f,0f), Quaternion.identity, 0);
+                }
+            }
         }
-        
+
+        private void Update()
+        {
+            foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
+            {
+                if (GameObject.Find(enemy.name + "LifeBar") == null)
+                {
+                    PhotonNetwork.Destroy(enemy);
+                }
+            }
+            
+            foreach (var lifebar in GameObject.FindGameObjectsWithTag("LifeBar"))
+            {
+                if (GameObject.Find(lifebar.name.Replace("LifeBar", "")) == null)
+                {
+                    PhotonNetwork.Destroy(lifebar);
+                }
+            }
+            
+            
+        }
     }
-    
-    
 }

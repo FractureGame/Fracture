@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -20,58 +20,35 @@ namespace Com.MyCompany.MyGame
 
 
         #region Private Fields
-        
+
+        public GameObject textPublic;
+        public GameObject textPrivate;
+        public GameObject waitingPrivateMenu;
+        public GameObject privateMenu;
         private bool publicGame;
         private string value;
-        private bool creator;
+        //private bool creator;
         private const int CODE_LENGTH = 4;
         private string code;
+        private string sceneName = "LevelSelector";
 
         #endregion
 
 
         #region Public Fields
         
-        // [Tooltip("The UI Label to inform the user that the connection is in progress")]
-        // [SerializeField]
-        // private GameObject progressLabel;
-        //
-        // [Tooltip("The Play Menu")]
-        // [SerializeField]
-        // private GameObject menuPlay;
-        //
+
         [Tooltip("Room Code Label")]
         [SerializeField]
         private GameObject inviteCodeLabel;
-        //
         [Tooltip("input Room Name To Join")]
         [SerializeField]
         private GameObject inputRoomNameToJoin;
-        //
-        // [Tooltip("Erro Join Label")]
-        // [SerializeField]
-        // private GameObject errorJoinLabel;
-        //
-        // [Tooltip("Join a Private Room menu")]
-        // [SerializeField]
-        // private GameObject joinPrivateGameMenu;
-        //
+
         [Tooltip("LaunchGame Button")]
         [SerializeField]
         private GameObject launchGameButton;
-        //
-        // [Tooltip("Player2 Label")]
-        // [SerializeField]
-        // private GameObject player2Label;
-        //
-        // [Tooltip("Master Label")]
-        // [SerializeField]
-        // private GameObject masterLabel;
-        //
-        // [Tooltip("Back Button")]
-        // [SerializeField]
-        // private GameObject backButton;
-        
+
         #endregion
         
         #region MonoBehaviour CallBacks
@@ -86,22 +63,7 @@ namespace Com.MyCompany.MyGame
             // this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
             PhotonNetwork.AutomaticallySyncScene = true;
         }
-
-
-        /// <summary>
-        /// MonoBehaviour method called on GameObject by Unity during initialization phase.
-        /// </summary>
-        void Start()
-        {
-            // progressLabel.SetActive(false);
-            // menuPlay.SetActive(true);
-            // backButton.SetActive(true);
-            // masterLabel.SetActive(false);
-            // player2Label.SetActive(false);
-            // launchGameButton.SetActive(false);
-            // joinPrivateGameMenu.SetActive(false);
-            // inviteCodeLabel.SetActive(false);
-        }
+        
 
         #endregion
 
@@ -112,9 +74,7 @@ namespace Com.MyCompany.MyGame
         {
             Debug.Log("PLAYONLINE");
             publicGame = true;
-            // menuPlay.SetActive(false);
-            // progressLabel.SetActive(true);
-            // backButton.GetComponentInChildren<Text>().text = "Quit Queue";
+            textPublic.GetComponent<TextMeshProUGUI>().text = "Waiting for my special someone...";
             PhotonNetwork.JoinRandomRoom();
         }
 
@@ -133,39 +93,25 @@ namespace Com.MyCompany.MyGame
         public void CreatePrivateRoom()
         {
             publicGame = false;
-            creator = true;
-            // backButton.GetComponentInChildren<Text>().text = "Quit Room";
-            // menuPlay.SetActive(false);
-            // masterLabel.SetActive(true);
-            // player2Label.SetActive(true);
-            // masterLabel.GetComponent<Text>().text = PhotonNetwork.NickName;
+            //creator = true;
             code = GenerateRandomCode();
             PhotonNetwork.CreateRoom(code, new RoomOptions {MaxPlayers = maxPlayersPerRoom, IsVisible = false}, null,
                 new string[]{});
         }
-
         
-        public void DisplayJoinPrivateRoom()
-        {
-            // menuPlay.SetActive(false);
-            // joinPrivateGameMenu.SetActive(true);
-        }
         
         public void JoinPrivateRoom()
         {
-            // errorJoinLabel.GetComponent<Text>().text = "";
-            creator = false;
+            //creator = false;
             publicGame = false;
-            // backButton.GetComponentInChildren<Text>().text = "Quit Room";
             value = inputRoomNameToJoin.GetComponent<Text>().text;
             if (string.IsNullOrEmpty(value))
             {
                 Debug.LogError("Room Name is null or empty");
-                // errorJoinLabel.GetComponent<Text>().text = "Room Name is null or empty";
-                
                 return;
             }
             PhotonNetwork.JoinRoom(value);
+            
         }
 
         public void LaunchGame()
@@ -174,46 +120,6 @@ namespace Com.MyCompany.MyGame
             PhotonNetwork.LoadLevel("MapGame");
         }
 
-
-        // public void Back()
-        // {
-        //     if (menuPlay.activeSelf)
-        //     {
-        //         SceneManager.LoadScene("Launcher");
-        //     }
-        //     else if(joinPrivateGameMenu.activeSelf)
-        //     {
-        //         joinPrivateGameMenu.SetActive(false);
-        //         menuPlay.SetActive(true);
-        //         errorJoinLabel.GetComponent<Text>().text = "";
-        //     }
-        //     else if (inviteCodeLabel.activeSelf)
-        //     {
-        //         PhotonNetwork.LeaveRoom();
-        //         // backButton.GetComponentInChildren<Text>().text = "Back";
-        //         // inviteCodeLabel.SetActive(false);
-        //         // masterLabel.SetActive(false);
-        //         // player2Label.SetActive(false);
-        //         // launchGameButton.SetActive(false);
-        //         // menuPlay.SetActive(true);
-        //     }
-        //     else if (player2Label.activeSelf && !creator)
-        //     {
-        //         PhotonNetwork.LeaveRoom();
-        //         // backButton.GetComponentInChildren<Text>().text = "Back";
-        //         // masterLabel.SetActive(false);
-        //         // player2Label.SetActive(false);
-        //         // menuPlay.SetActive(true);
-        //     }
-        //     else if (publicGame)
-        //     {
-        //         PhotonNetwork.LeaveRoom();
-        //         // backButton.GetComponentInChildren<Text>().text = "Back";
-        //         // progressLabel.SetActive(false);
-        //         // menuPlay.SetActive(true);
-        //     }
-        // }
-        
         #endregion
     
         #region MonoBehaviourPunCallbacks Callbacks
@@ -227,7 +133,6 @@ namespace Com.MyCompany.MyGame
         
         public override void OnDisconnected(DisconnectCause cause)
         {
-            // progressLabel.SetActive(false);
             Debug.LogWarningFormat("OnDisconnected() was called by PUN with reason {0}", cause);
         }
 
@@ -254,8 +159,6 @@ namespace Com.MyCompany.MyGame
             Debug.Log("OnJoinRoomFailed");
             if (!publicGame)
             {
-                // errorJoinLabel.GetComponent<Text>().text = "Error: Room does not exist";
-                DisplayJoinPrivateRoom();
             }
         }
 
@@ -272,30 +175,18 @@ namespace Com.MyCompany.MyGame
                 // now the player joins the room
             }
         }
-        
+
         public override void OnJoinedRoom()
         {
-            Debug.Log("OnJoinedRoom() called by PUN. Now this client is in a room.");
-            if (PhotonNetwork.IsMasterClient && publicGame)
+            if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && publicGame)
             {
-                // progressLabel.GetComponent<Text>().text = "Connected. Waiting for my special someone...";
+                textPublic.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
             }
-            else if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            else if (!PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && !publicGame)
             {
-                // menuPlay.SetActive(false);
-                // masterLabel.SetActive(true);
-                // player2Label.SetActive(true);
-                // launchGameButton.SetActive(false);
-                // masterLabel.GetComponent<Text>().text = PhotonNetwork.NickName;
-            }
-            else if (PhotonNetwork.CurrentRoom.PlayerCount == 2 && !publicGame)
-            {
-                // menuPlay.SetActive(false);
-                // joinPrivateGameMenu.SetActive(false);
-                // masterLabel.SetActive(true);
-                // player2Label.SetActive(true);
-                // masterLabel.GetComponent<Text>().text = PhotonNetwork.MasterClient.NickName;
-                // player2Label.GetComponent<Text>().text = PhotonNetwork.NickName;
+                privateMenu.SetActive(false);
+                waitingPrivateMenu.SetActive(true);
+                textPrivate.GetComponent<TextMeshProUGUI>().text = "Waiting for master to select level...";
             }
         }
 
@@ -304,30 +195,37 @@ namespace Com.MyCompany.MyGame
             Debug.Log("OnPlayerEnteredRoom() called by PUN. Now this client is in a room.");
             if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && publicGame)
             {
-                Debug.Log("We load the 'MapGame");
-                PhotonNetwork.LoadLevel("MapGame");
+                Debug.Log("We load the game scene");
+                
+                // PhotonNetwork.LoadLevel(sceneName);
+                PhotonNetwork.AutomaticallySyncScene = false;
+                PhotonNetwork.LoadLevel(sceneName);
             }
             else if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
-                // player2Label.GetComponentInChildren<Text>().text = PhotonNetwork.PlayerList[1].NickName;
-                launchGameButton.SetActive(true);
+                PhotonNetwork.AutomaticallySyncScene = false;
+                PhotonNetwork.LoadLevel(sceneName);
+                // launchGameButton.SetActive(true);
             }
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && !creator)
+            
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 /*&& !creator*/ && publicGame)
             {
-                creator = true;
-                // masterLabel.GetComponent<Text>().text = PhotonNetwork.MasterClient.NickName;
-                // player2Label.GetComponent<Text>().text = "Waiting for my special someone...";
-                // inviteCodeLabel.GetComponent<Text>().text = "CODE : " + PhotonNetwork.CurrentRoom.Name;
-                // inviteCodeLabel.SetActive(true);
+                leaveRoom();
+                textPublic.GetComponent<TextMeshProUGUI>().text = "Master left the room";
             }
-            else if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 1 /*&& !creator*/ && !publicGame)
+
             {
-                // player2Label.GetComponent<Text>().text = "Waiting for my special someone...";
+                textPrivate.GetComponent<TextMeshProUGUI>().text = "Master left the room";
             }
+            // else if (PhotonNetwork.CurrentRoom.PlayerCount == 1/* && !creator*/)
+            // {
+            //     //creator = true;
+            // }
         }
 
         #endregion

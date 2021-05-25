@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - WeakSpot
+  - Enemies
+  - Victory
+  - LifeBar
+  - Pieds
   layers:
   - Default
   - TransparentFX
@@ -15,9 +20,9 @@ TagManager:
   - 
   - Enemies
   - Platforms
-  - 
-  - 
-  - 
+  - WeakSpot
+  - Walls
+  - Danger
   - 
   - 
   - 
