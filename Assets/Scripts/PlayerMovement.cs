@@ -294,6 +294,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             
 
         onWall = IsTouchingWalls();
+        Debug.LogFormat("PRESSING C : {0}",Input.GetKey(KeyCode.C));
+        Debug.LogFormat("OnGround {0}", onGround);
+        Debug.LogFormat("OnWall {0}", onWall);
+        Debug.LogFormat("Rigidbody velocity y : {0}", rigidbody2d.velocity.y);
         if (Input.GetKey(KeyCode.C) && !onGround && onWall != Vector2.zero && rigidbody2d.velocity.y < 0)
         {
             Debug.Log("WallSliding");
@@ -812,7 +816,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         List<string> enemyNames = new List<string>();
         
-        Debug.Log(hitEnemies.Length);
+        // Debug.Log(hitEnemies.Length);
         foreach (var enemy in hitEnemies)
         {
             if (enemyNames.Contains(enemy.name) == false)
@@ -843,7 +847,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
-            Debug.Log(enemyName);
+            // Debug.Log(enemyName);
             GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
             bar.GetComponent<HPBar>().SetHealth(0);
             Destroy(bar);
@@ -854,7 +858,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [PunRPC]
     private void KillEnemy(string enemyName)
     {
-        Debug.Log(enemyName);
+        // Debug.Log(enemyName);
         GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
         bar.GetComponent<HPBar>().SetHealth(0);
         Destroy(bar);
