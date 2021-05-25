@@ -538,6 +538,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (isAttacking && !isWallSliding)
         {
             animator.SetTrigger("attack");
+
+            // animator.ResetTrigger("attack");
             animator.SetBool("isAttacking", true);
             Attack();
             attackCooldownStatus = ATTACK_COOLDOWN;
@@ -580,9 +582,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             }
             
         }
-        
-        
     }
+    
     
     private void LateUpdate()
     {

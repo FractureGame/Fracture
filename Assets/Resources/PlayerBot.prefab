@@ -211,7 +211,6 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 5263145771569359251}
   - {fileID: 4751556183210653164}
-  - {fileID: 0}
   - {fileID: 7819333780617015210}
   viewIdField: 0
   InstantiationId: 0
@@ -517,6 +516,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Bounds.m_Extent.y
       value: 1.375
+      objectReference: {fileID: 0}
+    - target: {fileID: -6653491996690780532, guid: 56f46f12d9a3d934dbd907518fe3843a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -5317980736150021893, guid: 56f46f12d9a3d934dbd907518fe3843a,
         type: 3}
