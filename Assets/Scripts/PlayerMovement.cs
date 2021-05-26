@@ -522,6 +522,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
+            if (nbJump < 2)
+            {
+                nbJump = 0;
+            }
             WallSlide();
         }
         
