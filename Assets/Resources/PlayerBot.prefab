@@ -94,7 +94,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 405967004587526682}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4, y: 1, z: -1631.8873}
+  m_LocalPosition: {x: 7.55, y: 2.8, z: -1631.8873}
   m_LocalScale: {x: 1.2305723, y: 1.2305723, z: 1.2305723}
   m_Children: []
   m_Father: {fileID: 178852129549791314}
@@ -179,7 +179,7 @@ MonoBehaviour:
   dashParticleLeft: {fileID: 1693074252123155176, guid: a6d439f38bf3adddebc5a742c1a4ad88,
     type: 3}
   attackPoint: {fileID: 3263385813041290757}
-  attackRange: 1.23
+  attackRange: 1.4
   enemyLayers:
     serializedVersion: 2
     m_Bits: 256

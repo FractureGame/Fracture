@@ -62,7 +62,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Attack")]
     private bool isAttacking = false;
     public Transform attackPoint;
-    public float attackRange = 0.5f;
+    public float attackRange = 1.4f;
     public LayerMask enemyLayers;
     public int attackDamage = 40;
     private float ATTACK_COOLDOWN = 0.3f;
