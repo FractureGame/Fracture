@@ -294,10 +294,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             
 
         onWall = IsTouchingWalls();
-        Debug.LogFormat("PRESSING C : {0}",Input.GetKey(KeyCode.C));
-        Debug.LogFormat("OnGround {0}", onGround);
-        Debug.LogFormat("OnWall {0}", onWall);
-        Debug.LogFormat("Rigidbody velocity y : {0}", rigidbody2d.velocity.y);
         if (Input.GetKey(KeyCode.C) && !onGround && onWall != Vector2.zero && rigidbody2d.velocity.y < 0)
         {
             Debug.Log("WallSliding");
@@ -844,6 +840,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [PunRPC]
     private void DmgEnemy(string enemyName, int enemyHealth)
     {
+        if (enemyName.StartsWith("Harpie"))
+        {
+            GameObject.Find(enemyName).GetComponentInChildren<HarpieAI>().PushBack();
+        }
         if (enemyHealth > 0 )
         {
             GameObject.Find(enemyName).GetComponentInChildren<Enemy>().currentHealth = enemyHealth;

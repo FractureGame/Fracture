@@ -27,6 +27,10 @@ public class HarpieAI : MonoBehaviour
     private bool followPlayerTop;
     private bool horizontal;
 
+    public bool isStunned = false;
+    private Vector2 stunPos;
+    private Vector2 endStunPos;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +38,6 @@ public class HarpieAI : MonoBehaviour
         if (SceneManager.GetActiveScene().name[0] == 'H')
         {
             horizontal = true;
-            Debug.LogFormat("CAMERA Y : {0} vs {1}", GameObject.Find("Main Camera").transform.position.y, pos.y);
             if (pos.y > GameObject.Find("Main Camera").transform.position.y)
             {
                 followPlayerTop = true;
@@ -83,129 +86,167 @@ public class HarpieAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Flipping to go to the right direction
-        posLastFrame = posThisFrame;
-        posThisFrame = transform.position;
-
-
-        playerTopPos = GameObject.Find("PlayerTop(Clone)").GetComponent<Transform>().position;
-        playerBotPos = GameObject.Find("PlayerBot(Clone)").GetComponent<Transform>().position;
-
-        
-
-        if (horizontal)
+        Debug.LogFormat("IsStunned {0}", isStunned);
+        if (isStunned == false)
         {
-            if (followPlayerTop && playerTopPos.y > playerBotPos.y)
-            {
-                Debug.Log("That's right");
-                playerToFollow = GameObject.Find("PlayerTop(Clone)");
-            }
-            else if (followPlayerTop && playerTopPos.y < playerBotPos.y)
-            {
-                playerToFollow = GameObject.Find("PlayerBot(Clone)");
-            }
-            else if (!followPlayerTop && playerTopPos.y > playerBotPos.y)
-            {
-                playerToFollow = GameObject.Find("PlayerBot(Clone)");
-            }
-            else if (!followPlayerTop && playerTopPos.y < playerBotPos.y)
-            {
-                playerToFollow = GameObject.Find("PlayerTop(Clone)");
-            }
-        }
-        else
-        {
-            if (followPlayerTop && playerTopPos.x > playerBotPos.x)
-            {
-                playerToFollow = GameObject.Find("PlayerTop(Clone)");
-            }
-            else if (followPlayerTop && playerTopPos.x < playerBotPos.x)
-            {
-                playerToFollow = GameObject.Find("PlayerBot(Clone)");
-            }
-            else if (!followPlayerTop && playerTopPos.x > playerBotPos.x)
-            {
-                playerToFollow = GameObject.Find("PlayerBot(Clone)");
-            }
-            else if (!followPlayerTop && playerTopPos.x < playerBotPos.x)
-            {
-                playerToFollow = GameObject.Find("PlayerTop(Clone)");
-            }
-        }
+            
+            // Flipping to go to the right direction
+            posLastFrame = posThisFrame;
+            posThisFrame = transform.position;
 
 
-        playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
-        
-        
-        if (isPatrolling)
-        {
-            Debug.Log("TARGET  ??");
-            Debug.Log(target.position);
-            transform.position = Vector2.MoveTowards(transform.position, target.position, speedEnemy * Time.deltaTime);
-            if(Vector2.Distance(transform.position,target.position)<0.3f)
+            playerTopPos = GameObject.Find("PlayerTop(Clone)").GetComponent<Transform>().position;
+            playerBotPos = GameObject.Find("PlayerBot(Clone)").GetComponent<Transform>().position;
+
+            
+
+            if (horizontal)
             {
-                destPoint = (destPoint + 1) % waypoints.Length;
-                target = waypoints[destPoint];
-            }
-        }
-        
-        if (Vector2.Distance(transform.position, playerToFollowPos) < distance && playerToFollow.GetComponent<PlayerMovement>().isDead == false)
-        {
-            isPatrolling = false;
-            transform.position = Vector2.MoveTowards(transform.position, playerToFollowPos, speedEnemy * Time.deltaTime);
-        }
-        else
-        {
-            if (Vector2.Distance(transform.position, pos) < 0.3 && canPatrol)
-            {
-                isPatrolling = true;
-                if (direction != originDir && facingRight)
+                if (followPlayerTop && playerTopPos.y > playerBotPos.y)
                 {
-                    transform.Rotate(0, 180, 0);
-                    direction = originDir;
+                    playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                }
+                else if (followPlayerTop && playerTopPos.y < playerBotPos.y)
+                {
+                    playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                }
+                else if (!followPlayerTop && playerTopPos.y > playerBotPos.y)
+                {
+                    playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                }
+                else if (!followPlayerTop && playerTopPos.y < playerBotPos.y)
+                {
+                    playerToFollow = GameObject.Find("PlayerTop(Clone)");
                 }
             }
-            else if (Vector2.Distance(transform.position, pos) < 0.3)
+            else
             {
-                posThisFrame = posLastFrame;
+                if (followPlayerTop && playerTopPos.x > playerBotPos.x)
+                {
+                    playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                }
+                else if (followPlayerTop && playerTopPos.x < playerBotPos.x)
+                {
+                    playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                }
+                else if (!followPlayerTop && playerTopPos.x > playerBotPos.x)
+                {
+                    playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                }
+                else if (!followPlayerTop && playerTopPos.x < playerBotPos.x)
+                {
+                    playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                }
+            }
+
+
+            playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
+            
+            
+            if (isPatrolling)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, target.position, speedEnemy * Time.deltaTime);
+                if(Vector2.Distance(transform.position,target.position)<0.3f)
+                {
+                    destPoint = (destPoint + 1) % waypoints.Length;
+                    target = waypoints[destPoint];
+                }
+            }
+            
+            if (Vector2.Distance(transform.position, playerToFollowPos) < distance && playerToFollow.GetComponent<PlayerMovement>().isDead == false)
+            {
+                isPatrolling = false;
+                transform.position = Vector2.MoveTowards(transform.position, playerToFollowPos, speedEnemy * Time.deltaTime);
+            }
+            else
+            {
+                if (Vector2.Distance(transform.position, pos) < 0.3 && canPatrol)
+                {
+                    isPatrolling = true;
+                    if (direction != originDir && facingRight)
+                    {
+                        transform.Rotate(0, 180, 0);
+                        direction = originDir;
+                    }
+                }
+                else if (Vector2.Distance(transform.position, pos) < 0.3)
+                {
+                    posThisFrame = posLastFrame;
+                    if (direction != originDir)
+                    {
+                        transform.Rotate(0, 180, 0);
+                        direction = originDir;
+                    }
+                }
+                else if (isPatrolling == false)
+                {
+                    transform.position = Vector2.MoveTowards(transform.position, pos, speedEnemy * Time.deltaTime);
+                }
+            }
+            
+        }
+        else
+        {
+            Debug.Log("GETTING PUSHED");
+            transform.position = Vector2.MoveTowards(transform.position, endStunPos, speedEnemy * 2 * Time.deltaTime);
+            if (Vector2.Distance(transform.position, endStunPos) <= 0)
+            {
+                Debug.Log("WE ARRIVED!");
+                isStunned = false;
+            }
+            
+        }
+
+    }
+
+    public void PushBack()
+    {
+        isStunned = true;
+        stunPos = transform.position;
+        if (direction == Vector2.left)
+        {
+            endStunPos = new Vector2(stunPos.x + 2, stunPos.y + 1);
+        }
+        else if (direction == Vector2.right)
+        {
+            endStunPos = new Vector2(stunPos.x - 2, stunPos.y + 1);
+        }
+        else
+        {
+            endStunPos = Vector2.zero;
+        }
+    }
+    
+    private void FixedUpdate()
+    {
+
+        if (isStunned == false)
+        {
+            if (posThisFrame == posLastFrame)
+            {
                 if (direction != originDir)
                 {
                     transform.Rotate(0, 180, 0);
                     direction = originDir;
                 }
             }
-            else if (isPatrolling == false)
+            else if (posThisFrame.x - posLastFrame.x >= 0.02)
             {
-                transform.position = Vector2.MoveTowards(transform.position, pos, speedEnemy * Time.deltaTime);
+                if (direction != Vector2.right)
+                {
+                    transform.Rotate(0, 180, 0);
+                    direction = Vector2.right;
+                }
+            }
+            else if (posThisFrame.x - posLastFrame.x <= -0.02)
+            {
+                if (direction != Vector2.left)
+                {
+                    transform.Rotate(0, 180, 0);
+                    direction = Vector2.left;
+                }
             }
         }
-    }
 
-    private void FixedUpdate()
-    {
-        if (posThisFrame == posLastFrame)
-        {
-            if (direction != originDir)
-            {
-                transform.Rotate(0, 180, 0);
-                direction = originDir;
-            }
-        }
-        else if (posThisFrame.x - posLastFrame.x >= 0.02)
-        {
-            if (direction != Vector2.right)
-            {
-                transform.Rotate(0, 180, 0);
-                direction = Vector2.right;
-            }
-        }
-        else if (posThisFrame.x - posLastFrame.x <= -0.02)
-        {
-            if (direction != Vector2.left)
-            {
-                transform.Rotate(0, 180, 0);
-                direction = Vector2.left;
-            }
-        }
     }
 }
