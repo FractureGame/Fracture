@@ -107,7 +107,9 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         Debug.Log("Enemy Died " + gameObject.name);
-        PhotonNetwork.Destroy(gameObject);
+        Destroy(gameObject.transform.parent.gameObject);
+        // Destroy(gameObject);
+        // PhotonNetwork.Destroy(gameObject);
     }
     
 }

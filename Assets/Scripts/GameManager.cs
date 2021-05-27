@@ -163,9 +163,13 @@ namespace Com.MyCompany.MyGame
         {
             foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
             {
+                if (enemy.GetComponentInChildren<Enemy>().currentHealth <= 0)
+                {
+                    Destroy(enemy);
+                }
                 if (GameObject.Find(enemy.name + "LifeBar") == null)
                 {
-                    PhotonNetwork.Destroy(enemy);
+                    Destroy(enemy);
                 }
             }
             
@@ -173,7 +177,7 @@ namespace Com.MyCompany.MyGame
             {
                 if (GameObject.Find(lifebar.name.Replace("LifeBar", "")) == null)
                 {
-                    PhotonNetwork.Destroy(lifebar);
+                    Destroy(lifebar);
                 }
             }
             

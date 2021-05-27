@@ -820,9 +820,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Debug.Log(hitEnemies.Length);
         foreach (var enemy in hitEnemies)
         {
-            if (enemyNames.Contains(enemy.name) == false)
+            if (enemyNames.Contains(enemy.transform.parent.name) == false)
             {
-                enemyNames.Add(enemy.name);
+                enemyNames.Add(enemy.transform.parent.name);
 
                 Debug.Log("We hit " + enemy.transform.parent.name);
 
@@ -840,10 +840,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [PunRPC]
     private void DmgEnemy(string enemyName, int enemyHealth)
     {
-        // if (enemyName.StartsWith("Harpie"))
-        // {
-        //     GameObject.Find(enemyName).GetComponentInChildren<HarpieAI>().PushBack();
-        // }
         if (enemyHealth > 0 )
         {
             GameObject.Find(enemyName).GetComponentInChildren<Enemy>().currentHealth = enemyHealth;
@@ -852,7 +848,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
-            // Debug.Log(enemyName);
             GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
             bar.GetComponent<HPBar>().SetHealth(0);
             Destroy(bar);
@@ -863,7 +858,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [PunRPC]
     private void KillEnemy(string enemyName)
     {
-        // Debug.Log(enemyName);
         GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
         bar.GetComponent<HPBar>().SetHealth(0);
         Destroy(bar);
