@@ -1,8 +1,10 @@
 ﻿using System;
+using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class HarpieAI : MonoBehaviour
+public class HarpieAI : MonoBehaviourPunCallbacks
 {
     private Vector2 pos;
     private GameObject playerTop;
@@ -139,7 +141,36 @@ public class HarpieAI : MonoBehaviour
                 }
             }
 
+            if (playerToFollow == GameObject.Find("PlayerTop(Clone)"))
+            {
+                try
+                {
+                    if (photonView.Owner.Equals(PhotonNetwork.PlayerList[0]) == false)
+                    {
+                        photonView.TransferOwnership(PhotonNetwork.PlayerList[0]);
+                    }
+                }
+                catch (NullReferenceException)
+                {
+                    photonView.TransferOwnership(PhotonNetwork.PlayerList[0]);
+                }
 
+            }
+            else
+            {
+                try
+                {
+                    if (photonView.Owner.Equals(PhotonNetwork.PlayerList[1]) == false)
+                    {
+                        photonView.TransferOwnership(PhotonNetwork.PlayerList[1]);
+                    }
+                }
+                catch (NullReferenceException)
+                {
+                    photonView.TransferOwnership(PhotonNetwork.PlayerList[1]);
+                }
+            }
+            
             playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
             
             
@@ -187,11 +218,9 @@ public class HarpieAI : MonoBehaviour
         }
         else
         {
-            Debug.Log("GETTING PUSHED");
-            transform.position = Vector2.MoveTowards(transform.position, endStunPos, speedEnemy * 2 * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, endStunPos, speedEnemy * 3 * Time.deltaTime);
             if (Vector2.Distance(transform.position, endStunPos) <= 0)
             {
-                Debug.Log("WE ARRIVED!");
                 isStunned = false;
             }
             

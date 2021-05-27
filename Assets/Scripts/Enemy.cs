@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour
         {
             rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         }
-        catch (Exception e)
+        catch (Exception)
         {
         }
         
@@ -47,7 +47,7 @@ public class Enemy : MonoBehaviour
             rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
             modifyPhysics();
         }
-        catch (Exception e)
+        catch (Exception)
         {
         }
         
@@ -59,7 +59,7 @@ public class Enemy : MonoBehaviour
             lifebar = GameObject.Find("Canvas").transform.Find(transform.parent.name + "LifeBar").gameObject;
             lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             
         }
@@ -91,6 +91,10 @@ public class Enemy : MonoBehaviour
         lifebar.GetComponent<HPBar>().SetHealth(currentHealth);
         
         // Play hurt animation
+        if (transform.parent.name.StartsWith("Harpie"))
+        {
+            GetComponent<HarpieAI>().PushBack();
+        }
         
         if (currentHealth <= 0)
         {

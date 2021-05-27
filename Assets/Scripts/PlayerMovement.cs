@@ -376,7 +376,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void ChangeBodyVisibility(string playerName, float r, float g, float b, float a)
     {
         GameObject playerSprite = GameObject.Find(playerName).transform.GetChild(1).gameObject;
-        for (int i = 1; i <= 6; i++)
+        for (int i = 0; i < 6; i++)
         {
             playerSprite.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
         }
@@ -840,10 +840,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [PunRPC]
     private void DmgEnemy(string enemyName, int enemyHealth)
     {
-        if (enemyName.StartsWith("Harpie"))
-        {
-            GameObject.Find(enemyName).GetComponentInChildren<HarpieAI>().PushBack();
-        }
+        // if (enemyName.StartsWith("Harpie"))
+        // {
+        //     GameObject.Find(enemyName).GetComponentInChildren<HarpieAI>().PushBack();
+        // }
         if (enemyHealth > 0 )
         {
             GameObject.Find(enemyName).GetComponentInChildren<Enemy>().currentHealth = enemyHealth;
