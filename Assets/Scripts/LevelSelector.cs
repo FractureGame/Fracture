@@ -9,6 +9,8 @@ public class LevelSelector : MonoBehaviour
     // Start is called before the first frame update
     public GameObject buttonPrefab;
     public GameObject parent;
+    public int spacing;
+    public float buttonScale;
     public void Start()
     {
         parent.SetActive(true);
@@ -21,7 +23,11 @@ public class LevelSelector : MonoBehaviour
             button2.GetComponentInChildren<TextMeshProUGUI>().text = kvp.Key;
             button2.GetComponent<LevelButton>().buildIndex = kvp.Value;
             Vector3 pos = button2.transform.position;
-            pos.y -= i * 75;
+            Vector3 scale = button2.transform.localScale;
+            scale.x = scale.x * buttonScale;
+            scale.y = scale.y * buttonScale;
+            scale.z = scale.z * buttonScale;
+            pos.y -= i * spacing;
             button2.transform.position = pos;
             i++;
         }

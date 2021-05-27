@@ -25,7 +25,7 @@ public class VictoryChecker : MonoBehaviour
         if (victory1.isActivated && victory2.isActivated && !yet)
         {
             Victory();
-            ChooseLevel();
+            //ChooseLevel();
         }
     }
     
