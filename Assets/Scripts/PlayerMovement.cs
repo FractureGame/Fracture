@@ -727,7 +727,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         jumpTimer = 0;
         lastInterestingDir = direction;
-        am.PlaySound("Jump");
+        try
+        {
+            am.PlaySound("Jump");
+
+        }
+        catch (Exception)
+        {
+        }
     }
 
     [PunRPC]

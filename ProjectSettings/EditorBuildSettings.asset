@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/VLevel8.unity
     guid: 933e68904feafbf489beef80289f20f5
+  - enabled: 1
+    path: Assets/Scenes/HBossRoom.unity
+    guid: b5246143e52e52af5a0b2a74dcdc37bf
   m_configObjects: {}
