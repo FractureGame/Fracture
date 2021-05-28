@@ -50,6 +50,11 @@ public class StrongSpot : MonoBehaviourPunCallbacks
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
         }
         
+        if (other.gameObject.CompareTag("Platform"))
+        {
+            Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+        }
+        
     }
 }
 

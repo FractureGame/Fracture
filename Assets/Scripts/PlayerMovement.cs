@@ -5,6 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEditor.Experimental;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
@@ -140,6 +141,49 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
         }
+
+        if (other.gameObject.CompareTag("Button"))
+        {
+            Debug.Log("DAMN");
+            // GameObject grid = GameObject.Find("Grid");
+            // Tilemap tilemap = grid.transform.GetChild(1).GetComponent<Tilemap>();
+            // BoundsInt bounds = tilemap.cellBounds;
+            // TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
+            //
+            // for (int x = 0; x < bounds.size.x; x++) {
+            //     for (int y = 0; y < bounds.size.y; y++) {
+            //         TileBase tile = allTiles[x + y * bounds.size.x];
+            //         if (tile != null) {
+            //             tilemap.SetTile(tilemap.WorldToCell(new Vector2(x, y)), null);
+            //         }
+            //     }
+            // }
+            photonView.RPC("DestroyTileMap", RpcTarget.All);
+        }
+        
+    }
+
+    [PunRPC]
+    private void DestroyTileMap()
+    {
+        GameObject grid = GameObject.Find("Grid");
+        Debug.Log(grid.transform.GetChild(1).name);
+        Destroy(grid.transform.GetChild(1).gameObject);
+        // Tilemap tilemap = grid.transform.GetChild(1).GetComponent<Tilemap>();
+        // Debug.Log(tilemap.name);
+        // BoundsInt bounds = tilemap.cellBounds;
+        // TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
+        //
+        // for (int x = 0; x < bounds.size.x; x++) {
+        //     for (int y = 0; y < bounds.size.y; y++) {
+        //         TileBase tile = allTiles[x + y * bounds.size.x];
+        //         if (tile != null) {
+        //             tilemap.SetTile(tilemap.WorldToCell(new Vector2(x, y)), null);
+        //         }
+        //     }
+        // }
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().direction = Vector2.zero;
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().direction = Vector2.zero;
     }
 
     private void Update()
