@@ -135,4 +135,9 @@ public class BossAI : MonoBehaviour
         Debug.Log("Enemy Died " + gameObject.name);
         Destroy(gameObject.transform.parent.gameObject);
     }
+
+    private void ThrowExplosionBlobs()
+    {
+        
+    }
 }

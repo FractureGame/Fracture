@@ -545,12 +545,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             return;
         }
 
-
-
-
-        
-        
-        
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)
         {
@@ -560,12 +554,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle Movement
         if (!isWallSliding)
         {
-            
             Move();
             modifyPhysics();
         }
         else
         {
+            am.StopSound("Walk");
             if (nbJump < 2)
             {
                 nbJump = 0;
@@ -624,15 +618,23 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             {
                 TakeDamage(onTouchEnemy.transform.GetComponentInChildren<HarpieAI>().enemyDamage);
             }
-            else
+            else if (onTouchEnemy.transform.parent.name.StartsWith("Blob"))
             {
                 TakeDamage(onTouchEnemy.transform.GetComponentInChildren<EnemyPatrol>().enemyDamage);
+            }
+            else
+            {
             }
             
         }
     }
-    
-    
+
+    private void OnParticleCollision(GameObject other)
+    {
+        TakeDamage(10);
+    }
+
+
     private void LateUpdate()
     {
         if (isDead)

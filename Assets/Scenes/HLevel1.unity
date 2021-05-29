@@ -830,6 +830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endTilePos: 159
+  falling: 0
 --- !u!1 &520636646
 GameObject:
   m_ObjectHideFlags: 0
