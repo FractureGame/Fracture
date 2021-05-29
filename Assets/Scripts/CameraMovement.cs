@@ -17,14 +17,15 @@ public class CameraMovement : MonoBehaviour
     private float playerBotPos;
 
     private bool horizontal;
+    // private bool both;
     public float endTilePos;
     private float maxDistanceBetweenPlayers;
+    public bool falling;
     
 
     // Start is called before the first frame update
     void Start()
     {
-        
         if (SceneManager.GetActiveScene().name[0] == 'H')
         {
             horizontal = true;
@@ -34,6 +35,10 @@ public class CameraMovement : MonoBehaviour
         {
             horizontal = false;
         }
+        // else if (SceneManager.GetActiveScene().name[0] == 'B')
+        // {
+        //     both = true;
+        // }
         beginning = transform.position;
 
     }
@@ -77,9 +82,7 @@ public class CameraMovement : MonoBehaviour
                 distanceBetweenPlayers = playerTopPos - playerBotPos;
                 if (distanceBetweenPlayers < 0)
                     distanceBetweenPlayers = -distanceBetweenPlayers;
-
                 
-                // si la caméra dépasse 150 et que les deux joueurs sont dans la partie gauche on continue à follow
                 if (camPos >= endTilePos && (playerTopPos < camPos && playerBotPos < camPos))
                     follow = true;
                 
@@ -123,7 +126,7 @@ public class CameraMovement : MonoBehaviour
         }
     }
     
-    public void FollowPlayer(GameObject player)
+    public void FollowPlayerVertically(GameObject player)
     {
         if (player.transform.position.y < endTilePos)
         {
@@ -138,6 +141,14 @@ public class CameraMovement : MonoBehaviour
             }
         }
     }
+
+    public void FollowPlayer(GameObject player)
+    {
+        Vector3 temp = new Vector3(player.transform.position.x, player.transform.position.y + 8, -10);
+        transform.position = temp;
+            
+    }
+    
     
     
 }

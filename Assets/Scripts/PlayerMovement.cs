@@ -89,11 +89,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public Animator animator;
     
     [Header("Scene")]
-    private float beginX;
-    private float endX;
-    private float beginY;
-    private float endY;
     private bool horizontal;
+    private bool both;
 
     [Header("Particles Systems")] 
     public ParticleSystem bloodEffect;
@@ -122,6 +119,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         else if (SceneManager.GetActiveScene().name[0] == 'V')
         {
             horizontal = false;
+        }
+        else
+        {
+            both = true;
         }
 
     }
@@ -540,7 +541,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void FixedUpdate()
     {
         if (isDead)
+        {
             return;
+        }
+
 
 
 
@@ -636,9 +640,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (photonView.IsMine)
         {
-            if (!horizontal)
+            if (both)
             {
                 Camera.main.GetComponent<CameraMovement>().FollowPlayer(gameObject);
+            }
+            else if (!horizontal)
+            {
+                Camera.main.GetComponent<CameraMovement>().FollowPlayerVertically(gameObject);
             }
         }
     }
@@ -865,27 +873,25 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
         // Damage them
-
-        List<string> enemyNames = new List<string>();
+        
         
         // Debug.Log(hitEnemies.Length);
         foreach (var enemy in hitEnemies)
         {
-            if (enemyNames.Contains(enemy.transform.parent.name) == false)
+
+
+            Debug.Log("We hit " + enemy.transform.parent.name);
+
+            if (!hasAttacked)
             {
-                enemyNames.Add(enemy.transform.parent.name);
-
-                Debug.Log("We hit " + enemy.transform.parent.name);
-
-                if (!hasAttacked)
-                {
-                    int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
-                    photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
-                    photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
-                    hasAttacked = true;
-                }
+                int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
+                photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
+                
             }
+            
         }
+        hasAttacked = true;
     }
 
     [PunRPC]

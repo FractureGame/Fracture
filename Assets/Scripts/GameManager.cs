@@ -157,7 +157,18 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(22f, 2.5f,0f), Quaternion.identity, 0);
                 }
             }
-            else if (SceneManager.GetActiveScene().name == "HBossRoom")
+            else if (SceneManager.GetActiveScene().name == "VLevel8")
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(6.5f, 2.5f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(22f, 2.5f,0f), Quaternion.identity, 0);
+                }
+            }
+            else if (SceneManager.GetActiveScene().name == "BBossRoom")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
