@@ -25,21 +25,27 @@ public class BossAI : MonoBehaviour
     public GameObject Waypoint1;
     public GameObject Waypoint2;
     public GameObject Waypoint3;
+    public GameObject Waypoint4;
     private bool phase1 = true;
+    private bool movingToCatsle;
     private bool movingToPhase2;
     private bool phase2;
     private bool movingToPhase3;
     private bool phase3;
     private bool movingToPhase4;
     private bool phase4;
+    private bool isPhase1Playing;
+    private bool isMovingToPhase4Playing;
+    private bool isPhase4Playing;
+    private Coroutine coroutine;
 
 
     [Header("Abilities")] 
     public GameObject throwBlobsParticle;
     private float throwBlobsCD = 2.5f;
-
-    private bool isPhase1playing;
-    private float throwBlobs;
+    public GameObject BomberHarpiePrefab;
+    public GameObject blobPrefab;
+    private float spawnBlob = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -50,19 +56,26 @@ public class BossAI : MonoBehaviour
     
     public IEnumerator Phase1()
     {
-        while(phase1)
-        {
-            // throw blobs
-            PhotonNetwork.Instantiate(throwBlobsParticle.name, transform.position, Quaternion.identity, 1);
-            yield return new WaitForSeconds(throwBlobsCD);
-        }
+        // throw blobs
+        yield return new WaitForSeconds(throwBlobsCD);
+        PhotonNetwork.Instantiate(throwBlobsParticle.name, transform.position, Quaternion.identity, 1);
+        
+    }
+    
+    public IEnumerator MovingToPhase4()
+    {
+        yield return new WaitForSeconds(spawnBlob);
+        PhotonNetwork.Instantiate(blobPrefab.name, new Vector2(transform.position.x -4, transform.position.y), Quaternion.identity, 1);
+        
     }
 
     private void Update()
     {
         currentHealth = GetComponent<Enemy>().currentHealth;
         isGrounded = IsGrounded();
-        if (rigidbody2d.IsTouchingLayers(platformLayerMask))
+        // Debug.LogFormat("TOUCHING LAYERS : {0}", rigidbody2d.IsTouchingLayers(platformLayerMask));
+        Debug.LogFormat("isGrounded : {0}", isGrounded);
+        if (rigidbody2d.IsTouchingLayers(platformLayerMask) || movingToCatsle)
         {
             rigidbody2d.isKinematic = true;
         }
@@ -74,11 +87,10 @@ public class BossAI : MonoBehaviour
 
         if (phase1)
         {
-            // chier des blobs toutes les 5 secondes
-            if (!isPhase1playing)
+            if (!isPhase1Playing)
             {
-                isPhase1playing = true;
-                StartCoroutine(Phase1());
+                coroutine = StartCoroutine(Phase1());
+                isPhase1Playing = true;
             }
         }
 
@@ -90,19 +102,37 @@ public class BossAI : MonoBehaviour
         if (currentHealth < 400 && currentHealth > 300 && phase1)
         {
             phase1 = false;
+            StopCoroutine(coroutine);
+            isPhase1Playing = false;
             movingToPhase2 = true;
+            // BomberHarpie
+            PhotonNetwork.Instantiate(BomberHarpiePrefab.name, new Vector2(-1, 0), Quaternion.identity, 1);
         }
 
         if (movingToPhase2)
         {
-            // SPAWN blob behind you
-            if (Vector2.Distance(transform.position, new Vector2(Waypoint1.transform.position.x, transform.position.y)) <= 0)
+            if (movingToCatsle)
             {
-                phase2 = true;
-                movingToPhase2 = false;
+                transform.position = Vector2.MoveTowards(transform.position,
+                    new Vector2(transform.position.x, Waypoint2.transform.position.y), speed * Time.deltaTime);
+                if (Vector2.Distance(transform.position,
+                    new Vector2(transform.position.x, Waypoint2.transform.position.y)) <= 0)
+                {
+                    phase2 = true;
+                    movingToCatsle = false;
+                    movingToPhase2 = false;
+                }
             }
-            transform.position =
-                Vector2.MoveTowards(transform.position, new Vector2(Waypoint1.transform.position.x, transform.position.y), speed * Time.deltaTime);
+            else if (Vector2.Distance(transform.position, new Vector2(Waypoint1.transform.position.x, transform.position.y)) <= 0)
+            {
+                movingToCatsle = true;
+            }
+            else
+            {
+                transform.position =
+                    Vector2.MoveTowards(transform.position, new Vector2(Waypoint1.transform.position.x, transform.position.y), speed * Time.deltaTime);
+            }
+
         }
 
         if (phase2 && !isGrounded)
@@ -114,13 +144,13 @@ public class BossAI : MonoBehaviour
 
         if (movingToPhase3 && isGrounded)
         {
-            if (Vector2.Distance(transform.position, new Vector2(Waypoint2.transform.position.x, transform.position.y)) <= 0)
+            if (Vector2.Distance(transform.position, new Vector2(Waypoint3.transform.position.x, transform.position.y)) <= 0)
             {
                 movingToPhase3 = false;
                 phase3 = true;
             }
             transform.position =
-                Vector2.MoveTowards(transform.position, new Vector2(Waypoint2.transform.position.x, transform.position.y), speed * Time.deltaTime);
+                Vector2.MoveTowards(transform.position, new Vector2(Waypoint3.transform.position.x, transform.position.y), speed * Time.deltaTime);
 
         }
 
@@ -132,17 +162,27 @@ public class BossAI : MonoBehaviour
 
         if (movingToPhase4)
         {
-            if (Vector2.Distance(transform.position, new Vector2(Waypoint3.transform.position.x, transform.position.y)) <= 0)
+            if (!isMovingToPhase4Playing)
+            {
+                isMovingToPhase4Playing = true;
+                // laisser des blobs derrière, blobs vivants
+                coroutine = StartCoroutine(MovingToPhase4());
+                
+            }
+            
+            if (Vector2.Distance(transform.position, new Vector2(Waypoint4.transform.position.x, transform.position.y)) <= 0)
             {
                 movingToPhase4 = false;
                 phase4 = true;
             }
             transform.position =
-                Vector2.MoveTowards(transform.position, new Vector2(Waypoint3.transform.position.x, transform.position.y), speed * Time.deltaTime);
+                Vector2.MoveTowards(transform.position, new Vector2(Waypoint4.transform.position.x, transform.position.y), speed * Time.deltaTime);
         }
 
         if (phase4)
         {
+            StopCoroutine(coroutine);
+            isMovingToPhase4Playing = false;
             // WAIT LITTLE BIT
             // CALL THE HARPIES
             // MOVE UP WITH THEM
@@ -153,10 +193,6 @@ public class BossAI : MonoBehaviour
         
         // lifebar = GameObject.Find("Canvas").transform.Find(name + "LifeBar").gameObject; 
         // lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
-        
-        
-        
-        
     }
     
     private bool IsGrounded()
@@ -197,39 +233,4 @@ public class BossAI : MonoBehaviour
         Debug.Log("Enemy Died " + gameObject.name);
         Destroy(gameObject.transform.parent.gameObject);
     }
-
-    private void ThrowExplosionBlobs()
-    {
-        
-    }
-    
-    // private void OnCollisionEnter(Collision collision)
-    // {
-    //     if (collision.gameObject.CompareTag("Platform"))
-    //     {
-    //         GetComponent<Rigidbody>().isKinematic = true;
-    //         GetComponent<Rigidbody>().useGravity = false;
-    //         GetComponent<Rigidbody>().velocity = Vector3.zero;
-    //         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-    //     }
-    //          
-    //      
-    //
-    // }
-    //
-    //
-    // private void OnCollisionExit(Collision collision)
-    // {
-    //     if (collision.gameObject.CompareTag("Platform"))
-    //     {
-    //         // switch to 'non-kinematic'
-    //         GetComponent<Rigidbody>().isKinematic = false;
-    //         GetComponent<Rigidbody>().useGravity = true;
-    //         GetComponent<Rigidbody>().velocity = Vector3.zero; // or another initial value
-    //         modifyPhysics();
-    //     }
-    //
-    // }
-    
-    
 }

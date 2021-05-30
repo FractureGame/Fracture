@@ -174,13 +174,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 150
   currentHealth: 0
+  enemyDamage: 30
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 512
   linearDrag: 1
   gravity: 1
   fallMultiplier: 6
-  enemyDamage: 30
 --- !u!50 &6642292017535822513
 Rigidbody2D:
   serializedVersion: 4

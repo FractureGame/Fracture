@@ -23,6 +23,7 @@ public class HarpieAI : MonoBehaviourPunCallbacks
     private bool isPatrolling;
     private int destPoint;
     public bool canPatrol;
+    public bool canChase = true;
     public bool facingRight;
     private Vector2 originDir;
     private bool followPlayerTop;
@@ -182,38 +183,40 @@ public class HarpieAI : MonoBehaviourPunCallbacks
                     target = waypoints[destPoint];
                 }
             }
-            
-            if (Vector2.Distance(transform.position, playerToFollowPos) < distance && playerToFollow.GetComponent<PlayerMovement>().isDead == false)
+
+            if (canChase)
             {
-                isPatrolling = false;
-                transform.position = Vector2.MoveTowards(transform.position, playerToFollowPos, speedEnemy * Time.deltaTime);
-            }
-            else
-            {
-                if (Vector2.Distance(transform.position, pos) < 0.3 && canPatrol)
+                if (Vector2.Distance(transform.position, playerToFollowPos) < distance && playerToFollow.GetComponent<PlayerMovement>().isDead == false)
                 {
-                    isPatrolling = true;
-                    if (direction != originDir && facingRight)
+                    isPatrolling = false;
+                    transform.position = Vector2.MoveTowards(transform.position, playerToFollowPos, speedEnemy * Time.deltaTime);
+                }
+                else
+                {
+                    if (Vector2.Distance(transform.position, pos) < 0.3 && canPatrol)
                     {
-                        transform.Rotate(0, 180, 0);
-                        direction = originDir;
+                        isPatrolling = true;
+                        if (direction != originDir && facingRight)
+                        {
+                            transform.Rotate(0, 180, 0);
+                            direction = originDir;
+                        }
+                    }
+                    else if (Vector2.Distance(transform.position, pos) < 0.3)
+                    {
+                        posThisFrame = posLastFrame;
+                        if (direction != originDir)
+                        {
+                            transform.Rotate(0, 180, 0);
+                            direction = originDir;
+                        }
+                    }
+                    else if (isPatrolling == false)
+                    {
+                        transform.position = Vector2.MoveTowards(transform.position, pos, speedEnemy * Time.deltaTime);
                     }
                 }
-                else if (Vector2.Distance(transform.position, pos) < 0.3)
-                {
-                    posThisFrame = posLastFrame;
-                    if (direction != originDir)
-                    {
-                        transform.Rotate(0, 180, 0);
-                        direction = originDir;
-                    }
-                }
-                else if (isPatrolling == false)
-                {
-                    transform.position = Vector2.MoveTowards(transform.position, pos, speedEnemy * Time.deltaTime);
-                }
             }
-            
         }
         else
         {
