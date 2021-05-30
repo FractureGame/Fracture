@@ -260,6 +260,7 @@ MonoBehaviour:
   linearDrag: 1
   gravity: 0
   fallMultiplier: 0
+  enemyDamage: 30
 --- !u!114 &8314020947102869202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,7 +278,6 @@ MonoBehaviour:
   waypoints:
   - {fileID: 8564931509833369960}
   - {fileID: 2201281025638510494}
-  enemyDamage: 30
   canPatrol: 1
   facingRight: 1
   isStunned: 0

@@ -141,7 +141,6 @@ MonoBehaviour:
   - {fileID: 6642292018173894505}
   - {fileID: 6642292017638194478}
   graphics: {fileID: 6642292017535822514}
-  enemyDamage: 30
 --- !u!95 &6642292017535822512
 Animator:
   serializedVersion: 3
@@ -181,6 +180,7 @@ MonoBehaviour:
   linearDrag: 1
   gravity: 1
   fallMultiplier: 6
+  enemyDamage: 30
 --- !u!50 &6642292017535822513
 Rigidbody2D:
   serializedVersion: 4

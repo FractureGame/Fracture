@@ -22,7 +22,6 @@ public class HarpieAI : MonoBehaviourPunCallbacks
     private Transform target;
     private bool isPatrolling;
     private int destPoint;
-    public int enemyDamage;
     public bool canPatrol;
     public bool facingRight;
     private Vector2 originDir;

@@ -159,17 +159,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             //         }
             //     }
             // }
-            photonView.RPC("DestroyTileMap", RpcTarget.All);
+            photonView.RPC("DestroyTileMap", RpcTarget.All, "Destroy" + other.gameObject.name[other.gameObject.name.Length-1]);
         }
         
     }
 
     [PunRPC]
-    private void DestroyTileMap()
+    private void DestroyTileMap(string tilemapName)
     {
         GameObject grid = GameObject.Find("Grid");
-        Debug.Log(grid.transform.GetChild(1).name);
-        Destroy(grid.transform.GetChild(1).gameObject);
+        Debug.Log(grid.transform.Find(tilemapName).gameObject.name);
+        Destroy(grid.transform.Find(tilemapName).gameObject);
         // Tilemap tilemap = grid.transform.GetChild(1).GetComponent<Tilemap>();
         // Debug.Log(tilemap.name);
         // BoundsInt bounds = tilemap.cellBounds;
@@ -614,18 +614,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Collider2D onTouchEnemy = IsTouchingEnemy();
         if (onTouchEnemy != null)
         {
-            if (onTouchEnemy.transform.parent.name.StartsWith("Harpie"))
-            {
-                TakeDamage(onTouchEnemy.transform.GetComponentInChildren<HarpieAI>().enemyDamage);
-            }
-            else if (onTouchEnemy.transform.parent.name.StartsWith("Blob"))
-            {
-                TakeDamage(onTouchEnemy.transform.GetComponentInChildren<EnemyPatrol>().enemyDamage);
-            }
-            else
-            {
-            }
-            
+            TakeDamage(onTouchEnemy.transform.GetComponentInChildren<Enemy>().enemyDamage);
         }
     }
 

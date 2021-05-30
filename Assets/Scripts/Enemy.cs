@@ -10,6 +10,9 @@ public class Enemy : MonoBehaviour
     private bool isGrounded = false;
     private GameObject lifebar;
 
+    [Header("Damage")]
+    public int enemyDamage;
+    
     private Rigidbody2D rigidbody2d;
     private BoxCollider2D boxCollider2d;
     [SerializeField] private LayerMask platformLayerMask;
@@ -18,8 +21,9 @@ public class Enemy : MonoBehaviour
     public float linearDrag;
     public float gravity;
     public float fallMultiplier;
-    
 
+
+    
     // Start is called before the first frame update
     void Start()
     {
