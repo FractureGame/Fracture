@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon;
+using Photon.Pun;
 
 public class LevelSelector : MonoBehaviour
 {
@@ -13,12 +15,35 @@ public class LevelSelector : MonoBehaviour
     public float buttonScale;
     public void Start()
     {
+        if (this.gameObject.name == "GameOverPanel")
+        {
+            Debug.Log("In game");
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Debug.Log("Is master, we display buttons");
+                GameObject.Find("LevelButtons").SetActive(true);
+                CreateButtons();
+            }
+            else
+            {
+                Debug.Log("Isnt master, displaying text");
+                GameObject.Find("WaitingMaster").SetActive(true);
+            }
+        }
+        else
+        {
+            Debug.Log("In menus");
+            CreateButtons();
+        }
+    }
+
+    void CreateButtons()
+    {
         parent.SetActive(true);
         int i = 0;
-        foreach (KeyValuePair<string,int> kvp in Levels.scenes)
+        foreach (var kvp in Levels.scenes)
         {
-            
-            GameObject button2 = Instantiate(buttonPrefab,parent.transform) as GameObject;
+            GameObject button2 = Instantiate(buttonPrefab, parent.transform) as GameObject;
             button2.name = kvp.Key + " Button";
             button2.GetComponentInChildren<TextMeshProUGUI>().text = kvp.Key;
             button2.GetComponent<LevelButton>().buildIndex = kvp.Value;
@@ -32,7 +57,6 @@ public class LevelSelector : MonoBehaviour
             i++;
         }
     }
-
     // Update is called once per frame
     void Update()
     {
