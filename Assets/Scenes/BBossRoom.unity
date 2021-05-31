@@ -284,7 +284,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282608404}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 16.600105}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1932328969}
@@ -825,7 +825,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 470357238}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 16.600105}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1932328969}
@@ -10402,7 +10402,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526429313}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 16.600105}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1932328969}
@@ -14151,7 +14151,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 896704647}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 16.600105}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1932328969}
@@ -16129,9 +16129,9 @@ GameObject:
   - component: {fileID: 1651393774}
   - component: {fileID: 1651393776}
   - component: {fileID: 1651393775}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Castle
-  m_TagString: Platform
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16144,7 +16144,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1651393773}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 16.600105}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1932328969}
@@ -28368,7 +28368,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871894283}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 16.600105}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1932328969}
@@ -28870,7 +28870,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1932328967}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -16.600105}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 470357239}
@@ -29189,6 +29189,7 @@ GameObject:
   - component: {fileID: 8903321881402979837}
   - component: {fileID: 8903321881402979841}
   - component: {fileID: 8903321881402979843}
+  - component: {fileID: 8903321881402979844}
   m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
@@ -29218,6 +29219,8 @@ MonoBehaviour:
   Waypoint2: {fileID: 1930901241}
   Waypoint3: {fileID: 314656526}
   castleTilemap: {fileID: 1651393776}
+  castleGround: {fileID: 896704650}
+  grid: {fileID: 1932328968}
   throwBlobsParticle: {fileID: 2720484137339176327, guid: 5fe1c5927ab4ac94ca354983f58443e5,
     type: 3}
   BomberHarpiePrefab: {fileID: 5772708982873422063, guid: da5bc72bff84dbace879b39fcfe9a399,
@@ -29265,7 +29268,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8903321881402979836}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.8853407, y: 29.2, z: 42.078617}
+  m_LocalPosition: {x: -3.8853397, y: 27.599998, z: 42.078617}
   m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_Children: []
   m_Father: {fileID: 878444283}
@@ -29291,6 +29294,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 8903321881402979838}
+  - {fileID: 8903321881402979844}
   viewIdField: 2
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -29336,7 +29340,7 @@ Rigidbody2D:
   m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: ba3c14a624458a446a355fe0dc2e214b, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -29362,6 +29366,22 @@ MonoBehaviour:
   linearDrag: 1
   gravity: 1
   fallMultiplier: 6
+--- !u!114 &8903321881402979844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8903321881402979836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7cb724808c322458aa4d15f5035fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!95 &8903321881402979845
 Animator:
   serializedVersion: 3
