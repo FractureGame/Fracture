@@ -2,6 +2,7 @@
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class BossAI : MonoBehaviour
 {
@@ -25,7 +26,6 @@ public class BossAI : MonoBehaviour
     public GameObject Waypoint1;
     public GameObject Waypoint2;
     public GameObject Waypoint3;
-    public GameObject Waypoint4;
     private bool phase1 = true;
     private bool movingToCatsle;
     private bool movingToPhase2;
@@ -34,11 +34,11 @@ public class BossAI : MonoBehaviour
     private bool phase3;
     private bool movingToPhase4;
     private bool phase4;
-    private bool isPhase1Playing;
     private bool isMovingToPhase4Playing;
     private bool isPhase4Playing;
     private Coroutine coroutine;
-
+    private Coroutine jumpCoroutine;
+    public Tilemap castleTilemap;
 
     [Header("Abilities")] 
     public GameObject throwBlobsParticle;
@@ -46,12 +46,21 @@ public class BossAI : MonoBehaviour
     public GameObject BomberHarpiePrefab;
     public GameObject blobPrefab;
     private float spawnBlob = 0.5f;
-
+    private float jumpCD = 5f;
+    private float jumpVelocity = 20f;
+    private bool isJumpPlaying;
+    private int nbJumpBeforeDestruction = 3;
+    private int nbJump;
+    private Vector2 pos;
+    
     // Start is called before the first frame update
     void Start()
     {
+        pos = transform.position;
         rigidbody2d = GetComponent<Rigidbody2D>();
         boxCollider2d = GetComponent<BoxCollider2D>();
+        coroutine = StartCoroutine(Phase1());
+        // jumpCoroutine = StartCoroutine(Jump());
     }
     
     public IEnumerator Phase1()
@@ -59,6 +68,16 @@ public class BossAI : MonoBehaviour
         // throw blobs
         yield return new WaitForSeconds(throwBlobsCD);
         PhotonNetwork.Instantiate(throwBlobsParticle.name, transform.position, Quaternion.identity, 1);
+    }
+
+    public IEnumerator Jump()
+    {
+        yield return new WaitForSeconds(jumpCD);
+        while (Vector2.Distance(transform.position, new Vector2(transform.position.x, pos.y + 10)) > 0)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, new Vector2(transform.position.x, pos.y + 5), speed
+                * Time.deltaTime);
+        }
         
     }
     
@@ -75,35 +94,22 @@ public class BossAI : MonoBehaviour
         isGrounded = IsGrounded();
         // Debug.LogFormat("TOUCHING LAYERS : {0}", rigidbody2d.IsTouchingLayers(platformLayerMask));
         Debug.LogFormat("isGrounded : {0}", isGrounded);
-        if (rigidbody2d.IsTouchingLayers(platformLayerMask) || movingToCatsle)
-        {
-            rigidbody2d.isKinematic = true;
-        }
-        else if (isGrounded == false)
-        {
-            rigidbody2d.isKinematic = false;
-            modifyPhysics();
-        }
 
         if (phase1)
         {
-            if (!isPhase1Playing)
+            if (!isJumpPlaying)
             {
-                coroutine = StartCoroutine(Phase1());
-                isPhase1Playing = true;
+                nbJump = 0;
+                isJumpPlaying = true;
+                jumpCoroutine = StartCoroutine(Jump());
             }
-        }
-
-        if (phase2)
-        {
-            
         }
         
         if (currentHealth < 400 && currentHealth > 300 && phase1)
         {
             phase1 = false;
             StopCoroutine(coroutine);
-            isPhase1Playing = false;
+            StopCoroutine(jumpCoroutine);
             movingToPhase2 = true;
             // BomberHarpie
             PhotonNetwork.Instantiate(BomberHarpiePrefab.name, new Vector2(-1, 0), Quaternion.identity, 1);
@@ -111,19 +117,7 @@ public class BossAI : MonoBehaviour
 
         if (movingToPhase2)
         {
-            if (movingToCatsle)
-            {
-                transform.position = Vector2.MoveTowards(transform.position,
-                    new Vector2(transform.position.x, Waypoint2.transform.position.y), speed * Time.deltaTime);
-                if (Vector2.Distance(transform.position,
-                    new Vector2(transform.position.x, Waypoint2.transform.position.y)) <= 0)
-                {
-                    phase2 = true;
-                    movingToCatsle = false;
-                    movingToPhase2 = false;
-                }
-            }
-            else if (Vector2.Distance(transform.position, new Vector2(Waypoint1.transform.position.x, transform.position.y)) <= 0)
+            if (Vector2.Distance(transform.position, new Vector2(Waypoint1.transform.position.x, transform.position.y)) <= 0)
             {
                 movingToCatsle = true;
             }
@@ -132,8 +126,26 @@ public class BossAI : MonoBehaviour
                 transform.position =
                     Vector2.MoveTowards(transform.position, new Vector2(Waypoint1.transform.position.x, transform.position.y), speed * Time.deltaTime);
             }
-
         }
+        
+        if (phase2 && nbJump < nbJumpBeforeDestruction)
+        {
+            if (!isJumpPlaying)
+            {
+                nbJump = 0;
+                isJumpPlaying = true;
+                jumpCoroutine = StartCoroutine(Jump());
+            }
+        }
+
+        if (phase2 && nbJump >= nbJumpBeforeDestruction)
+        {
+            StopCoroutine(jumpCoroutine);
+            // On détruit le château
+            Destroy(GameObject.Find("Grid").transform.Find(castleTilemap.name).gameObject);
+        }
+        
+        
 
         if (phase2 && !isGrounded)
         {
@@ -144,13 +156,13 @@ public class BossAI : MonoBehaviour
 
         if (movingToPhase3 && isGrounded)
         {
-            if (Vector2.Distance(transform.position, new Vector2(Waypoint3.transform.position.x, transform.position.y)) <= 0)
+            if (Vector2.Distance(transform.position, new Vector2(Waypoint2.transform.position.x, transform.position.y)) <= 0)
             {
                 movingToPhase3 = false;
                 phase3 = true;
             }
             transform.position =
-                Vector2.MoveTowards(transform.position, new Vector2(Waypoint3.transform.position.x, transform.position.y), speed * Time.deltaTime);
+                Vector2.MoveTowards(transform.position, new Vector2(Waypoint2.transform.position.x, transform.position.y), speed * Time.deltaTime);
 
         }
 
@@ -170,13 +182,13 @@ public class BossAI : MonoBehaviour
                 
             }
             
-            if (Vector2.Distance(transform.position, new Vector2(Waypoint4.transform.position.x, transform.position.y)) <= 0)
+            if (Vector2.Distance(transform.position, new Vector2(Waypoint3.transform.position.x, transform.position.y)) <= 0)
             {
                 movingToPhase4 = false;
                 phase4 = true;
             }
             transform.position =
-                Vector2.MoveTowards(transform.position, new Vector2(Waypoint4.transform.position.x, transform.position.y), speed * Time.deltaTime);
+                Vector2.MoveTowards(transform.position, new Vector2(Waypoint3.transform.position.x, transform.position.y), speed * Time.deltaTime);
         }
 
         if (phase4)
@@ -188,8 +200,8 @@ public class BossAI : MonoBehaviour
             // MOVE UP WITH THEM
         }
         
-        rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
-        
+        // rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+        // modifyPhysics();
         
         // lifebar = GameObject.Find("Canvas").transform.Find(name + "LifeBar").gameObject; 
         // lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
