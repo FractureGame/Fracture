@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 15
-  speedEnemy: 7
+  speedEnemy: 9
   waypoints:
   - {fileID: 3143475821298656590}
   - {fileID: 4886374949198988216}
@@ -190,6 +190,10 @@ MonoBehaviour:
   canChase: 0
   facingRight: 1
   isStunned: 0
+  isRocket: 0
+  escortBlobKing: 0
+  readyToCarryKingBlob: 0
+  ignition: 0
 --- !u!114 &3019543287366541359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5169,7 +5173,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3765137605136450852}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 19, y: 1.2, z: 479.44296}
+  m_LocalPosition: {x: 26, y: 1.2, z: 479.44296}
   m_LocalScale: {x: 0.59999996, y: 0.59999996, z: 1}
   m_Children: []
   m_Father: {fileID: 5772708982873422060}

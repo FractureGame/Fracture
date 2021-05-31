@@ -124,7 +124,7 @@ namespace Com.MyCompany.MyGame
             
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            if (SceneManager.GetActiveScene().name == "HLevel1")
+            if (SceneManager.GetActiveScene().name == "Level1")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -135,7 +135,7 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(8f, 2f,0f), Quaternion.identity, 0);
                 } 
             }
-            else if (SceneManager.GetActiveScene().name == "HLevel2")
+            else if (SceneManager.GetActiveScene().name == "Level2")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -146,7 +146,7 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(6f, 1f,0f), Quaternion.identity, 0);
                 }
             }
-            else if (SceneManager.GetActiveScene().name == "VLevel3")
+            else if (SceneManager.GetActiveScene().name == "Level3")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -168,7 +168,7 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(22f, 2.5f,0f), Quaternion.identity, 0);
                 }
             }
-            else if (SceneManager.GetActiveScene().name == "BBossRoom")
+            else if (SceneManager.GetActiveScene().name == "BossRoom")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {

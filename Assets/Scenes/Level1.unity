@@ -829,6 +829,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe4e3f429f22ff45a3c8e7361d275ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalLeft: 0
+  horizontalRight: 1
+  verticalUp: 0
+  verticalDown: 0
   endTilePos: 159
   falling: 0
 --- !u!1 &520636646

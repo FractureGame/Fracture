@@ -1,6 +1,6 @@
 ﻿using System;
+using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -32,14 +32,20 @@ public class HarpieAI : MonoBehaviourPunCallbacks
     public bool isStunned = false;
     private Vector2 stunPos;
     private Vector2 endStunPos;
+    
+    public bool isRocket;
+    private GameObject blobKing;
+    public bool escortBlobKing;
+    public bool readyToCarryKingBlob;
+    public bool ignition;
 
     // Start is called before the first frame update
     void Start()
     {
         pos = transform.position;
-        if (SceneManager.GetActiveScene().name[0] == 'H')
+        horizontal = Camera.main.GetComponent<CameraMovement>().GetCam().StartsWith("horizontal");
+        if (horizontal)
         {
-            horizontal = true;
             if (pos.y > GameObject.Find("Main Camera").transform.position.y)
             {
                 followPlayerTop = true;
@@ -51,7 +57,6 @@ public class HarpieAI : MonoBehaviourPunCallbacks
         }
         else
         {
-            horizontal = false;
             if (pos.x > GameObject.Find("Main Camera").transform.position.x)
             {
                 followPlayerTop = true;
@@ -83,151 +88,194 @@ public class HarpieAI : MonoBehaviourPunCallbacks
         }
         originDir = direction;
     }
-
+    
+    
     
     // Update is called once per frame
     void Update()
     {
-        Debug.LogFormat("IsStunned {0}", isStunned);
-        if (isStunned == false)
+        if (isRocket)
         {
-            
-            // Flipping to go to the right direction
-            posLastFrame = posThisFrame;
-            posThisFrame = transform.position;
-
-
-            playerTopPos = GameObject.Find("PlayerTop(Clone)").GetComponent<Transform>().position;
-            playerBotPos = GameObject.Find("PlayerBot(Clone)").GetComponent<Transform>().position;
-
-            
-
-            if (horizontal)
+            if (ignition)
             {
-                if (followPlayerTop && playerTopPos.y > playerBotPos.y)
+                Vector2 dest = new Vector2(transform.position.x, blobKing.GetComponentInChildren<BossAI>().Waypoint4.transform.position.y);
+                // MOVE UP WITH THEM
+                if (Vector2.Distance(transform.position, dest) <= 0)
                 {
-                    playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                    // YOU LOSE
                 }
-                else if (followPlayerTop && playerTopPos.y < playerBotPos.y)
+                else
                 {
-                    playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                }
-                else if (!followPlayerTop && playerTopPos.y > playerBotPos.y)
-                {
-                    playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                }
-                else if (!followPlayerTop && playerTopPos.y < playerBotPos.y)
-                {
-                    playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                    transform.position = Vector2.MoveTowards(transform.position, dest, blobKing.GetComponentInChildren<BossAI>().escapeSpeed * Time.deltaTime);
                 }
             }
             else
             {
-                if (followPlayerTop && playerTopPos.x > playerBotPos.x)
+                blobKing = GameObject.Find("RoiBlob");
+                if (escortBlobKing)
                 {
-                    playerToFollow = GameObject.Find("PlayerTop(Clone)");
-                }
-                else if (followPlayerTop && playerTopPos.x < playerBotPos.x)
-                {
-                    playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                }
-                else if (!followPlayerTop && playerTopPos.x > playerBotPos.x)
-                {
-                    playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                }
-                else if (!followPlayerTop && playerTopPos.x < playerBotPos.x)
-                {
-                    playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                    if (Vector2.Distance(transform.position, waypoints[1].position) <= 0)
+                    {
+                        transform.Rotate(0, 180, 0);
+                        readyToCarryKingBlob = true;
+                    }
+                    else
+                    {
+                        transform.position = Vector2.MoveTowards(transform.position, waypoints[1].transform.position,
+                            speedEnemy * Time.deltaTime);
+                    }
+                
                 }
             }
 
-            if (playerToFollow == GameObject.Find("PlayerTop(Clone)"))
+            
+        }
+        else
+        {
+            if (isStunned == false)
             {
-                try
+
+                // Flipping to go to the right direction
+                posLastFrame = posThisFrame;
+                posThisFrame = transform.position;
+
+
+                playerTopPos = GameObject.Find("PlayerTop(Clone)").GetComponent<Transform>().position;
+                playerBotPos = GameObject.Find("PlayerBot(Clone)").GetComponent<Transform>().position;
+
+
+
+                if (horizontal)
                 {
-                    if (photonView.Owner.Equals(PhotonNetwork.PlayerList[0]) == false)
+                    if (followPlayerTop && playerTopPos.y > playerBotPos.y)
+                    {
+                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                    }
+                    else if (followPlayerTop && playerTopPos.y < playerBotPos.y)
+                    {
+                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                    }
+                    else if (!followPlayerTop && playerTopPos.y > playerBotPos.y)
+                    {
+                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                    }
+                    else if (!followPlayerTop && playerTopPos.y < playerBotPos.y)
+                    {
+                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                    }
+                }
+                else
+                {
+                    if (followPlayerTop && playerTopPos.x > playerBotPos.x)
+                    {
+                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                    }
+                    else if (followPlayerTop && playerTopPos.x < playerBotPos.x)
+                    {
+                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                    }
+                    else if (!followPlayerTop && playerTopPos.x > playerBotPos.x)
+                    {
+                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                    }
+                    else if (!followPlayerTop && playerTopPos.x < playerBotPos.x)
+                    {
+                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                    }
+                }
+
+                if (playerToFollow == GameObject.Find("PlayerTop(Clone)"))
+                {
+                    try
+                    {
+                        if (photonView.Owner.Equals(PhotonNetwork.PlayerList[0]) == false)
+                        {
+                            photonView.TransferOwnership(PhotonNetwork.PlayerList[0]);
+                        }
+                    }
+                    catch (NullReferenceException)
                     {
                         photonView.TransferOwnership(PhotonNetwork.PlayerList[0]);
                     }
-                }
-                catch (NullReferenceException)
-                {
-                    photonView.TransferOwnership(PhotonNetwork.PlayerList[0]);
-                }
 
-            }
-            else
-            {
-                try
+                }
+                else
                 {
-                    if (photonView.Owner.Equals(PhotonNetwork.PlayerList[1]) == false)
+                    try
+                    {
+                        if (photonView.Owner.Equals(PhotonNetwork.PlayerList[1]) == false)
+                        {
+                            photonView.TransferOwnership(PhotonNetwork.PlayerList[1]);
+                        }
+                    }
+                    catch (NullReferenceException)
                     {
                         photonView.TransferOwnership(PhotonNetwork.PlayerList[1]);
                     }
                 }
-                catch (NullReferenceException)
-                {
-                    photonView.TransferOwnership(PhotonNetwork.PlayerList[1]);
-                }
-            }
-            
-            playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
-            
-            
-            if (isPatrolling)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, target.position, speedEnemy * Time.deltaTime);
-                if(Vector2.Distance(transform.position,target.position)<0.3f)
-                {
-                    destPoint = (destPoint + 1) % waypoints.Length;
-                    target = waypoints[destPoint];
-                }
-            }
 
-            if (canChase)
-            {
-                if (Vector2.Distance(transform.position, playerToFollowPos) < distance && playerToFollow.GetComponent<PlayerMovement>().isDead == false)
+                playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
+
+
+                if (isPatrolling)
                 {
-                    isPatrolling = false;
-                    transform.position = Vector2.MoveTowards(transform.position, playerToFollowPos, speedEnemy * Time.deltaTime);
-                }
-                else
-                {
-                    if (Vector2.Distance(transform.position, pos) < 0.3 && canPatrol)
+                    transform.position =
+                        Vector2.MoveTowards(transform.position, target.position, speedEnemy * Time.deltaTime);
+                    if (Vector2.Distance(transform.position, target.position) < 0.3f)
                     {
-                        isPatrolling = true;
-                        if (direction != originDir && facingRight)
+                        destPoint = (destPoint + 1) % waypoints.Length;
+                        target = waypoints[destPoint];
+                    }
+                }
+
+                if (canChase)
+                {
+                    if (Vector2.Distance(transform.position, playerToFollowPos) < distance &&
+                        playerToFollow.GetComponent<PlayerMovement>().isDead == false)
+                    {
+                        isPatrolling = false;
+                        transform.position = Vector2.MoveTowards(transform.position, playerToFollowPos,
+                            speedEnemy * Time.deltaTime);
+                    }
+                    else
+                    {
+                        if (Vector2.Distance(transform.position, pos) < 0.3 && canPatrol)
                         {
-                            transform.Rotate(0, 180, 0);
-                            direction = originDir;
+                            isPatrolling = true;
+                            if (direction != originDir && facingRight)
+                            {
+                                transform.Rotate(0, 180, 0);
+                                direction = originDir;
+                            }
+                        }
+                        else if (Vector2.Distance(transform.position, pos) < 0.3)
+                        {
+                            posThisFrame = posLastFrame;
+                            if (direction != originDir)
+                            {
+                                transform.Rotate(0, 180, 0);
+                                direction = originDir;
+                            }
+                        }
+                        else if (isPatrolling == false)
+                        {
+                            transform.position =
+                                Vector2.MoveTowards(transform.position, pos, speedEnemy * Time.deltaTime);
                         }
                     }
-                    else if (Vector2.Distance(transform.position, pos) < 0.3)
-                    {
-                        posThisFrame = posLastFrame;
-                        if (direction != originDir)
-                        {
-                            transform.Rotate(0, 180, 0);
-                            direction = originDir;
-                        }
-                    }
-                    else if (isPatrolling == false)
-                    {
-                        transform.position = Vector2.MoveTowards(transform.position, pos, speedEnemy * Time.deltaTime);
-                    }
                 }
             }
-        }
-        else
-        {
-            transform.position = Vector2.MoveTowards(transform.position, endStunPos, speedEnemy * 3 * Time.deltaTime);
-            if (Vector2.Distance(transform.position, endStunPos) <= 0)
+            else
             {
-                isStunned = false;
-            }
-            
-        }
+                transform.position =
+                    Vector2.MoveTowards(transform.position, endStunPos, speedEnemy * 3 * Time.deltaTime);
+                if (Vector2.Distance(transform.position, endStunPos) <= 0)
+                {
+                    isStunned = false;
+                }
 
+            }
+        }
     }
 
     public void PushBack()
@@ -251,7 +299,7 @@ public class HarpieAI : MonoBehaviourPunCallbacks
     private void FixedUpdate()
     {
 
-        if (isStunned == false)
+        if (isStunned == false && !isRocket)
         {
             if (posThisFrame == posLastFrame)
             {

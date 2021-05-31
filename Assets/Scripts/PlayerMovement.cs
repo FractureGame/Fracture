@@ -112,18 +112,18 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         attackCooldownStatus = 0f;
         animator = GetComponentInChildren<Animator>();
         switchCooldownStatus = 0f;
-        if (SceneManager.GetActiveScene().name[0] == 'H')
-        {
-            horizontal = true;
-        }
-        else if (SceneManager.GetActiveScene().name[0] == 'V')
-        {
-            horizontal = false;
-        }
-        else
-        {
-            both = true;
-        }
+        // if (SceneManager.GetActiveScene().name[0] == 'H')
+        // {
+        //     horizontal = true;
+        // }
+        // else if (SceneManager.GetActiveScene().name[0] == 'V')
+        // {
+        //     horizontal = false;
+        // }
+        // else
+        // {
+        //     both = true;
+        // }
 
     }
 
@@ -631,13 +631,21 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (photonView.IsMine)
         {
-            if (both)
+            if (Camera.main.GetComponent<CameraMovement>().GetCam() == "horizontalLeft")
             {
-                Camera.main.GetComponent<CameraMovement>().FollowPlayer(gameObject);
+                Camera.main.GetComponent<CameraMovement>().FollowPlayerHorizontallyLeft(gameObject);
             }
-            else if (!horizontal)
+            else if (Camera.main.GetComponent<CameraMovement>().GetCam() == "horizontalRight")
             {
-                Camera.main.GetComponent<CameraMovement>().FollowPlayerVertically(gameObject);
+                Camera.main.GetComponent<CameraMovement>().FollowPlayerHorizontallyRight(gameObject);
+            }
+            else if (Camera.main.GetComponent<CameraMovement>().GetCam() == "verticalUp")
+            {
+                Camera.main.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
+            }
+            else if (Camera.main.GetComponent<CameraMovement>().GetCam() == "verticalDown")
+            {
+                Camera.main.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
             }
         }
     }
@@ -743,6 +751,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    // public void SetCamToVerticalUp()
+    // {
+    //     Camera.main.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
+    // }
+    // public void SetCamToVerticalDown()
+    // {
+    //     Camera.main.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
+    // }
     
     public void Jump()
     {

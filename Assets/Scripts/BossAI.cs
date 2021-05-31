@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = System.Random;
 
-public class BossAI : MonoBehaviour
+public class BossAI : MonoBehaviourPunCallbacks
 {
     [Header("Health")]
     private bool isGrounded = false;
@@ -27,6 +27,7 @@ public class BossAI : MonoBehaviour
     public GameObject Waypoint1;
     public GameObject Waypoint2;
     public GameObject Waypoint3;
+    public GameObject Waypoint4;
     private bool phase1 = true;
     private bool movingToPhase2;
     private bool phase2;
@@ -47,18 +48,24 @@ public class BossAI : MonoBehaviour
     public GameObject throwBlobsParticle;
     private float throwBlobsCD = 2.5f;
     public GameObject BomberHarpiePrefab;
+    public GameObject explosionParticle;
     public GameObject blobPrefab;
     private float spawnBlob = 0.5f;
     private float jumpCD = 3f;
     private float jumpCDStatus;
     private float jumpVelocity = 20f;
-    private float jumpHeight = 10f;
+    private float jumpHeight = 8f;
     private Vector2 jumpDest;
+    private bool falling;
     private bool isJumpPlaying;
     private int nbJumpBeforeDestruction = 3;
     private int nbJump;
     private bool isJumping;
     private Vector2 pos;
+    public HarpieAI[] rocketHarpies;
+    private bool hasCalledHarpies;
+    public float escapeSpeed;
+    private bool hasCalledIgnition;
     
     // Start is called before the first frame update
     void Start()
@@ -81,11 +88,48 @@ public class BossAI : MonoBehaviour
     public IEnumerator MovingToPhase4()
     {
         yield return new WaitForSeconds(spawnBlob);
-        PhotonNetwork.Instantiate(blobPrefab.name, new Vector2(transform.position.x -4, transform.position.y), Quaternion.identity, 1);
+        Instantiate(blobPrefab, new Vector2(transform.position.x -4, transform.position.y), Quaternion.identity);
     }
 
+    [PunRPC]
+    private void DestroyTiles()
+    {
+        Random rand = new Random();
+        int prob;
+        BoundsInt bounds = castleTilemap.cellBounds;
+        for (int x = 0; x < bounds.size.x; x++) {
+            for (int y = 0; y < bounds.size.y; y++) {
+                Vector3Int coordinate = castleTilemap.WorldToCell(new Vector3(x, y-15, 0));
+                prob = rand.Next(5);
+                if (prob == 0)
+                {
+                    castleTilemap.SetTile(coordinate, null);
+                    // Vector3 pos = castleTilemap.CellToWorld(coordinate);
+                    // prob = rand.Next(15);
+                    // if (prob == 0)
+                    // {
+                    //     PhotonNetwork.Instantiate(explosionParticle.name, pos, Quaternion.identity, 1);
+                    // }
+                }
+            }
+        }
+    }
+
+
+    [PunRPC]
+    private void DestroyCastleAndGround()
+    {
+        Destroy(GameObject.Find("Grid").transform.Find(castleTilemap.name).gameObject);
+        Destroy(GameObject.Find("Grid").transform.Find(castleGround.name).gameObject);
+    }
+    
     private void Update()
     {
+        if (movingToPhase2 || movingToPhase4)
+        {
+            rigidbody2d.isKinematic = true;
+        }
+
         currentHealth = GetComponent<Enemy>().currentHealth;
         isGrounded = IsGrounded();
         Debug.LogFormat("isGrounded : {0}", isGrounded);
@@ -137,7 +181,7 @@ public class BossAI : MonoBehaviour
             isPhase1Playing = false;
             movingToPhase2 = true;
             // BomberHarpie
-            PhotonNetwork.Instantiate(BomberHarpiePrefab.name, new Vector2(-1, 0), Quaternion.identity, 1);
+            PhotonNetwork.Instantiate(BomberHarpiePrefab.name, new Vector2(-27, 0), Quaternion.identity, 1);
         }
 
         if (movingToPhase2)
@@ -171,42 +215,37 @@ public class BossAI : MonoBehaviour
             {
                 if (Vector2.Distance(transform.position, jumpDest) <= 0)
                 {
-                    Random rand = new Random();
-                    int prob;
+
                     isJumping = false;
+                    falling = true;
                     jumpCDStatus = jumpCD;
                     rigidbody2d.isKinematic = false;
                     nbJump += 1;
-                    // Détruire une partie des tiles du château
-                    BoundsInt bounds = castleTilemap.cellBounds;
-                    // TileBase[] allTiles = castleTilemap.GetTilesBlock(bounds);
-                    for (int x = 0; x < bounds.size.x; x++) {
-                        for (int y = 0; y < bounds.size.y; y++) {
-                            Vector3Int coordinate = castleTilemap.WorldToCell(new Vector3(x, y-15, 0));
-                            prob = rand.Next(5);
-                            if (prob == 0)
-                            {
-                                castleTilemap.SetTile(coordinate, null);
-                            }
-                        }
-                    }  
                 }
                 else
                 {
                     rigidbody2d.isKinematic = true;
                     transform.position = Vector2.MoveTowards(transform.position, jumpDest, jumpVelocity * Time.deltaTime);
-                    
                 }
             }
+            if (falling && IsGrounded())
+            {
+                photonView.RPC("DestroyTiles", RpcTarget.All);
+
+                falling = false;
+            }
+            
+            
         }
         else if (phase2 && nbJump >= nbJumpBeforeDestruction && rigidbody2d.IsTouchingLayers(platformLayerMask))
         {
-            // On détruit le château
-            Destroy(GameObject.Find("Grid").transform.Find(castleTilemap.name).gameObject);
-            Destroy(GameObject.Find("Grid").transform.Find(castleGround.name).gameObject);
-            
+            photonView.RPC("DestroyCastleAndGround", RpcTarget.All);
+
+
             phase2 = false;
             movingToPhase3 = true;
+            
+            
         }
         
         
@@ -220,13 +259,14 @@ public class BossAI : MonoBehaviour
 
         if (movingToPhase3 && isGrounded)
         {
-            if (Vector2.Distance(transform.position, new Vector2(Waypoint2.transform.position.x, transform.position.y)) <= 0)
-            {
-                movingToPhase3 = false;
-                phase3 = true;
-            }
-            transform.position =
-                Vector2.MoveTowards(transform.position, new Vector2(Waypoint2.transform.position.x, transform.position.y), speed * Time.deltaTime);
+            movingToPhase3 = false;
+            phase3 = true;
+            // if (Vector2.Distance(transform.position, new Vector2(Waypoint2.transform.position.x, transform.position.y)) <= 0)
+            // {
+            //     
+            // }
+            // transform.position =
+            //     Vector2.MoveTowards(transform.position, new Vector2(Waypoint2.transform.position.x, transform.position.y), speed * Time.deltaTime);
 
         }
 
@@ -238,13 +278,13 @@ public class BossAI : MonoBehaviour
 
         if (movingToPhase4)
         {
-            if (!isMovingToPhase4Playing)
-            {
-                isMovingToPhase4Playing = true;
-                // laisser des blobs derrière, blobs vivants
-                coroutine = StartCoroutine(MovingToPhase4());
-                
-            }
+            // if (!isMovingToPhase4Playing)
+            // {
+            //     isMovingToPhase4Playing = true;
+            //     // laisser des blobs derrière, blobs vivants
+            //     coroutine = StartCoroutine(MovingToPhase4());
+            //     
+            // }
             
             if (Vector2.Distance(transform.position, new Vector2(Waypoint3.transform.position.x, transform.position.y)) <= 0)
             {
@@ -257,11 +297,40 @@ public class BossAI : MonoBehaviour
 
         if (phase4)
         {
-            StopCoroutine(coroutine);
-            isMovingToPhase4Playing = false;
-            // WAIT LITTLE BIT
+
+            
+            
+            rigidbody2d.isKinematic = true;
+            // StopCoroutine(coroutine);
             // CALL THE HARPIES
-            // MOVE UP WITH THEM
+            if (!hasCalledHarpies)
+            {
+                CallHarpies();
+                hasCalledHarpies = true;
+            }
+
+            if (IsReady())
+            {
+                Vector2 dest = new Vector2(transform.position.x, Waypoint4.transform.position.y);
+                // MOVE UP WITH THEM
+                if (Vector2.Distance(transform.position, dest) <= 0)
+                {
+                    // YOU LOSE
+                }
+                else
+                {
+                    transform.position = Vector2.MoveTowards(transform.position, dest, escapeSpeed * Time.deltaTime);
+                }
+
+                if (!hasCalledIgnition)
+                {
+                    foreach (var rocketHarpy in rocketHarpies)
+                    {
+                        rocketHarpy.ignition = true;
+                    }
+                    hasCalledHarpies = true;
+                }
+            }
         }
         
         // rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
@@ -270,7 +339,27 @@ public class BossAI : MonoBehaviour
         // lifebar = GameObject.Find("Canvas").transform.Find(name + "LifeBar").gameObject; 
         // lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
     }
-    
+
+
+    private bool IsReady()
+    {
+        foreach (var rocketHarpy in rocketHarpies)
+        {
+            if (rocketHarpy.readyToCarryKingBlob == false)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    private void CallHarpies()
+    {
+        foreach (var rocketHarpy in rocketHarpies)
+        {
+            rocketHarpy.escortBlobKing = true;
+        }
+    }
+
     private bool IsGrounded()
     {
         // distance to the ground from which the player can jump again

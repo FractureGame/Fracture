@@ -673,7 +673,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe4e3f429f22ff45a3c8e7361d275ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalLeft: 0
+  horizontalRight: 0
+  verticalUp: 1
+  verticalDown: 0
   endTilePos: 80
+  falling: 0
 --- !u!1001 &550940972
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14325,7 +14330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTopPrefab: {fileID: 6139641389935244459, guid: f54d07dd076cbdd4897e5efeea201524,
     type: 3}
-  playerBotPrefab: {fileID: 6439899078545751950, guid: 485d2e97a4eb95d42b64ffa97a6eae46,
+  playerBotPrefab: {fileID: 7279580523068394672, guid: e07d570cb75cb2bb58fabf059ebde66a,
     type: 3}
   Enemylifebar: {fileID: 7876699492653496462, guid: 87bf8ede08c46a4538e0570a563ab158,
     type: 3}
