@@ -96,11 +96,18 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public ParticleSystem bloodEffect;
     
     
-    [Header(("Damaege"))]
+    [Header(("Damage"))]
     private bool isInvincible = false; // triggered when enemy contact
     private int dangerousTilesDmg = 30;
 
+    [Header("Cameras")] 
+    private GameObject[] cameras;
+    private int cameraIndex;
+
+
     public AudioManager am;
+    
+    
     private void Start()
     {
         am = FindObjectOfType<AudioManager>();
@@ -125,6 +132,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         //     both = true;
         // }
 
+        cameras = Camera.main.GetComponent<CameraMovement>().cameras;
     }
 
     private void OnDestroy()
@@ -631,21 +639,74 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (photonView.IsMine)
         {
-            if (Camera.main.GetComponent<CameraMovement>().GetCam() == "horizontalLeft")
+            if (SceneManager.GetActiveScene().name == "BossRoom")
             {
-                Camera.main.GetComponent<CameraMovement>().FollowPlayerHorizontallyLeft(gameObject);
+
+                if (transform.position.x > 184)
+                {
+                    if (cameras[3].activeSelf == false)
+                    {
+                        cameras[2].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[3].SetActive(true);
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[3].GetComponent<Camera>();
+                    }
+                }
+                
+                else if (transform.position.y < -62)
+                {
+                    if (cameras[2].activeSelf == false)
+                    {
+                        cameras[3].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[2].SetActive(true);
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[2].GetComponent<Camera>();
+                    }
+                }
+                
+
+                else if (transform.position.y < -11)
+                {
+                    if (cameras[1].activeSelf == false)
+                    {
+                        cameras[3].SetActive(false);
+                        cameras[2].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[1].SetActive(true);
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[1].GetComponent<Camera>();
+                    }
+                }
+                
+                else if (transform.position.x > 82)
+                {
+                    if (cameras[0].activeSelf == false)
+                    {
+                        
+                        cameras[3].SetActive(false);
+                        cameras[2].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(true);
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[0].GetComponent<Camera>();
+                    }
+                }
             }
-            else if (Camera.main.GetComponent<CameraMovement>().GetCam() == "horizontalRight")
+            if (Camera.current.GetComponent<CameraMovement>().horizontalLeft)
             {
-                Camera.main.GetComponent<CameraMovement>().FollowPlayerHorizontallyRight(gameObject);
+                Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyLeft(gameObject);
             }
-            else if (Camera.main.GetComponent<CameraMovement>().GetCam() == "verticalUp")
+            else if (Camera.current.GetComponent<CameraMovement>().horizontalRight)
             {
-                Camera.main.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
+                Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyRight(gameObject);
             }
-            else if (Camera.main.GetComponent<CameraMovement>().GetCam() == "verticalDown")
+            else if (Camera.current.GetComponent<CameraMovement>().verticalUp)
             {
-                Camera.main.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
+                Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
+            }
+            else if (Camera.current.GetComponent<CameraMovement>().verticalDown)
+            {
+                Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
             }
         }
     }

@@ -43,7 +43,7 @@ public class HarpieAI : MonoBehaviourPunCallbacks
     void Start()
     {
         pos = transform.position;
-        horizontal = Camera.main.GetComponent<CameraMovement>().GetCam().StartsWith("horizontal");
+        horizontal = Camera.main.GetComponent<CameraMovement>().horizontalLeft || Camera.main.GetComponent<CameraMovement>().horizontalRight;
         if (horizontal)
         {
             if (pos.y > GameObject.Find("Main Camera").transform.position.y)

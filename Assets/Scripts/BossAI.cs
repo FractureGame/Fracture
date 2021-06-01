@@ -22,7 +22,11 @@ public class BossAI : MonoBehaviourPunCallbacks
     public float fallMultiplier;
 
     private float speed = 10;
-
+    
+    
+    
+    
+    
     [Header("Timeline")] 
     public GameObject Waypoint1;
     public GameObject Waypoint2;
@@ -39,7 +43,6 @@ public class BossAI : MonoBehaviourPunCallbacks
     private bool isMovingToPhase4Playing;
     private bool isPhase4Playing;
     private Coroutine coroutine;
-    private Coroutine jumpCoroutine;
     public Tilemap castleTilemap;
     public Tilemap castleGround;
     public Grid grid;
@@ -51,7 +54,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     public GameObject explosionParticle;
     public GameObject blobPrefab;
     private float spawnBlob = 0.5f;
-    private float jumpCD = 3f;
+    private float jumpCD = 5f;
     private float jumpCDStatus;
     private float jumpVelocity = 20f;
     private float jumpHeight = 8f;
@@ -74,6 +77,7 @@ public class BossAI : MonoBehaviourPunCallbacks
         pos = transform.position;
         rigidbody2d = GetComponent<Rigidbody2D>();
         boxCollider2d = GetComponent<BoxCollider2D>();
+        transform.position = Vector2.MoveTowards(transform.position, transform.position, speed * Time.deltaTime);
 
     }
     
@@ -125,6 +129,8 @@ public class BossAI : MonoBehaviourPunCallbacks
     
     private void Update()
     {
+
+
         if (movingToPhase2 || movingToPhase4)
         {
             rigidbody2d.isKinematic = true;
@@ -174,7 +180,7 @@ public class BossAI : MonoBehaviourPunCallbacks
             }
         }
         
-        if (currentHealth < 400 && currentHealth > 300 && phase1)
+        if (currentHealth < 400 && currentHealth > 300 && phase1 && isGrounded)
         {
             phase1 = false;
             StopCoroutine(coroutine);
@@ -297,9 +303,6 @@ public class BossAI : MonoBehaviourPunCallbacks
 
         if (phase4)
         {
-
-            
-            
             rigidbody2d.isKinematic = true;
             // StopCoroutine(coroutine);
             // CALL THE HARPIES
@@ -334,7 +337,7 @@ public class BossAI : MonoBehaviourPunCallbacks
         }
         
         // rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
-        // modifyPhysics();
+        modifyPhysics();
         
         // lifebar = GameObject.Find("Canvas").transform.Find(name + "LifeBar").gameObject; 
         // lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
