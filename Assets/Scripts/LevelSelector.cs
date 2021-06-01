@@ -48,7 +48,7 @@ public class LevelSelector : MonoBehaviour
         int i = 0;
         foreach (var kvp in Levels.scenes)
         {
-            if (toSkip != null && kvp.Value == i)
+            if (toSkip != null && kvp.Value == toSkip)
             {
                 continue;
             }
