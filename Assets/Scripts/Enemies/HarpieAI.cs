@@ -98,7 +98,7 @@ public class HarpieAI : MonoBehaviourPunCallbacks
         {
             if (ignition)
             {
-                Vector2 dest = new Vector2(transform.position.x, blobKing.GetComponentInChildren<BossAI>().Waypoint4.transform.position.y);
+                Vector2 dest = new Vector2(transform.position.x, blobKing.GetComponentInChildren<BossAI>().waypoints[2].transform.position.y);
                 // MOVE UP WITH THEM
                 if (Vector2.Distance(transform.position, dest) <= 0)
                 {

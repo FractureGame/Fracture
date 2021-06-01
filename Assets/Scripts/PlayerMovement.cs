@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private BoxCollider2D boxCollider2d;
     [SerializeField] private LayerMask platformLayerMask;
     [SerializeField] private LayerMask dangerLayerMask;
+    [SerializeField] private LayerMask laddersLayerMask;
     
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
@@ -729,11 +730,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         float extraHeightText = 0.2f;
         RaycastHit2D boxCastHitRight = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.right,
-            extraHeightText, platformLayerMask);
+            extraHeightText, laddersLayerMask);
         if (boxCastHitRight.collider != null)
             return Vector2.right;
         RaycastHit2D boxCastHitLeft = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.left,
-            extraHeightText, platformLayerMask);
+            extraHeightText, laddersLayerMask);
         if (boxCastHitLeft.collider != null)
             return Vector2.left;
 

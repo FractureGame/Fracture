@@ -22,26 +22,19 @@ public class BossAI : MonoBehaviourPunCallbacks
     public float fallMultiplier;
 
     private float speed = 10;
-    
-    
-    
-    
-    
+
+
+
+
+
     [Header("Timeline")] 
-    public GameObject Waypoint1;
-    public GameObject Waypoint2;
-    public GameObject Waypoint3;
-    public GameObject Waypoint4;
+    public GameObject[] waypoints;
     private bool phase1 = true;
     private bool movingToPhase2;
     private bool phase2;
     private bool movingToPhase3;
     private bool phase3;
-    private bool movingToPhase4;
-    private bool phase4;
     private bool isPhase1Playing;
-    private bool isMovingToPhase4Playing;
-    private bool isPhase4Playing;
     private Coroutine coroutine;
     public Tilemap castleTilemap;
     public Tilemap castleGround;
@@ -131,7 +124,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     {
 
 
-        if (movingToPhase2 || movingToPhase4)
+        if (movingToPhase2 || movingToPhase3)
         {
             rigidbody2d.isKinematic = true;
         }
@@ -192,7 +185,7 @@ public class BossAI : MonoBehaviourPunCallbacks
 
         if (movingToPhase2)
         {
-            if (Vector2.Distance(transform.position, new Vector2(Waypoint1.transform.position.x, transform.position.y)) <= 0)
+            if (Vector2.Distance(transform.position, new Vector2(waypoints[0].transform.position.x, transform.position.y)) <= 0)
             {
                 movingToPhase2 = false;
                 nbJump = 0;
@@ -201,7 +194,7 @@ public class BossAI : MonoBehaviourPunCallbacks
             else
             {
                 transform.position =
-                    Vector2.MoveTowards(transform.position, new Vector2(Waypoint1.transform.position.x, transform.position.y), speed * Time.deltaTime);
+                    Vector2.MoveTowards(transform.position, new Vector2(waypoints[0].transform.position.x, transform.position.y), speed * Time.deltaTime);
             }
         }
         
@@ -253,36 +246,8 @@ public class BossAI : MonoBehaviourPunCallbacks
             
             
         }
-        
-        
-
-        // if (phase2 && !isGrounded)
-        // {
-        //     phase2 = false;
-        //     movingToPhase3 = true;
-        // }
-        
 
         if (movingToPhase3 && isGrounded)
-        {
-            movingToPhase3 = false;
-            phase3 = true;
-            // if (Vector2.Distance(transform.position, new Vector2(Waypoint2.transform.position.x, transform.position.y)) <= 0)
-            // {
-            //     
-            // }
-            // transform.position =
-            //     Vector2.MoveTowards(transform.position, new Vector2(Waypoint2.transform.position.x, transform.position.y), speed * Time.deltaTime);
-
-        }
-
-        if (phase3 && currentHealth < 200)
-        {
-            movingToPhase4 = true;
-            phase3 = false;
-        }
-
-        if (movingToPhase4)
         {
             // if (!isMovingToPhase4Playing)
             // {
@@ -292,16 +257,16 @@ public class BossAI : MonoBehaviourPunCallbacks
             //     
             // }
             
-            if (Vector2.Distance(transform.position, new Vector2(Waypoint3.transform.position.x, transform.position.y)) <= 0)
+            if (Vector2.Distance(transform.position, new Vector2(waypoints[1].transform.position.x, transform.position.y)) <= 0)
             {
-                movingToPhase4 = false;
-                phase4 = true;
+                movingToPhase3 = false;
+                phase3 = true;
             }
             transform.position =
-                Vector2.MoveTowards(transform.position, new Vector2(Waypoint3.transform.position.x, transform.position.y), speed * Time.deltaTime);
+                Vector2.MoveTowards(transform.position, new Vector2(waypoints[1].transform.position.x, transform.position.y), speed * Time.deltaTime);
         }
 
-        if (phase4)
+        if (phase3)
         {
             rigidbody2d.isKinematic = true;
             // StopCoroutine(coroutine);
@@ -314,7 +279,7 @@ public class BossAI : MonoBehaviourPunCallbacks
 
             if (IsReady())
             {
-                Vector2 dest = new Vector2(transform.position.x, Waypoint4.transform.position.y);
+                Vector2 dest = new Vector2(transform.position.x, waypoints[2].transform.position.y);
                 // MOVE UP WITH THEM
                 if (Vector2.Distance(transform.position, dest) <= 0)
                 {
