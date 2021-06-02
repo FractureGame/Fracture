@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
@@ -15,6 +14,7 @@ namespace Com.MyCompany.MyGame
         public GameObject playerTopPrefab;
         public GameObject playerBotPrefab;
         public GameObject Enemylifebar;
+        public GameObject BossLifeBar;
         
         
         #endregion
@@ -115,10 +115,23 @@ namespace Com.MyCompany.MyGame
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
             foreach (var enemy in enemies)
             {
-                GameObject e = Instantiate(Enemylifebar, GameObject.Find("Canvas").transform);
-                e.name = enemy.name + "LifeBar";
-                e.tag = "LifeBar";
-                e.transform.position = new Vector3(enemy.GetComponentInChildren<BoxCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
+                Debug.Log(enemy.name);
+                if (enemy.name == "RoiBlob")
+                {
+                    // GameObject e = Instantiate(BossLifeBar, GameObject.Find("Canvas").transform);
+                    // e.name = enemy.name + "LifeBar";
+                    // e.tag = "LifeBar";
+                    // // e.transform.position = BossLifeBar.transform.position;
+                    // e.transform.position = new Vector3(enemy.GetComponentInChildren<PolygonCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
+                }
+                else
+                {
+                    GameObject e = Instantiate(Enemylifebar, GameObject.Find("Canvas").transform);
+                    e.name = enemy.name + "LifeBar";
+                    e.tag = "LifeBar";
+                    e.transform.position = new Vector3(enemy.GetComponentInChildren<BoxCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
+                }
+                
             }
             
             

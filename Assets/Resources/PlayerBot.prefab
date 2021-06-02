@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 293353788144174635}
   - component: {fileID: 8905019637182295638}
   - component: {fileID: 5952822528670339520}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: pieds
   m_TagString: Pieds
   m_Icon: {fileID: 0}
@@ -81,7 +81,7 @@ GameObject:
   - component: {fileID: 2188741710503253099}
   - component: {fileID: 4758348599351538314}
   - component: {fileID: 846170904076374780}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: "Calque copi\xE9 #1"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3263385813041290757}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 5695195144233255616}
   - component: {fileID: 4876531631495761754}
   - component: {fileID: 8915580699092004211}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: "Calque copi\xE9 #2"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -317,7 +317,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8409213890429788777}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -348,7 +348,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7842969001361837434}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 3128663643237282236}
   - component: {fileID: 6408425354543865199}
   - component: {fileID: 2111732006799744988}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: "Calque copi\xE9 #3"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -483,7 +483,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4149928361406887211}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,7 +515,7 @@ GameObject:
   - component: {fileID: 2109126068794354590}
   - component: {fileID: 4593327654536060523}
   - component: {fileID: 6699925604543890820}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: hache
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -618,7 +618,7 @@ GameObject:
   - component: {fileID: 7002491653862992685}
   - component: {fileID: 956408697930398641}
   - component: {fileID: 7996886905002691271}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: pied
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -720,7 +720,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4651353854316327640}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -750,7 +750,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8442517214797185412}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -781,7 +781,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5671507867295410168}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -811,7 +811,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2668921606640175026}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -841,7 +841,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2593845735045544550}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -876,7 +876,7 @@ GameObject:
   - component: {fileID: 2395872417764798830}
   - component: {fileID: 7512426392079062596}
   - component: {fileID: 6150536506509108299}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: "Calque copi\xE9"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -980,7 +980,7 @@ GameObject:
   - component: {fileID: 1258119224510684584}
   - component: {fileID: 3934640357591915758}
   - component: {fileID: 4426566484000187754}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: cicatric oeil+bras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1089,7 +1089,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 782539518281316685}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1126,7 +1126,7 @@ GameObject:
   - component: {fileID: 4751556183210653164}
   - component: {fileID: 309164844506313519}
   - component: {fileID: 796623386553763576}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: PlayerBot
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1439,7 +1439,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2279143013372580199}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1470,7 +1470,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8572265583866759108}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1500,7 +1500,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1076758773674520731}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bone_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1535,7 +1535,7 @@ GameObject:
   - component: {fileID: 6412554558918249238}
   - component: {fileID: 6046750027954711927}
   - component: {fileID: 7819333780617015210}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: changeMecPose
   m_TagString: Untagged
   m_Icon: {fileID: 0}

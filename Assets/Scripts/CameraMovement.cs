@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class CameraMovement : MonoBehaviour
 {
 
-    public bool horizontalLeft;
+    public bool horizontalLeft = false;
     public bool horizontalRight;
     public bool verticalUp;
     public bool verticalDown;

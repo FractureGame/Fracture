@@ -149,7 +149,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         if (other.gameObject.CompareTag("Pieds"))
         {
-            Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+            if (other.gameObject.transform.parent.parent.name == "RoiBlob")
+            {
+                ApplyDamage(currentHealth);
+            }
+            else
+            {
+                Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+            }
+            
         }
 
         // if (other.gameObject.CompareTag("Button"))
@@ -928,14 +936,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Instantiate(bloodEffect, pos, Quaternion.identity);
     }
 
-
-    // private void OnCollisionStay2D(Collision2D other)
-    // {
-    //     if (other.transform.parent.CompareTag("Enemies"))
-    //     {
-    //         animator.ResetTrigger("attack");
-    //     }
-    // }
+    
 
     private void Attack()
     {

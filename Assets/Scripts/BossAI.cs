@@ -13,7 +13,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     private int currentHealth;
 
     private Rigidbody2D rigidbody2d;
-    private BoxCollider2D boxCollider2d;
+    private PolygonCollider2D polygonCollider2D;
     [SerializeField] private LayerMask platformLayerMask;
     
     [Header("Physics")] 
@@ -47,6 +47,15 @@ public class BossAI : MonoBehaviourPunCallbacks
     public GameObject explosionParticle;
     public GameObject blobPrefab;
     private float spawnBlob = 0.5f;
+
+
+    private Vector2 pos;
+    public HarpieAI[] rocketHarpies;
+    private bool hasCalledHarpies;
+    public float escapeSpeed;
+    private bool hasCalledIgnition;
+    
+    [Header("Jump")]
     private float jumpCD = 5f;
     private float jumpCDStatus;
     private float jumpVelocity = 20f;
@@ -57,11 +66,12 @@ public class BossAI : MonoBehaviourPunCallbacks
     private int nbJumpBeforeDestruction = 3;
     private int nbJump;
     private bool isJumping;
-    private Vector2 pos;
-    public HarpieAI[] rocketHarpies;
-    private bool hasCalledHarpies;
-    public float escapeSpeed;
-    private bool hasCalledIgnition;
+    
+    
+    [Header("JumpAttack")]
+    public GameObject JumpGroundParticles;
+
+    
     
     // Start is called before the first frame update
     void Start()
@@ -69,10 +79,11 @@ public class BossAI : MonoBehaviourPunCallbacks
         jumpCDStatus = jumpCD;
         pos = transform.position;
         rigidbody2d = GetComponent<Rigidbody2D>();
-        boxCollider2d = GetComponent<BoxCollider2D>();
+        polygonCollider2D = GetComponent<PolygonCollider2D>();
         transform.position = Vector2.MoveTowards(transform.position, transform.position, speed * Time.deltaTime);
 
     }
+    
     
     public IEnumerator Phase1()
     {
@@ -144,7 +155,7 @@ public class BossAI : MonoBehaviourPunCallbacks
             {
                 // Random rand = new Random();
                 // int n = rand.Next(2);
-                // int x = rand.Next(4);
+                // int x = rand.Next(5);
                 // if (n == 0)
                 // {
                 //     x = -x;
@@ -164,12 +175,21 @@ public class BossAI : MonoBehaviourPunCallbacks
                     isJumping = false;
                     jumpCDStatus = jumpCD;
                     rigidbody2d.isKinematic = false;
+                    falling = true;
                 }
                 else
                 {
                     rigidbody2d.isKinematic = true;
                     transform.position = Vector2.MoveTowards(transform.position, jumpDest, jumpVelocity * Time.deltaTime);
                 }
+            }
+            if (falling && IsGrounded())
+            {
+                // Show the attack range with particules
+                PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(transform.position.x, transform.position.y),
+                    Quaternion.identity, 1);
+
+                falling = false;
             }
         }
         
@@ -230,6 +250,8 @@ public class BossAI : MonoBehaviourPunCallbacks
             if (falling && IsGrounded())
             {
                 photonView.RPC("DestroyTiles", RpcTarget.All);
+                PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(transform.position.x, transform.position.y - 3),
+                    Quaternion.identity, 1);
 
                 falling = false;
             }
@@ -332,7 +354,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     {
         // distance to the ground from which the player can jump again
         float extraHeightText = 0.1f;
-        RaycastHit2D boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
+        RaycastHit2D boxCastHit = Physics2D.BoxCast(polygonCollider2D.bounds.center, polygonCollider2D.bounds.size,0f,Vector2.down,
             extraHeightText, platformLayerMask);
         return boxCastHit.collider != null;
     }
