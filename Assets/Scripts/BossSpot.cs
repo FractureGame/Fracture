@@ -36,24 +36,31 @@ public class BossSpot : MonoBehaviourPunCallbacks
     
     private void OnCollisionEnter2D(Collision2D other)
     {
-        // if (other.gameObject.CompareTag("Player")) {
-        //     Physics2D.IgnoreCollision(other.collider, boxCollider2d);
-        // }
 
-        if (other.gameObject.CompareTag("Pieds"))
+        if (boxCollider2d.IsTouching(other.collider))
         {
-            Physics2D.IgnoreCollision(other.collider, boxCollider2d);
-        }
+            if (other.gameObject.CompareTag("Player")) {
+                other.gameObject.GetComponent<PlayerMovement>().TakeDamage(1000);
+                Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+            }
+
+            if (other.gameObject.CompareTag("Pieds"))
+            {
+                Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+            }
         
-        if (other.gameObject.CompareTag("Danger"))
-        {
-            Physics2D.IgnoreCollision(other.collider, boxCollider2d);
-        }
+            if (other.gameObject.CompareTag("Danger"))
+            {
+                Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+            }
         
-        if (other.gameObject.CompareTag("Platform"))
-        {
+            if (other.gameObject.CompareTag("Platform"))
+            {
+                Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+            }
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
         }
+
         
     }
 }

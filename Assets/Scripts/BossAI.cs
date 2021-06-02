@@ -3,13 +3,14 @@ using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 using Random = System.Random;
 
 public class BossAI : MonoBehaviourPunCallbacks
 {
     [Header("Health")]
     private bool isGrounded = false;
-    private GameObject lifebar;
+    // private GameObject lifebar;
     private int currentHealth;
 
     private Rigidbody2D rigidbody2d;
@@ -23,10 +24,7 @@ public class BossAI : MonoBehaviourPunCallbacks
 
     private float speed = 10;
 
-
-
-
-
+    
     [Header("Timeline")] 
     public GameObject[] waypoints;
     private bool phase1 = true;
@@ -38,11 +36,13 @@ public class BossAI : MonoBehaviourPunCallbacks
     private Coroutine coroutine;
     public Tilemap castleTilemap;
     public Tilemap castleGround;
+    public Tilemap lastTilemap;
+    public LayerMask dangerLayerMask;
     public Grid grid;
 
     [Header("Abilities")] 
     public GameObject throwBlobsParticle;
-    private float throwBlobsCD = 2.5f;
+    private float throwBlobsCD = 5f;
     public GameObject BomberHarpiePrefab;
     public GameObject explosionParticle;
     public GameObject blobPrefab;
@@ -54,6 +54,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     private bool hasCalledHarpies;
     public float escapeSpeed;
     private bool hasCalledIgnition;
+    private bool hasDestroyedlast;
     
     [Header("Jump")]
     private float jumpCD = 5f;
@@ -66,22 +67,26 @@ public class BossAI : MonoBehaviourPunCallbacks
     private int nbJumpBeforeDestruction = 3;
     private int nbJump;
     private bool isJumping;
+    private bool playerNearby;
     
     
     [Header("JumpAttack")]
     public GameObject JumpGroundParticles;
+    private float distanceFromPlayer = 15; 
 
-    
+    [Header("Players")]
+    private Vector2 playerTopPos;
+    private Vector2 playerBotPos;
     
     // Start is called before the first frame update
     void Start()
     {
-        jumpCDStatus = jumpCD;
+        jumpCDStatus = 0;
         pos = transform.position;
         rigidbody2d = GetComponent<Rigidbody2D>();
         polygonCollider2D = GetComponent<PolygonCollider2D>();
         transform.position = Vector2.MoveTowards(transform.position, transform.position, speed * Time.deltaTime);
-
+        // lifebar = GameObject.Find("Canvas").transform.Find("BossLifeBar").gameObject;
     }
     
     
@@ -130,12 +135,26 @@ public class BossAI : MonoBehaviourPunCallbacks
         Destroy(GameObject.Find("Grid").transform.Find(castleTilemap.name).gameObject);
         Destroy(GameObject.Find("Grid").transform.Find(castleGround.name).gameObject);
     }
+
+    [PunRPC]
+
+    private void DestroyLastTilemap()
+    {
+        Destroy(GameObject.Find("Grid").transform.Find(lastTilemap.name).gameObject);
+    }
     
     private void Update()
     {
+        playerTopPos = GameObject.Find("PlayerTop(Clone)").transform.position;
+        playerBotPos = GameObject.Find("PlayerBot(Clone)").transform.position;
 
 
-        if (movingToPhase2 || movingToPhase3)
+        playerNearby = Math.Abs(transform.position.x - playerTopPos.x) <= distanceFromPlayer || Math.Abs(transform.position.x - playerBotPos.x) <= distanceFromPlayer;
+
+        
+        
+
+        if (movingToPhase2)
         {
             rigidbody2d.isKinematic = true;
         }
@@ -149,9 +168,12 @@ public class BossAI : MonoBehaviourPunCallbacks
             if (!isPhase1Playing)
             {
                 isPhase1Playing = true;
+
                 coroutine = StartCoroutine(Phase1());
+                
             }
-            if (jumpCDStatus <= 0 && isGrounded)
+
+            if (jumpCDStatus <= 0 && isGrounded && playerNearby)
             {
                 // Random rand = new Random();
                 // int n = rand.Next(2);
@@ -160,7 +182,7 @@ public class BossAI : MonoBehaviourPunCallbacks
                 // {
                 //     x = -x;
                 // }
-                jumpDest = new Vector2(transform.position.x, transform.position.y + jumpHeight);
+                jumpDest = new Vector2(transform.position.x , transform.position.y + jumpHeight);
                 isJumping = true;
             }
             else if (jumpCDStatus > 0 && isGrounded)
@@ -170,12 +192,12 @@ public class BossAI : MonoBehaviourPunCallbacks
 
             if (isJumping)
             {
-                if (Vector2.Distance(transform.position, jumpDest) <= 0)
+                if (Vector2.Distance(transform.position, jumpDest) <= 1)
                 {
-                    isJumping = false;
                     jumpCDStatus = jumpCD;
                     rigidbody2d.isKinematic = false;
                     falling = true;
+                    isJumping = false;
                 }
                 else
                 {
@@ -183,14 +205,17 @@ public class BossAI : MonoBehaviourPunCallbacks
                     transform.position = Vector2.MoveTowards(transform.position, jumpDest, jumpVelocity * Time.deltaTime);
                 }
             }
-            if (falling && IsGrounded())
+
+            if (falling && isGrounded)
             {
                 // Show the attack range with particules
-                PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(transform.position.x, transform.position.y),
+                PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(0, -5),
                     Quaternion.identity, 1);
 
                 falling = false;
             }
+            
+
         }
         
         if (currentHealth < 400 && currentHealth > 300 && phase1 && isGrounded)
@@ -220,7 +245,7 @@ public class BossAI : MonoBehaviourPunCallbacks
         
         if (phase2 && nbJump < nbJumpBeforeDestruction)
         {
-            if (jumpCDStatus <= 0 && isGrounded)
+            if (jumpCDStatus <= 0 && isGrounded && playerNearby)
             {
                 jumpDest = new Vector2(transform.position.x, transform.position.y + jumpHeight);
                 isJumping = true;
@@ -232,14 +257,13 @@ public class BossAI : MonoBehaviourPunCallbacks
 
             if (isJumping)
             {
-                if (Vector2.Distance(transform.position, jumpDest) <= 0)
+                if (Vector2.Distance(transform.position, jumpDest) <= 1)
                 {
-
-                    isJumping = false;
                     falling = true;
                     jumpCDStatus = jumpCD;
                     rigidbody2d.isKinematic = false;
                     nbJump += 1;
+                    isJumping = false;
                 }
                 else
                 {
@@ -247,7 +271,7 @@ public class BossAI : MonoBehaviourPunCallbacks
                     transform.position = Vector2.MoveTowards(transform.position, jumpDest, jumpVelocity * Time.deltaTime);
                 }
             }
-            if (falling && IsGrounded())
+            if (falling && isGrounded)
             {
                 photonView.RPC("DestroyTiles", RpcTarget.All);
                 PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(transform.position.x, transform.position.y - 3),
@@ -260,25 +284,20 @@ public class BossAI : MonoBehaviourPunCallbacks
         }
         else if (phase2 && nbJump >= nbJumpBeforeDestruction && rigidbody2d.IsTouchingLayers(platformLayerMask))
         {
+            rigidbody2d.isKinematic = false;
             photonView.RPC("DestroyCastleAndGround", RpcTarget.All);
-
-
             phase2 = false;
             movingToPhase3 = true;
             
             
         }
+        
+        
+        
 
         if (movingToPhase3 && isGrounded)
         {
-            // if (!isMovingToPhase4Playing)
-            // {
-            //     isMovingToPhase4Playing = true;
-            //     // laisser des blobs derrière, blobs vivants
-            //     coroutine = StartCoroutine(MovingToPhase4());
-            //     
-            // }
-            
+            rigidbody2d.isKinematic = true;
             if (Vector2.Distance(transform.position, new Vector2(waypoints[1].transform.position.x, transform.position.y)) <= 0)
             {
                 movingToPhase3 = false;
@@ -302,10 +321,48 @@ public class BossAI : MonoBehaviourPunCallbacks
             if (IsReady())
             {
                 Vector2 dest = new Vector2(transform.position.x, waypoints[2].transform.position.y);
+                
+                
+                // if all harpies are dead you win, the bitch falls in lava
+                if (CheckWinCondition())
+                {
+                    phase3 = false;
+                    rigidbody2d.isKinematic = false;
+                    // False into the lava
+                    if (isGrounded && !hasDestroyedlast)
+                    {
+                        photonView.RPC("DestroyLastTilemap", RpcTarget.All);
+                        hasDestroyedlast = true;
+                    }
+
+                    if (isTouchingDanger())
+                    {
+                        GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                        gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
+                        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
+                        gameOverPanel.SetActive(true);
+                        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
+        
+                        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
+                    }
+                    
+                    
+                }
+                
+                
+                
                 // MOVE UP WITH THEM
                 if (Vector2.Distance(transform.position, dest) <= 0)
                 {
                     // YOU LOSE
+                    GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                    gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
+                    gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
+                    gameOverPanel.SetActive(true);
+                    GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
+        
+                    GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
+                    
                 }
                 else
                 {
@@ -324,12 +381,23 @@ public class BossAI : MonoBehaviourPunCallbacks
         }
         
         // rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
-        modifyPhysics();
+        // modifyPhysics();
         
-        // lifebar = GameObject.Find("Canvas").transform.Find(name + "LifeBar").gameObject; 
-        // lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
     }
 
+
+    private bool CheckWinCondition()
+    {
+        foreach (var harpie in rocketHarpies)
+        {
+            if (GameObject.Find(harpie.name) != null)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     private bool IsReady()
     {
@@ -358,34 +426,13 @@ public class BossAI : MonoBehaviourPunCallbacks
             extraHeightText, platformLayerMask);
         return boxCastHit.collider != null;
     }
-    
-    private void modifyPhysics()
+
+    private bool isTouchingDanger()
     {
-        rigidbody2d.gravityScale = gravity;
+        float extraHeightText = 0.1f;
+        RaycastHit2D boxCastHit = Physics2D.BoxCast(polygonCollider2D.bounds.center, polygonCollider2D.bounds.size,0f,Vector2.down,
+            extraHeightText, dangerLayerMask);
+        return boxCastHit.collider != null;
         
-        // Drag can be used to slow down an object. The higher the drag the more the object slows down.
-        rigidbody2d.drag = linearDrag;
-        rigidbody2d.gravityScale = gravity * fallMultiplier;
-    }
-
-    public int TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-        lifebar.GetComponent<HPBar>().SetHealth(currentHealth);
-        
-        // Play hurt animation
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-
-        return currentHealth;
-    }
-
-    void Die()
-    {
-        Debug.Log("Enemy Died " + gameObject.name);
-        Destroy(gameObject.transform.parent.gameObject);
     }
 }

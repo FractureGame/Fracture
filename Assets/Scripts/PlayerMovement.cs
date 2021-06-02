@@ -149,15 +149,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         if (other.gameObject.CompareTag("Pieds"))
         {
-            if (other.gameObject.transform.parent.parent.name == "RoiBlob")
-            {
-                ApplyDamage(currentHealth);
-            }
-            else
-            {
-                Physics2D.IgnoreCollision(other.collider, boxCollider2d);
-            }
+            Debug.LogFormat("COLLISION : {0}", other.gameObject.transform.parent.parent.name);
+
+            Physics2D.IgnoreCollision(other.collider, boxCollider2d);
             
+        
         }
 
         // if (other.gameObject.CompareTag("Button"))
@@ -629,7 +625,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
 
         Collider2D onTouchEnemy = IsTouchingEnemy();
-        if (onTouchEnemy != null)
+        if (onTouchEnemy != null && onTouchEnemy.gameObject.name != "RoiBlob" && onTouchEnemy.gameObject.transform.parent.name != "RoiBlob")
         {
             TakeDamage(onTouchEnemy.transform.GetComponentInChildren<Enemy>().enemyDamage);
         }
@@ -655,6 +651,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                 {
                     if (cameras[3].activeSelf == false)
                     {
+                        cameras[4].SetActive(false);
                         cameras[2].SetActive(false);
                         cameras[1].SetActive(false);
                         cameras[0].SetActive(false);
@@ -667,6 +664,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                 {
                     if (cameras[2].activeSelf == false)
                     {
+                        cameras[4].SetActive(false);
                         cameras[3].SetActive(false);
                         cameras[1].SetActive(false);
                         cameras[0].SetActive(false);
@@ -680,6 +678,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                 {
                     if (cameras[1].activeSelf == false)
                     {
+                        cameras[4].SetActive(false);
                         cameras[3].SetActive(false);
                         cameras[2].SetActive(false);
                         cameras[0].SetActive(false);
@@ -692,12 +691,25 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                 {
                     if (cameras[0].activeSelf == false)
                     {
-                        
+                        cameras[4].SetActive(false);
                         cameras[3].SetActive(false);
                         cameras[2].SetActive(false);
                         cameras[1].SetActive(false);
                         cameras[0].SetActive(true);
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[0].GetComponent<Camera>();
+                    }
+                }
+                else
+                {
+                    if (cameras[4].activeSelf == false)
+                    {
+                        
+                        cameras[3].SetActive(false);
+                        cameras[2].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[4].SetActive(true);
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[4].GetComponent<Camera>();
                     }
                 }
             }
@@ -729,6 +741,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         { 
             boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
                 extraHeightText, dangerLayerMask);
+        }
+        if (boxCastHit.collider == null)
+        { 
+            boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
+                extraHeightText, laddersLayerMask);
         }
         
         return boxCastHit.collider != null;
@@ -956,6 +973,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             if (!hasAttacked)
             {
                 int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                
                 photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
                 photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
                 

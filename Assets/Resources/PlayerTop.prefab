@@ -1129,7 +1129,7 @@ MonoBehaviour:
   gravity: 1
   fallMultiplier: 6
   dashSpeed: 55
-  startDashTime: 0.1
+  startDashTime: 0.15
   DASH_COOLDOWN: 1
   dashParticleRight: {fileID: 7988900130007825293, guid: fa79b379c6f2fddf099ce325a87f201c,
     type: 3}
@@ -1140,7 +1140,7 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 256
-  attackDamage: 42
+  attackDamage: 40
   orientation: {x: 1, y: 0}
   switchCooldownStatus: 0
   animator: {fileID: 0}
