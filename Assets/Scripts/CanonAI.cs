@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Photon.Pun;
+﻿using Photon.Pun;
 using UnityEngine;
-using UnityEngine.Timeline;
 
 public class CanonAI : MonoBehaviour
 {
@@ -10,7 +7,8 @@ public class CanonAI : MonoBehaviour
     private bool horizontal;
     private bool followPlayerTop;
     private float fireRange = 50;
-    private Transform playerToFollowPos;
+    private Vector3 playerToFollowPos;
+    private GameObject playerToFollow;
     private float angularSpeed = 1;
     private bool isRotating;
     private float fireCD = 2;
@@ -51,17 +49,19 @@ public class CanonAI : MonoBehaviour
     {
         if (followPlayerTop)
         {
-            playerToFollowPos = GameObject.Find("PlayerTop(Clone)").transform;
+            playerToFollow = GameObject.Find("PlayerTop(Clone)");
+            playerToFollowPos = playerToFollow.transform.position;
         }
         else
         {
-            playerToFollowPos = GameObject.Find("PlayerBot(Clone)").transform;
+            playerToFollow = GameObject.Find("PlayerBot(Clone)");
+            playerToFollowPos = playerToFollow.transform.position;
         }
 
-        if (Vector2.Distance(transform.position, playerToFollowPos.position) <= fireRange)
+        if (Vector2.Distance(transform.position, playerToFollowPos) <= fireRange && playerToFollow.GetComponent<PlayerMovement>().isDead == false)
         {
             // Aim at the player (change rotation)
-            var dir = playerToFollowPos.position - transform.position;
+            var dir = playerToFollowPos - transform.position;
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
@@ -82,8 +82,13 @@ public class CanonAI : MonoBehaviour
 
     private void Fire()
     {
-        GameObject ball = Instantiate(fireBall);
-        ball.GetComponent<FireBall>().playerPos = playerToFollowPos;
-        
+        // GameObject ball = Instantiate(fireBall, transform);
+        PhotonNetwork.Instantiate(fireBall.name, new Vector2(transform.position.x - 0.1f, transform.position.y), Quaternion.identity, 1);
+    }
+
+    public Vector3 GetPlayerToFollowPos()
+    {
+        return playerToFollowPos;
+        // return new Vector3(playerToFollowPos.x * 10, playerToFollowPos.y * 10);
     }
 }

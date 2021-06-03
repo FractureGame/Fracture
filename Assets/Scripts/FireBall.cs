@@ -1,5 +1,5 @@
-﻿
-using System;
+﻿using System;
+using Photon.Pun;
 using UnityEngine;
 
 
@@ -7,20 +7,30 @@ public class FireBall : MonoBehaviour
 {
 
 
-    public Transform playerPos;
+    private Vector3 playerPos;
     private float speed = 10;
     private BoxCollider2D BoxCollider2D;
+    private Rigidbody2D rigidbody2D;
+    public GameObject explosionPrefab;
+    public int dmg = 30;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerPos = GameObject.Find("Canon").GetComponent<CanonAI>().GetPlayerToFollowPos();
+        rigidbody2D = GetComponent<Rigidbody2D>();
+        // GetComponent<Rigidbody2D>().velocity = playerPos * speed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector2.MoveTowards(transform.position, playerPos.position, speed * Time.deltaTime);
+        // if (Vector2.Distance(transform.position, playerPos) <= 0)
+        // {
+        //     playerPos *= 2;
+        // }
+        transform.position = Vector2.MoveTowards(transform.position, playerPos, speed * Time.deltaTime);
+        transform.Rotate(0,0,20*Time.deltaTime);
     }
     
 
@@ -30,12 +40,18 @@ public class FireBall : MonoBehaviour
         Debug.Log(other.gameObject.name);
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("YESS");
+            other.gameObject.GetComponent<PlayerMovement>().TakeDamage(dmg);
             Destroy(gameObject);
         }
         else if (other.gameObject.CompareTag("Platform"))
         {
             Destroy(gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        PhotonNetwork.Instantiate(explosionPrefab.name, transform.position, Quaternion.identity, 1);
+        
     }
 }
