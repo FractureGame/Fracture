@@ -140,8 +140,16 @@ public class HarpieAI : MonoBehaviourPunCallbacks
                 posThisFrame = transform.position;
 
 
-                playerTopPos = GameObject.Find("PlayerTop(Clone)").GetComponent<Transform>().position;
-                playerBotPos = GameObject.Find("PlayerBot(Clone)").GetComponent<Transform>().position;
+                try
+                {
+                    playerTopPos = GameObject.Find("PlayerTop(Clone)").GetComponent<Transform>().position;
+                    playerBotPos = GameObject.Find("PlayerBot(Clone)").GetComponent<Transform>().position;
+                }
+                catch (Exception)
+                {
+
+                }
+                
 
 
 

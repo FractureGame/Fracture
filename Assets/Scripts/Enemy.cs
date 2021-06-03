@@ -37,7 +37,6 @@ public class Enemy : MonoBehaviour
         
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         currentHealth = maxHealth;
-        Debug.Log(transform.parent.name);
         // lifebar = GameObject.Find("Canvas").transform.Find(transform.parent.name + "LifeBar").gameObject;
     }
 
