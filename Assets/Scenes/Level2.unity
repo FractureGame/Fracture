@@ -2240,12 +2240,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe4e3f429f22ff45a3c8e7361d275ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalWithMaxDistance: 1
   horizontalLeft: 0
-  horizontalRight: 1
+  horizontalRight: 0
   verticalUp: 0
   verticalDown: 0
   endTilePos: 153
-  falling: 0
+  cameras: []
 --- !u!1 &1078390183
 GameObject:
   m_ObjectHideFlags: 0
@@ -11039,6 +11040,7 @@ MonoBehaviour:
   playerBotPrefab: {fileID: 7279580523068394672, guid: e07d570cb75cb2bb58fabf059ebde66a,
     type: 3}
   Enemylifebar: {fileID: 0}
+  BossLifeBar: {fileID: 0}
 --- !u!1001 &1568764497
 PrefabInstance:
   m_ObjectHideFlags: 0

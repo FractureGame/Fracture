@@ -1,8 +1,6 @@
 ﻿using System;
-using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class HarpieAI : MonoBehaviourPunCallbacks
 {
@@ -43,7 +41,7 @@ public class HarpieAI : MonoBehaviourPunCallbacks
     void Start()
     {
         pos = transform.position;
-        horizontal = Camera.main.GetComponent<CameraMovement>().horizontalLeft || Camera.main.GetComponent<CameraMovement>().horizontalRight;
+        horizontal = Camera.main.GetComponent<CameraMovement>().horizontalLeft || Camera.main.GetComponent<CameraMovement>().horizontalRight || Camera.main.GetComponent<CameraMovement>().horizontalWithMaxDistance;
         if (horizontal)
         {
             if (pos.y > GameObject.Find("Main Camera").transform.position.y)
@@ -84,7 +82,8 @@ public class HarpieAI : MonoBehaviourPunCallbacks
         else
         {
             direction = Vector2.left;
-            transform.Rotate(0, 180, 0);
+            transform.rotation = new Quaternion(0, 180, 0, 0);
+            // transform.Rotate(0, 180, 0);
         }
         originDir = direction;
     }
@@ -238,11 +237,7 @@ public class HarpieAI : MonoBehaviourPunCallbacks
 
                 if (canChase)
                 {
-                    if (Vector2.Distance(transform.position, playerToFollowPos) <= 0.3)
-                    {
-                        // playerToFollow.GetComponent<PlayerMovement>().TakeDamage(GetComponent<Enemy>().enemyDamage);
-                    }
-                    else if (Vector2.Distance(transform.position, playerToFollowPos) < distance &&
+                    if (Vector2.Distance(transform.position, playerToFollowPos) < distance &&
                         playerToFollow.GetComponent<PlayerMovement>().isDead == false)
                     {
                         isPatrolling = false;
@@ -254,9 +249,10 @@ public class HarpieAI : MonoBehaviourPunCallbacks
                         if (Vector2.Distance(transform.position, pos) < 0.3 && canPatrol)
                         {
                             isPatrolling = true;
-                            if (direction != originDir && facingRight)
+                            if (direction != originDir)
                             {
-                                transform.Rotate(0, 180, 0);
+                                transform.rotation = new Quaternion(0, 180, 0, 0);
+                                // transform.Rotate(0, 180, 0);
                                 direction = originDir;
                             }
                         }
@@ -265,7 +261,15 @@ public class HarpieAI : MonoBehaviourPunCallbacks
                             posThisFrame = posLastFrame;
                             if (direction != originDir)
                             {
-                                transform.Rotate(0, 180, 0);
+                                if (direction == Vector2.left)
+                                {
+                                    transform.rotation = new Quaternion(0, 0, 0, 0);
+                                }
+                                else
+                                {
+                                    transform.rotation = new Quaternion(0, 180, 0, 0);
+                                }
+                                // transform.Rotate(0, 180, 0);
                                 direction = originDir;
                             }
                         }
@@ -317,25 +321,37 @@ public class HarpieAI : MonoBehaviourPunCallbacks
             {
                 if (direction != originDir)
                 {
-                    transform.Rotate(0, 180, 0);
+                    if (direction == Vector2.left)
+                    {
+                        transform.rotation = new Quaternion(0, 0, 0, 0);
+                    }
+                    else
+                    {
+                        transform.rotation = new Quaternion(0, 180, 0, 0);
+                    }
+                    // transform.Rotate(0, 180, 0);
                     direction = originDir;
                 }
             }
             else if (posThisFrame.x - posLastFrame.x >= 0.02)
             {
-                if (direction != Vector2.right)
-                {
-                    transform.Rotate(0, 180, 0);
-                    direction = Vector2.right;
-                }
+                transform.rotation = new Quaternion(0, 0, 0, 0);
+                direction = Vector2.right;
+                // if (direction != Vector2.right)
+                // {
+                //     transform.Rotate(0, 180, 0);
+                //     direction = Vector2.right;
+                // }
             }
             else if (posThisFrame.x - posLastFrame.x <= -0.02)
             {
-                if (direction != Vector2.left)
-                {
-                    transform.Rotate(0, 180, 0);
-                    direction = Vector2.left;
-                }
+                transform.rotation = new Quaternion(0, 180, 0, 0);
+                direction = Vector2.left;
+                // if (direction != Vector2.left)
+                // {
+                //     transform.Rotate(0, 180, 0);
+                //     direction = Vector2.left;
+                // }
             }
         }
 

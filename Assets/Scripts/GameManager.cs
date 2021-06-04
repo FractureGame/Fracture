@@ -215,8 +215,6 @@ namespace Com.MyCompany.MyGame
                     Destroy(lifebar);
                 }
             }
-            
-            
         }
     }
 }

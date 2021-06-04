@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 public class CameraMovement : MonoBehaviour
 {
 
-    public bool horizontalLeft = false;
+    public bool horizontalWithMaxDistance;
+    public bool horizontalLeft;
     public bool horizontalRight;
     public bool verticalUp;
     public bool verticalDown;
+    
     
     private Transform playerTop;
     private Transform playerBot;
@@ -30,25 +32,10 @@ public class CameraMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // if (SceneManager.GetActiveScene().name[0] == 'H')
-        // {
-        //     horizontal = true;
-        //     maxDistanceBetweenPlayers = 22;
-        // }
-        // else if (SceneManager.GetActiveScene().name[0] == 'V')
-        // {
-        //     horizontal = false;
-        // }
-        // else if (SceneManager.GetActiveScene().name[0] == 'B')
-        // {
-        //     both = true;
-        // }
-        // maxDistanceBetweenPlayers = 22;
+        maxDistanceBetweenPlayers = 22;
         beginning = transform.position;
-        
-        
     }
-    
+
 
     private void Update()
     {
@@ -60,10 +47,10 @@ public class CameraMovement : MonoBehaviour
             }
             catch (NullReferenceException)
             {
-                    
+
             }
         }
-        
+
         if (playerBot == null)
         {
             try
@@ -72,93 +59,54 @@ public class CameraMovement : MonoBehaviour
             }
             catch (NullReferenceException)
             {
-                    
+
             }
         }
 
         if (playerTop != null && playerBot != null)
         {
-        
-            if (horizontalLeft || horizontalRight)
-            { 
+
+            if (horizontalWithMaxDistance)
+            {
                 camPos = transform.position.x;
                 playerTopPos = playerTop.transform.position.x;
                 playerBotPos = playerBot.transform.position.x;
-        
-                
+
+
                 // Debug.Log(playerTop.transform.position.x);
                 distanceBetweenPlayers = playerTopPos - playerBotPos;
                 if (distanceBetweenPlayers < 0)
                     distanceBetweenPlayers = -distanceBetweenPlayers;
-        
-                if (horizontalRight)
+
+
+                if (camPos >= endTilePos && (playerTopPos < camPos && playerBotPos < camPos))
+                    follow = true;
+
+                else if (camPos >= endTilePos)
+                    follow = false;
+
+                else if (distanceBetweenPlayers >= maxDistanceBetweenPlayers)
+                    follow = false;
+
+
+                else if (camPos > beginning.x)
                 {
-                    if (camPos >= endTilePos && (playerTopPos < camPos && playerBotPos < camPos))
-                        follow = true;
-                
-                    else if (camPos >= endTilePos)
-                        follow = false;
-                
-                    else if (distanceBetweenPlayers >= maxDistanceBetweenPlayers)
-                        follow = false;
-                
-                            
-                    else if (camPos > beginning.x)
-                    {
-                        follow = true;
-                    }
-                            
-                    else if (playerTopPos > beginning.x && playerBotPos > beginning.x && camPos <= beginning.x)
-                        follow = true;
-                
-                    // si les deux joueurs sont à gauche de l'écran au début on ne follow pas
-                    else if (playerTopPos < beginning.x || playerBotPos < beginning.x && camPos <= beginning.x)
-                        follow = false;
+                    follow = true;
                 }
-                else if (horizontalLeft)
-                {
-                    if (camPos <= endTilePos && (playerTopPos > camPos && playerBotPos > camPos))
-                        follow = true;
-                
-                    else if (camPos <= endTilePos)
-                        follow = false;
-                
-                    else if (distanceBetweenPlayers >= maxDistanceBetweenPlayers)
-                        follow = false;
-                
-                            
-                    else if (camPos < beginning.x)
-                    {
-                        follow = true;
-                    }
-                            
-                    else if (playerTopPos < beginning.x && playerBotPos < beginning.x && camPos >= beginning.x)
-                        follow = true;
-                
-                    // si les deux joueurs sont à gauche de l'écran au début on ne follow pas
-                    else if (playerTopPos > beginning.x || playerBotPos > beginning.x && camPos >= beginning.x)
-                        follow = false;
-                }
+
+                else if (playerTopPos > beginning.x && playerBotPos > beginning.x && camPos <= beginning.x)
+                    follow = true;
+
+                // si les deux joueurs sont à gauche de l'écran au début on ne follow pas
+                else if (playerTopPos < beginning.x || playerBotPos < beginning.x && camPos <= beginning.x)
+                    follow = false;
             }
-        //
-        //     // else if (verticalUp)
-        //     // {
-        //     //     playerTop.GetComponent<PlayerMovement>().SetCamToVerticalUp();
-        //     //     playerBot.GetComponent<PlayerMovement>().SetCamToVerticalUp();
-        //     // }
-        //     // else if (verticalDown)
-        //     // {
-        //     //     playerTop.GetComponent<PlayerMovement>().SetCamToVerticalDown();
-        //     //     playerBot.GetComponent<PlayerMovement>().SetCamToVerticalDown();
-        //     // }
-        //
-        //     
         }
     }
 
     void LateUpdate()
     {
-        if (horizontalLeft || horizontalRight)
+        if (horizontalLeft || horizontalRight || horizontalWithMaxDistance)
         {
             if (playerTop != null && playerBot != null)
             {
@@ -175,34 +123,31 @@ public class CameraMovement : MonoBehaviour
     
     public void FollowPlayerHorizontallyRight(GameObject player)
     {
+
+        Vector3 temp = new Vector3(player.transform.position.x, transform.position.y, -10);
         if (player.transform.position.x > beginning.x)
         {
-            Vector3 temp = new Vector3(player.transform.position.x, transform.position.y, -10);
-            if (player.transform.position.x > beginning.x)
-            {
-                transform.position = temp;
-            }
-            else
-            {
-                transform.position = new Vector3(beginning.x, beginning.y, -10);
-            }
+            transform.position = temp;
         }
+        else
+        {
+            transform.position = new Vector3(beginning.x, beginning.y, -10);
+        }
+
     }
     
     public void FollowPlayerHorizontallyLeft(GameObject player)
     {
+
+        Vector3 temp = new Vector3(player.transform.position.x, transform.position.y, -10);
         if (player.transform.position.x < beginning.x)
         {
-            Vector3 temp = new Vector3(player.transform.position.x, transform.position.y, -10);
-            if (player.transform.position.x < beginning.x)
-            {
-                transform.position = temp;
-            }
-            else
-            {
-                transform.position = new Vector3(beginning.x, beginning.y, -10);
-            }
-        } 
+            transform.position = temp;
+        }
+        else
+        {
+            transform.position = new Vector3(beginning.x, beginning.y, -10);
+        }
     }
     
     
@@ -242,7 +187,6 @@ public class CameraMovement : MonoBehaviour
     {
         Vector3 temp = new Vector3(player.transform.position.x, player.transform.position.y + 8, -10);
         transform.position = temp;
-            
     }
     
     
