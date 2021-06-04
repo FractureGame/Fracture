@@ -143,6 +143,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        
+        
+        
         if (other.gameObject.CompareTag("Player")) {
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
         }

@@ -89,7 +89,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5850799690343737795}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.26, z: 0}
+  m_LocalPosition: {x: 0, y: 1.235, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5985998844229360683}
@@ -254,13 +254,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 150
   currentHealth: 0
+  enemyDamage: 30
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 512
   linearDrag: 1
   gravity: 0
   fallMultiplier: 0
-  enemyDamage: 30
 --- !u!114 &8314020947102869202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,8 +279,13 @@ MonoBehaviour:
   - {fileID: 8564931509833369960}
   - {fileID: 2201281025638510494}
   canPatrol: 1
+  canChase: 1
   facingRight: 1
   isStunned: 0
+  isRocket: 0
+  escortBlobKing: 0
+  readyToCarryKingBlob: 0
+  ignition: 0
 --- !u!114 &8405110886284905481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,7 +391,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 6200000, guid: ba3c14a624458a446a355fe0dc2e214b, type: 2}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.00000047683716, y: 0.7278385}

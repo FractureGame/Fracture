@@ -7,43 +7,40 @@ public class FireBall : MonoBehaviour
 {
 
 
-    private Vector3 playerPos;
+    private Vector2 beginning;
     private float speed = 10;
     private BoxCollider2D BoxCollider2D;
     private Rigidbody2D rigidbody2D;
     public GameObject explosionPrefab;
+    private CircleCollider2D circleCollider2D;
     public int dmg = 30;
     
     // Start is called before the first frame update
     void Start()
     {
-        playerPos = GameObject.Find("Canon").GetComponent<CanonAI>().GetPlayerToFollowPos();
-        rigidbody2D = GetComponent<Rigidbody2D>();
-        // GetComponent<Rigidbody2D>().velocity = playerPos * speed;
+        beginning = transform.position;
+        circleCollider2D = GetComponent<CircleCollider2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // if (Vector2.Distance(transform.position, playerPos) <= 0)
-        // {
-        //     playerPos *= 2;
-        // }
-        transform.position = Vector2.MoveTowards(transform.position, playerPos, speed * Time.deltaTime);
-        transform.Rotate(0,0,20*Time.deltaTime);
+
     }
     
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        // Explode
-        Debug.Log(other.gameObject.name);
+        if (other.gameObject.CompareTag("Enemies"))
+        {
+            Destroy(gameObject);
+        }
         if (other.gameObject.CompareTag("Player"))
         {
             other.gameObject.GetComponent<PlayerMovement>().TakeDamage(dmg);
             Destroy(gameObject);
         }
-        else if (other.gameObject.CompareTag("Platform"))
+        else if (Vector2.Distance(transform.position, beginning) > 1 && other.gameObject.CompareTag("Platform") || other.gameObject.CompareTag("Danger"))
         {
             Destroy(gameObject);
         }

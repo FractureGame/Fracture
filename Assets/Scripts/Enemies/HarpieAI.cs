@@ -238,7 +238,11 @@ public class HarpieAI : MonoBehaviourPunCallbacks
 
                 if (canChase)
                 {
-                    if (Vector2.Distance(transform.position, playerToFollowPos) < distance &&
+                    if (Vector2.Distance(transform.position, playerToFollowPos) <= 0.3)
+                    {
+                        // playerToFollow.GetComponent<PlayerMovement>().TakeDamage(GetComponent<Enemy>().enemyDamage);
+                    }
+                    else if (Vector2.Distance(transform.position, playerToFollowPos) < distance &&
                         playerToFollow.GetComponent<PlayerMovement>().isDead == false)
                     {
                         isPatrolling = false;
