@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
@@ -15,6 +14,7 @@ namespace Com.MyCompany.MyGame
         public GameObject playerTopPrefab;
         public GameObject playerBotPrefab;
         public GameObject Enemylifebar;
+        public GameObject BossLifeBar;
         
         
         #endregion
@@ -115,16 +115,29 @@ namespace Com.MyCompany.MyGame
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
             foreach (var enemy in enemies)
             {
-                GameObject e = Instantiate(Enemylifebar, GameObject.Find("Canvas").transform);
-                e.name = enemy.name + "LifeBar";
-                e.tag = "LifeBar";
-                e.transform.position = new Vector3(enemy.GetComponentInChildren<BoxCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
+                Debug.Log(enemy.name);
+                if (enemy.name == "RoiBlob")
+                {
+                    // GameObject e = Instantiate(BossLifeBar, GameObject.Find("Canvas").transform);
+                    // e.name = enemy.name + "LifeBar";
+                    // e.tag = "LifeBar";
+                    // // e.transform.position = BossLifeBar.transform.position;
+                    // e.transform.position = new Vector3(enemy.GetComponentInChildren<PolygonCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
+                }
+                else
+                {
+                    GameObject e = Instantiate(Enemylifebar, GameObject.Find("Canvas").transform);
+                    e.name = enemy.name + "LifeBar";
+                    e.tag = "LifeBar";
+                    e.transform.position = new Vector3(enemy.GetComponentInChildren<BoxCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
+                }
+                
             }
             
             
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            if (SceneManager.GetActiveScene().name == "HLevel1")
+            if (SceneManager.GetActiveScene().name == "Level1")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -135,7 +148,7 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(8f, 2f,0f), Quaternion.identity, 0);
                 } 
             }
-            else if (SceneManager.GetActiveScene().name == "HLevel2")
+            else if (SceneManager.GetActiveScene().name == "Level2")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -146,7 +159,7 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(6f, 1f,0f), Quaternion.identity, 0);
                 }
             }
-            else if (SceneManager.GetActiveScene().name == "VLevel3")
+            else if (SceneManager.GetActiveScene().name == "Level3")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -157,27 +170,51 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(22f, 2.5f,0f), Quaternion.identity, 0);
                 }
             }
+            else if (SceneManager.GetActiveScene().name == "VLevel8")
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(6.5f, 2.5f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(22f, 2.5f,0f), Quaternion.identity, 0);
+                }
+            }
+            else if (SceneManager.GetActiveScene().name == "BossRoom")
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(-15f, 3f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(-15f, -10f,0f), Quaternion.identity, 0);
+                }
+            }
         }
 
         private void Update()
         {
-            foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
-            {
-                if (GameObject.Find(enemy.name + "LifeBar") == null)
-                {
-                    PhotonNetwork.Destroy(enemy);
-                }
-            }
-            
-            foreach (var lifebar in GameObject.FindGameObjectsWithTag("LifeBar"))
-            {
-                if (GameObject.Find(lifebar.name.Replace("LifeBar", "")) == null)
-                {
-                    PhotonNetwork.Destroy(lifebar);
-                }
-            }
-            
-            
+            // foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
+            // {
+            //     if (enemy.GetComponentInChildren<Enemy>().currentHealth <= 0)
+            //     {
+            //         Destroy(enemy);
+            //     }
+            //     if (GameObject.Find(enemy.name + "LifeBar") == null)
+            //     {
+            //         Destroy(enemy);
+            //     }
+            // }
+            //
+            // foreach (var lifebar in GameObject.FindGameObjectsWithTag("LifeBar"))
+            // {
+            //     if (GameObject.Find(lifebar.name.Replace("LifeBar", "")) == null)
+            //     {
+            //         Destroy(lifebar);
+            //     }
+            // }
         }
     }
 }

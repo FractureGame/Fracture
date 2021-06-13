@@ -10,6 +10,9 @@ public class Enemy : MonoBehaviour
     private bool isGrounded = false;
     private GameObject lifebar;
 
+    [Header("Damage")]
+    public int enemyDamage;
+    
     private Rigidbody2D rigidbody2d;
     private BoxCollider2D boxCollider2d;
     [SerializeField] private LayerMask platformLayerMask;
@@ -18,8 +21,9 @@ public class Enemy : MonoBehaviour
     public float linearDrag;
     public float gravity;
     public float fallMultiplier;
-    
 
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -27,13 +31,12 @@ public class Enemy : MonoBehaviour
         {
             rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         }
-        catch (Exception e)
+        catch (Exception)
         {
         }
         
         boxCollider2d = gameObject.GetComponent<BoxCollider2D>();
         currentHealth = maxHealth;
-        Debug.Log(transform.parent.name);
         // lifebar = GameObject.Find("Canvas").transform.Find(transform.parent.name + "LifeBar").gameObject;
     }
 
@@ -47,7 +50,7 @@ public class Enemy : MonoBehaviour
             rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
             modifyPhysics();
         }
-        catch (Exception e)
+        catch (Exception)
         {
         }
         
@@ -57,9 +60,13 @@ public class Enemy : MonoBehaviour
         try
         {
             lifebar = GameObject.Find("Canvas").transform.Find(transform.parent.name + "LifeBar").gameObject;
-            lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
+            if (transform.parent.name != "RoiBlob")
+            {
+                lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
+            }
+            
         }
-        catch (Exception e)
+        catch (Exception)
         {
             
         }
@@ -91,6 +98,10 @@ public class Enemy : MonoBehaviour
         lifebar.GetComponent<HPBar>().SetHealth(currentHealth);
         
         // Play hurt animation
+        if (transform.parent.name.StartsWith("Harpie"))
+        {
+            GetComponent<HarpieAI>().PushBack();
+        }
         
         if (currentHealth <= 0)
         {
@@ -103,7 +114,9 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         Debug.Log("Enemy Died " + gameObject.name);
-        PhotonNetwork.Destroy(gameObject);
+        Destroy(gameObject.transform.parent.gameObject);
+        // Destroy(gameObject);
+        // PhotonNetwork.Destroy(gameObject);
     }
     
 }

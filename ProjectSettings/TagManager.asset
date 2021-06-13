@@ -9,6 +9,10 @@ TagManager:
   - Victory
   - LifeBar
   - Pieds
+  - Danger
+  - Platform
+  - Button
+  - FireBall
   layers:
   - Default
   - TransparentFX
@@ -23,8 +27,8 @@ TagManager:
   - WeakSpot
   - Walls
   - Danger
-  - 
-  - 
+  - Ladders
+  - Players
   - 
   - 
   - 

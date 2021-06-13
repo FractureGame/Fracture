@@ -5,6 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEditor.Experimental;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
@@ -26,6 +27,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private BoxCollider2D boxCollider2d;
     [SerializeField] private LayerMask platformLayerMask;
     [SerializeField] private LayerMask dangerLayerMask;
+    [SerializeField] private LayerMask laddersLayerMask;
     
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
@@ -62,7 +64,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Attack")]
     private bool isAttacking = false;
     public Transform attackPoint;
-    public float attackRange = 0.5f;
+    public float attackRange = 1.4f;
     public LayerMask enemyLayers;
     public int attackDamage = 40;
     private float ATTACK_COOLDOWN = 0.3f;
@@ -88,21 +90,25 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public Animator animator;
     
     [Header("Scene")]
-    private float beginX;
-    private float endX;
-    private float beginY;
-    private float endY;
     private bool horizontal;
+    private bool both;
 
     [Header("Particles Systems")] 
     public ParticleSystem bloodEffect;
     
     
-    [Header(("Damaege"))]
+    [Header(("Damage"))]
     private bool isInvincible = false; // triggered when enemy contact
     private int dangerousTilesDmg = 30;
 
+    [Header("Cameras")] 
+    private GameObject[] cameras;
+    private int cameraIndex;
+
+
     public AudioManager am;
+    
+    
     private void Start()
     {
         am = FindObjectOfType<AudioManager>();
@@ -114,15 +120,20 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         attackCooldownStatus = 0f;
         animator = GetComponentInChildren<Animator>();
         switchCooldownStatus = 0f;
-        if (SceneManager.GetActiveScene().name[0] == 'H')
-        {
-            horizontal = true;
-        }
-        else if (SceneManager.GetActiveScene().name[0] == 'V')
-        {
-            horizontal = false;
-        }
+        // if (SceneManager.GetActiveScene().name[0] == 'H')
+        // {
+        //     horizontal = true;
+        // }
+        // else if (SceneManager.GetActiveScene().name[0] == 'V')
+        // {
+        //     horizontal = false;
+        // }
+        // else
+        // {
+        //     both = true;
+        // }
 
+        cameras = Camera.main.GetComponent<CameraMovement>().cameras;
     }
 
     private void OnDestroy()
@@ -132,15 +143,65 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        
+        
+        
         if (other.gameObject.CompareTag("Player")) {
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
         }
 
         if (other.gameObject.CompareTag("Pieds"))
         {
+            Debug.LogFormat("COLLISION : {0}", other.gameObject.transform.parent.parent.name);
+
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+            
+        
         }
+
+        // if (other.gameObject.CompareTag("Button"))
+        // {
+            // Debug.Log("DAMN");
+            // GameObject grid = GameObject.Find("Grid");
+            // Tilemap tilemap = grid.transform.GetChild(1).GetComponent<Tilemap>();
+            // BoundsInt bounds = tilemap.cellBounds;
+            // TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
+            //
+            // for (int x = 0; x < bounds.size.x; x++) {
+            //     for (int y = 0; y < bounds.size.y; y++) {
+            //         TileBase tile = allTiles[x + y * bounds.size.x];
+            //         if (tile != null) {
+            //             tilemap.SetTile(tilemap.WorldToCell(new Vector2(x, y)), null);
+            //         }
+            //     }
+            // }
+            // photonView.RPC("DestroyTileMap", RpcTarget.All, "Destroy" + other.gameObject.name[other.gameObject.name.Length-1]);
+        // }
+        
     }
+
+    // [PunRPC]
+    // private void DestroyTileMap(string tilemapName)
+    // {
+    //     GameObject grid = GameObject.Find("Grid");
+    //     Debug.Log(grid.transform.Find(tilemapName).gameObject.name);
+    //     Destroy(grid.transform.Find(tilemapName).gameObject);
+        // Tilemap tilemap = grid.transform.GetChild(1).GetComponent<Tilemap>();
+        // Debug.Log(tilemap.name);
+        // BoundsInt bounds = tilemap.cellBounds;
+        // TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
+        //
+        // for (int x = 0; x < bounds.size.x; x++) {
+        //     for (int y = 0; y < bounds.size.y; y++) {
+        //         TileBase tile = allTiles[x + y * bounds.size.x];
+        //         if (tile != null) {
+        //             tilemap.SetTile(tilemap.WorldToCell(new Vector2(x, y)), null);
+        //         }
+        //     }
+        // }
+    //     GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().direction = Vector2.zero;
+    //     GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().direction = Vector2.zero;
+    // }
 
     private void Update()
     {        
@@ -376,7 +437,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void ChangeBodyVisibility(string playerName, float r, float g, float b, float a)
     {
         GameObject playerSprite = GameObject.Find(playerName).transform.GetChild(1).gameObject;
-        for (int i = 1; i <= 6; i++)
+        for (int i = 0; i < 6; i++)
         {
             playerSprite.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
         }
@@ -496,13 +557,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void FixedUpdate()
     {
         if (isDead)
+        {
             return;
+        }
 
-
-
-        
-        
-        
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)
         {
@@ -512,12 +570,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle Movement
         if (!isWallSliding)
         {
-            
             Move();
             modifyPhysics();
         }
         else
         {
+            am.StopSound("Walk");
+            if (nbJump < 2)
+            {
+                nbJump = 0;
+            }
             WallSlide();
         }
         
@@ -534,6 +596,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (isAttacking && !isWallSliding)
         {
             animator.SetTrigger("attack");
+
+            // animator.ResetTrigger("attack");
             animator.SetBool("isAttacking", true);
             Attack();
             attackCooldownStatus = ATTACK_COOLDOWN;
@@ -564,22 +628,18 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
 
         Collider2D onTouchEnemy = IsTouchingEnemy();
-        if (onTouchEnemy != null)
+        if (onTouchEnemy != null && onTouchEnemy.gameObject.name != "RoiBlob" && onTouchEnemy.gameObject.transform.parent.name != "RoiBlob")
         {
-            if (onTouchEnemy.transform.parent.name.StartsWith("Harpie"))
-            {
-                TakeDamage(onTouchEnemy.transform.GetComponentInChildren<HarpieAI>().enemyDamage);
-            }
-            else
-            {
-                TakeDamage(onTouchEnemy.transform.GetComponentInChildren<EnemyPatrol>().enemyDamage);
-            }
-            
+            TakeDamage(onTouchEnemy.transform.GetComponentInChildren<Enemy>().enemyDamage);
         }
-        
-        
     }
-    
+
+    private void OnParticleCollision(GameObject other)
+    {
+        TakeDamage(10);
+    }
+
+
     private void LateUpdate()
     {
         if (isDead)
@@ -587,9 +647,90 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (photonView.IsMine)
         {
-            if (!horizontal)
+            if (SceneManager.GetActiveScene().name == "BossRoom")
             {
-                Camera.main.GetComponent<CameraMovement>().FollowPlayer(gameObject);
+
+                if (transform.position.x > 184)
+                {
+                    if (cameras[3].activeSelf == false)
+                    {
+                        cameras[4].SetActive(false);
+                        cameras[2].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[3].SetActive(true);
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[3].GetComponent<Camera>();
+                    }
+                }
+                
+                else if (transform.position.y < -62)
+                {
+                    if (cameras[2].activeSelf == false)
+                    {
+                        cameras[4].SetActive(false);
+                        cameras[3].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[2].SetActive(true);
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[2].GetComponent<Camera>();
+                    }
+                }
+                
+
+                else if (transform.position.y < -11)
+                {
+                    if (cameras[1].activeSelf == false)
+                    {
+                        cameras[4].SetActive(false);
+                        cameras[3].SetActive(false);
+                        cameras[2].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[1].SetActive(true);
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[1].GetComponent<Camera>();
+                    }
+                }
+                
+                else if (transform.position.x > 82)
+                {
+                    if (cameras[0].activeSelf == false)
+                    {
+                        cameras[4].SetActive(false);
+                        cameras[3].SetActive(false);
+                        cameras[2].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(true);
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[0].GetComponent<Camera>();
+                    }
+                }
+                else
+                {
+                    if (cameras[4].activeSelf == false)
+                    {
+                        
+                        cameras[3].SetActive(false);
+                        cameras[2].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[4].SetActive(true);
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[4].GetComponent<Camera>();
+                    }
+                }
+            }
+            if (Camera.current.GetComponent<CameraMovement>().horizontalLeft)
+            {
+                Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyLeft(gameObject);
+            }
+            else if (Camera.current.GetComponent<CameraMovement>().horizontalRight)
+            {
+                Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyRight(gameObject);
+            }
+            else if (Camera.current.GetComponent<CameraMovement>().verticalUp)
+            {
+                Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
+            }
+            else if (Camera.current.GetComponent<CameraMovement>().verticalDown)
+            {
+                Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
             }
         }
     }
@@ -604,6 +745,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
                 extraHeightText, dangerLayerMask);
         }
+        if (boxCastHit.collider == null)
+        { 
+            boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
+                extraHeightText, laddersLayerMask);
+        }
         
         return boxCastHit.collider != null;
     }
@@ -612,11 +758,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         float extraHeightText = 0.2f;
         RaycastHit2D boxCastHitRight = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.right,
-            extraHeightText, platformLayerMask);
+            extraHeightText, laddersLayerMask);
         if (boxCastHitRight.collider != null)
             return Vector2.right;
         RaycastHit2D boxCastHitLeft = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.left,
-            extraHeightText, platformLayerMask);
+            extraHeightText, laddersLayerMask);
         if (boxCastHitLeft.collider != null)
             return Vector2.left;
 
@@ -695,6 +841,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    // public void SetCamToVerticalUp()
+    // {
+    //     Camera.main.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
+    // }
+    // public void SetCamToVerticalDown()
+    // {
+    //     Camera.main.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
+    // }
     
     public void Jump()
     {
@@ -722,7 +877,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         jumpTimer = 0;
         lastInterestingDir = direction;
-        am.PlaySound("Jump");
+        try
+        {
+            am.PlaySound("Jump");
+
+        }
+        catch (Exception)
+        {
+        }
     }
 
     [PunRPC]
@@ -794,14 +956,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Instantiate(bloodEffect, pos, Quaternion.identity);
     }
 
-
-    // private void OnCollisionStay2D(Collision2D other)
-    // {
-    //     if (other.transform.parent.CompareTag("Enemies"))
-    //     {
-    //         animator.ResetTrigger("attack");
-    //     }
-    // }
+    
 
     private void Attack()
     {
@@ -809,27 +964,26 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
         // Damage them
-
-        List<string> enemyNames = new List<string>();
         
-        Debug.Log(hitEnemies.Length);
+        
+        // Debug.Log(hitEnemies.Length);
         foreach (var enemy in hitEnemies)
         {
-            if (enemyNames.Contains(enemy.name) == false)
+
+
+            Debug.Log("We hit " + enemy.transform.parent.name);
+
+            if (!hasAttacked)
             {
-                enemyNames.Add(enemy.name);
-
-                Debug.Log("We hit " + enemy.transform.parent.name);
-
-                if (!hasAttacked)
-                {
-                    int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
-                    photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
-                    photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
-                    hasAttacked = true;
-                }
+                int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                
+                photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
+                photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
+                
             }
+            
         }
+        hasAttacked = true;
     }
 
     [PunRPC]
@@ -843,7 +997,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
-            Debug.Log(enemyName);
             GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
             bar.GetComponent<HPBar>().SetHealth(0);
             Destroy(bar);
@@ -854,7 +1007,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [PunRPC]
     private void KillEnemy(string enemyName)
     {
-        Debug.Log(enemyName);
         GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
         bar.GetComponent<HPBar>().SetHealth(0);
         Destroy(bar);
