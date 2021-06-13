@@ -218,6 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe4e3f429f22ff45a3c8e7361d275ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalWithMaxDistance: 0
   horizontalLeft: 0
   horizontalRight: 1
   verticalUp: 0
@@ -444,6 +445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe4e3f429f22ff45a3c8e7361d275ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalWithMaxDistance: 0
   horizontalLeft: 0
   horizontalRight: 1
   verticalUp: 0
@@ -615,6 +617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe4e3f429f22ff45a3c8e7361d275ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalWithMaxDistance: 0
   horizontalLeft: 0
   horizontalRight: 0
   verticalUp: 0
@@ -27534,6 +27537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe4e3f429f22ff45a3c8e7361d275ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalWithMaxDistance: 0
   horizontalLeft: 0
   horizontalRight: 0
   verticalUp: 1
@@ -37475,6 +37479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe4e3f429f22ff45a3c8e7361d275ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalWithMaxDistance: 0
   horizontalLeft: 0
   horizontalRight: 0
   verticalUp: 0
@@ -37611,6 +37616,7 @@ GameObject:
   - component: {fileID: 9109332483900628168}
   - component: {fileID: 9109332483900628169}
   - component: {fileID: 9109332483900628170}
+  - component: {fileID: 9109332483900628171}
   m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
@@ -37796,6 +37802,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a970f48fa7732eef91bad605da46783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9109332483900628171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9109332483900628164}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 812d291a29b994c0c9f425bbf719b38a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  platformLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!114 &9109332483900628792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37832,7 +37853,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 50
+  m_Mass: 5
   m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 1
