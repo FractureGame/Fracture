@@ -265,7 +265,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                 playerTopsign.transform.position = playerTop.transform.position + Vector3.up * 1.5f;
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
             
         }
@@ -334,7 +334,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                 playerBot.GetComponent<TrailRenderer>().time = 0.6f;
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 
             }
@@ -544,7 +544,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public void SetHealthBar(int value, string barName)
     {
         GameObject bar = GameObject.Find(barName);
-        bar.GetComponent<HPBar>().SetHealth(value);
+        if (value < bar.GetComponent<HPBar>().slider.value)
+        {
+            bar.GetComponent<HPBar>().SetHealth(value);
+        }
+        
     }
 
     private void Flip()
@@ -660,6 +664,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[0].SetActive(false);
                         cameras[3].SetActive(true);
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[3].GetComponent<Camera>();
+                        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[3].GetComponent<Camera>();
                     }
                 }
                 
@@ -673,6 +678,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[0].SetActive(false);
                         cameras[2].SetActive(true);
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[2].GetComponent<Camera>();
+                        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[2].GetComponent<Camera>();
                     }
                 }
                 
@@ -687,6 +693,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[0].SetActive(false);
                         cameras[1].SetActive(true);
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[1].GetComponent<Camera>();
+                        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[1].GetComponent<Camera>();
                     }
                 }
                 
@@ -700,6 +707,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[1].SetActive(false);
                         cameras[0].SetActive(true);
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[0].GetComponent<Camera>();
+                        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[0].GetComponent<Camera>();
                     }
                 }
                 else
@@ -713,6 +721,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[0].SetActive(false);
                         cameras[4].SetActive(true);
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[4].GetComponent<Camera>();
+                        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[4].GetComponent<Camera>();
                     }
                 }
             }

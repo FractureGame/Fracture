@@ -55,21 +55,17 @@ public class Enemy : MonoBehaviour
         }
         
         
-
-
-        try
+        if (transform.parent.name != "RoiBlob" && transform.parent.name != "BomberHarpie")
         {
             lifebar = GameObject.Find("LifeBars").transform.Find(transform.parent.name + "LifeBar").gameObject;
-            if (transform.parent.name != "RoiBlob")
-            {
-                lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
-            }
-            
+            lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
         }
-        catch (Exception)
+        else if (transform.parent.name == "RoiBlob")
         {
-            
+            lifebar = GameObject.Find("Canvas").transform.Find(transform.parent.name + "LifeBar").gameObject;
         }
+            
+
         
         
     }
@@ -95,9 +91,17 @@ public class Enemy : MonoBehaviour
     public int TakeDamage(int damage)
     {
         currentHealth -= damage;
-        lifebar.GetComponent<HPBar>().SetHealth(currentHealth);
+        if (transform.parent.name.StartsWith("RoiBlob"))
+        {
+            
+        }
+        else
+        {
+            lifebar.GetComponent<HPBar>().SetHealth(currentHealth);
+        }
+
         
-        // Play hurt animation
+        
         if (transform.parent.name.StartsWith("Harpie"))
         {
             GetComponent<HarpieAI>().PushBack();

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1318256181048250136}
   - component: {fileID: 1318256181048250143}
   - component: {fileID: 1318256181048250142}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: throwBlobsParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4825,7 +4825,7 @@ GameObject:
   - component: {fileID: 9111709439894464079}
   - component: {fileID: 7710054349794335153}
   - component: {fileID: 3119885417224161757}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: ExplosionParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
