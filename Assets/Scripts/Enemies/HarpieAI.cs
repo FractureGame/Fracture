@@ -110,21 +110,22 @@ public class HarpieAI : MonoBehaviourPunCallbacks
             }
             else
             {
-                blobKing = GameObject.Find("RoiBlob");
-                if (escortBlobKing)
-                {
-                    if (Vector2.Distance(transform.position, waypoints[1].position) <= 0)
-                    {
-                        transform.Rotate(0, 180, 0);
-                        readyToCarryKingBlob = true;
-                    }
-                    else
-                    {
-                        transform.position = Vector2.MoveTowards(transform.position, waypoints[1].transform.position,
-                            speedEnemy * Time.deltaTime);
-                    }
-                
-                }
+                readyToCarryKingBlob = true;
+                // blobKing = GameObject.Find("RoiBlob");
+                // if (escortBlobKing)
+                // {
+                //     if (Vector2.Distance(transform.position, waypoints[1].position) <= 0)
+                //     {
+                //         transform.Rotate(0, 180, 0);
+                //         readyToCarryKingBlob = true;
+                //     }
+                //     else
+                //     {
+                //         transform.position = Vector2.MoveTowards(transform.position, waypoints[1].transform.position,
+                //             speedEnemy * Time.deltaTime);
+                //     }
+                //
+                // }
             }
 
             
