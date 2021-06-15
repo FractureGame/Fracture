@@ -997,7 +997,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
-            GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
+            GameObject bar = GameObject.Find("LifeBars").transform.Find(enemyName + "LifeBar").gameObject;
             bar.GetComponent<HPBar>().SetHealth(0);
             Destroy(bar);
         }
@@ -1007,7 +1007,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [PunRPC]
     private void KillEnemy(string enemyName)
     {
-        GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
+        GameObject bar = GameObject.Find("LifeBars").transform.Find(enemyName + "LifeBar").gameObject;
         bar.GetComponent<HPBar>().SetHealth(0);
         Destroy(bar);
     }

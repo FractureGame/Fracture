@@ -59,7 +59,7 @@ public class Enemy : MonoBehaviour
 
         try
         {
-            lifebar = GameObject.Find("Canvas").transform.Find(transform.parent.name + "LifeBar").gameObject;
+            lifebar = GameObject.Find("LifeBars").transform.Find(transform.parent.name + "LifeBar").gameObject;
             if (transform.parent.name != "RoiBlob")
             {
                 lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);

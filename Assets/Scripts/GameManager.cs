@@ -126,7 +126,7 @@ namespace Com.MyCompany.MyGame
                 }
                 else
                 {
-                    GameObject e = Instantiate(Enemylifebar, GameObject.Find("Canvas").transform);
+                    GameObject e = Instantiate(Enemylifebar, GameObject.Find("LifeBars").transform);
                     e.name = enemy.name + "LifeBar";
                     e.tag = "LifeBar";
                     e.transform.position = new Vector3(enemy.GetComponentInChildren<BoxCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
