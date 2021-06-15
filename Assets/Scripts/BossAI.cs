@@ -59,7 +59,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     [Header("Jump")]
     private float jumpCD = 5f;
     private float jumpCDStatus;
-    private float jumpVelocity = 20f;
+    private float jumpVelocity = 200f;
     private float jumpHeight = 8f;
     private Vector2 jumpDest;
     private bool falling;
@@ -154,10 +154,10 @@ public class BossAI : MonoBehaviourPunCallbacks
         
         
 
-        if (movingToPhase2)
-        {
-            rigidbody2d.isKinematic = true;
-        }
+        // if (movingToPhase2)
+        // {
+        //     rigidbody2d.isKinematic = true;
+        // }
 
         currentHealth = GetComponent<Enemy>().currentHealth;
         isGrounded = IsGrounded();
@@ -175,14 +175,6 @@ public class BossAI : MonoBehaviourPunCallbacks
 
             if (jumpCDStatus <= 0 && isGrounded && playerNearby)
             {
-                // Random rand = new Random();
-                // int n = rand.Next(2);
-                // int x = rand.Next(5);
-                // if (n == 0)
-                // {
-                //     x = -x;
-                // }
-                jumpDest = new Vector2(transform.position.x , transform.position.y + jumpHeight);
                 isJumping = true;
             }
             else if (jumpCDStatus > 0 && isGrounded)
@@ -192,23 +184,16 @@ public class BossAI : MonoBehaviourPunCallbacks
 
             if (isJumping)
             {
-                if (Vector2.Distance(transform.position, jumpDest) <= 1)
-                {
-                    jumpCDStatus = jumpCD;
-                    rigidbody2d.isKinematic = false;
-                    falling = true;
-                    isJumping = false;
-                }
-                else
-                {
-                    rigidbody2d.isKinematic = true;
-                    transform.position = Vector2.MoveTowards(transform.position, jumpDest, jumpVelocity * Time.deltaTime);
-                }
-            }
+                jumpCDStatus = jumpCD;
+                rigidbody2d.AddForce(jumpVelocity * Vector2.up, ForceMode2D.Impulse);
+                isJumping = false;
+                falling = true;
+                isGrounded = false;
 
+            }
+            
             if (falling && isGrounded)
             {
-                // Show the attack range with particules
                 PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(0, -5),
                     Quaternion.identity, 1);
 
@@ -247,7 +232,7 @@ public class BossAI : MonoBehaviourPunCallbacks
         {
             if (jumpCDStatus <= 0 && isGrounded && playerNearby)
             {
-                jumpDest = new Vector2(transform.position.x, transform.position.y + jumpHeight);
+                // jumpDest = new Vector2(transform.position.x, transform.position.y + jumpHeight);
                 isJumping = true;
             }
             else if (jumpCDStatus > 0 && isGrounded)
@@ -257,22 +242,16 @@ public class BossAI : MonoBehaviourPunCallbacks
 
             if (isJumping)
             {
-                if (Vector2.Distance(transform.position, jumpDest) <= 1)
-                {
-                    falling = true;
-                    jumpCDStatus = jumpCD;
-                    rigidbody2d.isKinematic = false;
-                    nbJump += 1;
-                    isJumping = false;
-                }
-                else
-                {
-                    rigidbody2d.isKinematic = true;
-                    transform.position = Vector2.MoveTowards(transform.position, jumpDest, jumpVelocity * Time.deltaTime);
-                }
+                jumpCDStatus = jumpCD;
+                rigidbody2d.AddForce(jumpVelocity * Vector2.up, ForceMode2D.Impulse);
+                isJumping = false;
+                falling = true;
+                isGrounded = false;
+                
             }
             if (falling && isGrounded)
             {
+                nbJump += 1;
                 photonView.RPC("DestroyTiles", RpcTarget.All);
                 PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(transform.position.x, transform.position.y - 3),
                     Quaternion.identity, 1);
@@ -282,9 +261,8 @@ public class BossAI : MonoBehaviourPunCallbacks
             
             
         }
-        else if (phase2 && nbJump >= nbJumpBeforeDestruction && rigidbody2d.IsTouchingLayers(platformLayerMask))
+        else if (phase2 && nbJump >= nbJumpBeforeDestruction && isGrounded)
         {
-            rigidbody2d.isKinematic = false;
             photonView.RPC("DestroyCastleAndGround", RpcTarget.All);
             phase2 = false;
             movingToPhase3 = true;
@@ -309,7 +287,7 @@ public class BossAI : MonoBehaviourPunCallbacks
 
         if (phase3)
         {
-            rigidbody2d.isKinematic = true;
+            // rigidbody2d.isKinematic = true;
             // StopCoroutine(coroutine);
             // CALL THE HARPIES
             if (!hasCalledHarpies)
