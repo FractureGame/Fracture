@@ -23,7 +23,7 @@ public class CanonAI : MonoBehaviour
     void Start()
     {
         fireCDStatus = fireCD;
-        horizontal = Camera.main.GetComponent<CameraMovement>().horizontalLeft || Camera.main.GetComponent<CameraMovement>().horizontalRight;
+        horizontal = Camera.main.GetComponent<CameraMovement>().horizontalLeft || Camera.main.GetComponent<CameraMovement>().horizontalRight || Camera.main.GetComponent<CameraMovement>().horizontalWithMaxDistance;
         if (horizontal)
         {
             if (transform.position.y > GameObject.Find("Main Camera").transform.position.y)
