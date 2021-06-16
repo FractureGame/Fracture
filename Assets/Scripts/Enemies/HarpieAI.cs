@@ -95,6 +95,7 @@ public class HarpieAI : MonoBehaviourPunCallbacks
     {
         if (isRocket)
         {
+            blobKing = GameObject.Find("RoiBlob");
             if (ignition)
             {
                 Vector2 dest = new Vector2(transform.position.x, blobKing.GetComponentInChildren<BossAI>().waypoints[2].transform.position.y);

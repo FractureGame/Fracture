@@ -12,6 +12,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     private bool isGrounded = false;
     // private GameObject lifebar;
     private int currentHealth;
+    public bool hasLost;
 
     private Rigidbody2D rigidbody2d;
     private PolygonCollider2D polygonCollider2D;
@@ -87,6 +88,11 @@ public class BossAI : MonoBehaviourPunCallbacks
         polygonCollider2D = GetComponent<PolygonCollider2D>();
         transform.position = Vector2.MoveTowards(transform.position, transform.position, speed * Time.deltaTime);
         // lifebar = GameObject.Find("Canvas").transform.Find("BossLifeBar").gameObject;
+        
+        // TEST
+        phase1 = false;
+        movingToPhase3 = true;
+        
     }
     
     
@@ -308,38 +314,45 @@ public class BossAI : MonoBehaviourPunCallbacks
             }
             
 
-            if (IsReady())
-            {
-                // Everybody moves UP at same speed
-                Vector2 dest = new Vector2(transform.position.x, waypoints[2].transform.position.y);
-                // if all harpies are dead you win, the bitch falls in lava
-                if (CheckWinCondition())
-                {
-                    phase3 = false;
-                    rigidbody2d.isKinematic = false;
-                    rigidbody2d.simulated = true;
-                    // False into the lava
-                    if (isGrounded && !hasDestroyedlast)
-                    {
-                        photonView.RPC("DestroyLastTilemap", RpcTarget.All);
-                        hasDestroyedlast = true;
-                    }
 
-                    if (isTouchingDanger())
-                    {
-                        GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
-                        gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
-                        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
-                        gameOverPanel.SetActive(true);
-                        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
-        
-                        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
-                    }
+            // Everybody moves UP at same speed
+            Vector2 dest = new Vector2(transform.position.x, waypoints[2].transform.position.y);
+            
+            
+            // if all harpies are dead you win, the bitch falls in lava
+            if (CheckWinCondition())
+            {
+                // phase3 = false;
+                hasLost = true;
+                rigidbody2d.isKinematic = false;
+                rigidbody2d.simulated = true;
+                // Switch camera for both players to blob falling into lava bitch
+                
+                // photonView.RPC("CameraFollowKing", RpcTarget.All);
+                
+                // False into the lava
+                if (isGrounded && !hasDestroyedlast)
+                {
                     
-                    
+                    photonView.RPC("DestroyLastTilemap", RpcTarget.All);
+                    hasDestroyedlast = true;
+                }
+
+                if (isTouchingDanger())
+                {
+                    GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                    gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
+                    gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
+                    gameOverPanel.SetActive(true);
+                    GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
+    
+                    GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
                 }
                 
                 
+            }
+            else
+            {
                 // MOVE UP WITH THEM
                 if (Vector2.Distance(transform.position, dest) <= 0)
                 {
@@ -349,125 +362,60 @@ public class BossAI : MonoBehaviourPunCallbacks
                     gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
                     gameOverPanel.SetActive(true);
                     GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
-        
+    
                     GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
-                    
+                
                 }
                 else
                 {
                     transform.position = Vector2.MoveTowards(transform.position, dest, escapeSpeed * Time.deltaTime);
                 }
             }
+            
+            
 
-            
-            
-            
-            // rigidbody2d.isKinematic = true;
-            // StopCoroutine(coroutine);
-            // CALL THE HARPIES
-            // if (!hasCalledHarpies)
-            // {
-            //     CallHarpies();
-            //     hasCalledHarpies = true;
-            // }
-            //
-            // if (IsReady())
-            // {
-            //     Vector2 dest = new Vector2(transform.position.x, waypoints[2].transform.position.y);
-            //     
-            //     
-            //     // if all harpies are dead you win, the bitch falls in lava
-            //     if (CheckWinCondition())
-            //     {
-            //         phase3 = false;
-            //         rigidbody2d.isKinematic = false;
-            //         // False into the lava
-            //         if (isGrounded && !hasDestroyedlast)
-            //         {
-            //             photonView.RPC("DestroyLastTilemap", RpcTarget.All);
-            //             hasDestroyedlast = true;
-            //         }
-            //
-            //         if (isTouchingDanger())
-            //         {
-            //             GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
-            //             gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
-            //             gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
-            //             gameOverPanel.SetActive(true);
-            //             GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
-            //
-            //             GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
-            //         }
-            //         
-            //         
-            //     }
-            //     
-            //     
-            //     
-            //     // MOVE UP WITH THEM
-            //     if (Vector2.Distance(transform.position, dest) <= 0)
-            //     {
-            //         // YOU LOSE
-            //         GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
-            //         gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
-            //         gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
-            //         gameOverPanel.SetActive(true);
-            //         GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
-            //
-            //         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
-            //         
-            //     }
-            //     else
-            //     {
-            //         transform.position = Vector2.MoveTowards(transform.position, dest, escapeSpeed * Time.deltaTime);
-            //     }
-            //
-            //     if (!hasCalledIgnition)
-            //     {
-            //         foreach (var rocketHarpy in rocketHarpies)
-            //         {
-            //             rocketHarpy.ignition = true;
-            //         }
-            //         hasCalledHarpies = true;
-            //     }
-            // }
         }
-        
-        // rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
-        // modifyPhysics();
-        
     }
 
 
+
+    // [PunRPC]
+    //
+    // private void CameraFollowKing()
+    // {
+    //     GameObject[] cameras = GameObject.Find("Main Camera").GetComponent<CameraMovement>().cameras;
+    //     for (int i = 0; i < 5; i++)
+    //     {
+    //         cameras[i].SetActive(false);
+    //     }
+    //     cameras[5].SetActive(true);
+    // }
+    
     private bool CheckWinCondition()
     {
         foreach (var harpie in rocketHarpies)
         {
-            if (GameObject.Find(harpie.name) != null)
+            try
             {
-                return false;
+                if (harpie.name == "Graphics")
+                {
+                    return false;
+                }
             }
-        }
-
-        return true;
-    }
-
-    private bool IsReady()
-    {
-        foreach (var rocketHarpy in rocketHarpies)
-        {
-            if (rocketHarpy.readyToCarryKingBlob == false)
+            catch (MissingReferenceException)
             {
-                return false;
+
             }
         }
         return true;
     }
+    
     private void CallHarpies()
     {
         foreach (var rocketHarpy in rocketHarpies)
         {
             rocketHarpy.transform.Find("Cable").gameObject.GetComponent<LineRenderer>().startWidth = 0.2f;
+            rocketHarpy.transform.Find("Cable").gameObject.GetComponent<LineRenderer>().endWidth = 0.2f;
             rocketHarpy.escortBlobKing = true;
         }
     }

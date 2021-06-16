@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using UnityEditor.Experimental;
 using UnityEngine.SceneManagement;
-using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
@@ -158,50 +155,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             
         
         }
-
-        // if (other.gameObject.CompareTag("Button"))
-        // {
-            // Debug.Log("DAMN");
-            // GameObject grid = GameObject.Find("Grid");
-            // Tilemap tilemap = grid.transform.GetChild(1).GetComponent<Tilemap>();
-            // BoundsInt bounds = tilemap.cellBounds;
-            // TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
-            //
-            // for (int x = 0; x < bounds.size.x; x++) {
-            //     for (int y = 0; y < bounds.size.y; y++) {
-            //         TileBase tile = allTiles[x + y * bounds.size.x];
-            //         if (tile != null) {
-            //             tilemap.SetTile(tilemap.WorldToCell(new Vector2(x, y)), null);
-            //         }
-            //     }
-            // }
-            // photonView.RPC("DestroyTileMap", RpcTarget.All, "Destroy" + other.gameObject.name[other.gameObject.name.Length-1]);
-        // }
-        
     }
-
-    // [PunRPC]
-    // private void DestroyTileMap(string tilemapName)
-    // {
-    //     GameObject grid = GameObject.Find("Grid");
-    //     Debug.Log(grid.transform.Find(tilemapName).gameObject.name);
-    //     Destroy(grid.transform.Find(tilemapName).gameObject);
-        // Tilemap tilemap = grid.transform.GetChild(1).GetComponent<Tilemap>();
-        // Debug.Log(tilemap.name);
-        // BoundsInt bounds = tilemap.cellBounds;
-        // TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
-        //
-        // for (int x = 0; x < bounds.size.x; x++) {
-        //     for (int y = 0; y < bounds.size.y; y++) {
-        //         TileBase tile = allTiles[x + y * bounds.size.x];
-        //         if (tile != null) {
-        //             tilemap.SetTile(tilemap.WorldToCell(new Vector2(x, y)), null);
-        //         }
-        //     }
-        // }
-    //     GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().direction = Vector2.zero;
-    //     GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().direction = Vector2.zero;
-    // }
 
     private void Update()
     {        
@@ -647,13 +601,30 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void LateUpdate()
     {
         if (isDead)
+        {
             return;
+        }
         
         if (photonView.IsMine)
         {
             if (SceneManager.GetActiveScene().name == "BossRoom")
             {
 
+
+                // if (GameObject.Find("RoiBlob").GetComponent<BossAI>().hasLost)
+                // {
+                //     if (cameras[5].activeSelf == false)
+                //     {
+                //         cameras[4].SetActive(false);
+                //         cameras[2].SetActive(false);
+                //         cameras[1].SetActive(false);
+                //         cameras[0].SetActive(false);
+                //         cameras[3].SetActive(false);
+                //         cameras[5].SetActive(true);
+                //         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+                //         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+                //     }
+                // }
                 if (transform.position.x > 184)
                 {
                     if (cameras[3].activeSelf == false)
@@ -663,6 +634,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[1].SetActive(false);
                         cameras[0].SetActive(false);
                         cameras[3].SetActive(true);
+                        cameras[5].SetActive(false);
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[3].GetComponent<Camera>();
                         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[3].GetComponent<Camera>();
                     }
@@ -677,6 +649,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[1].SetActive(false);
                         cameras[0].SetActive(false);
                         cameras[2].SetActive(true);
+                        cameras[5].SetActive(false);
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[2].GetComponent<Camera>();
                         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[2].GetComponent<Camera>();
                     }
@@ -692,6 +665,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[2].SetActive(false);
                         cameras[0].SetActive(false);
                         cameras[1].SetActive(true);
+                        cameras[5].SetActive(false);
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[1].GetComponent<Camera>();
                         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[1].GetComponent<Camera>();
                     }
@@ -706,10 +680,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[2].SetActive(false);
                         cameras[1].SetActive(false);
                         cameras[0].SetActive(true);
+                        cameras[5].SetActive(false);
+
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[0].GetComponent<Camera>();
                         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[0].GetComponent<Camera>();
                     }
                 }
+
                 else
                 {
                     if (cameras[4].activeSelf == false)
@@ -720,6 +697,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[1].SetActive(false);
                         cameras[0].SetActive(false);
                         cameras[4].SetActive(true);
+                        cameras[5].SetActive(false);
+
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[4].GetComponent<Camera>();
                         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[4].GetComponent<Camera>();
                     }

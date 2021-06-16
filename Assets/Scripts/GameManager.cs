@@ -80,7 +80,7 @@ namespace Com.MyCompany.MyGame
         {
             Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName);
             
-            // So that the player leave alone and the player who did not left is not brutally kicked of the game
+            // So that the player leaves alone and the player who did not leave is not brutally kicked of the game
             PhotonNetwork.AutomaticallySyncScene = false;
             if (PhotonNetwork.IsMasterClient)
             {
@@ -185,11 +185,11 @@ namespace Com.MyCompany.MyGame
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(-15f, 3f,0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(150f, -70f,0f), Quaternion.identity, 0);
                 }
                 else
                 {
-                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(-15f, -10f,0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(150f, -70f,0f), Quaternion.identity, 0);
                 }
             }
         }
