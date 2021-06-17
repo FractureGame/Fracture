@@ -37820,6 +37820,80 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1876007585593119909
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2545974893436916213, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545974893436916213, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 23.20855
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545974893436916213, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.46719
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545974893436916213, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -37.12831
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545974893436916213, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545974893436916213, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545974893436916213, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545974893436916213, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545974893436916213, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545974893436916213, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545974893436916213, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4644819951825592498, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_Name
+      value: BossConfettiExplosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 4644819951825592498, guid: 640da042ea3955386981ebb32f0bd101,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 640da042ea3955386981ebb32f0bd101, type: 3}
 --- !u!1001 &3107740854464263802
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38047,7 +38121,7 @@ MonoBehaviour:
   escapeSpeed: 1
   JumpGroundParticles: {fileID: 8243293179855991376, guid: 4a0201a1139282168afccaf448626177,
     type: 3}
-  confetti: {fileID: 5907559814512820751, guid: b33f0b312335d4727a6ed2b990ea41cd,
+  confetti: {fileID: 2468941687940496403, guid: 640da042ea3955386981ebb32f0bd101,
     type: 3}
 --- !u!114 &9109332483900628166
 MonoBehaviour:

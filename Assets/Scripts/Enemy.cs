@@ -113,6 +113,16 @@ public class Enemy : MonoBehaviourPunCallbacks
         GetComponent<BossAI>().isInvincible = false;
     }
     
+    [PunRPC]
+    public void SetHealthBar(int value)
+    {
+        GameObject bar = GameObject.Find("Canvas").transform.Find("RoiBlobLifeBar").gameObject;
+        if (value < bar.GetComponent<HPBar>().slider.value)
+        {
+            bar.GetComponent<HPBar>().SetHealth(value);
+        }
+        
+    }
     public int TakeDamage(int damage)
     {
         
@@ -121,7 +131,7 @@ public class Enemy : MonoBehaviourPunCallbacks
             if(!GetComponent<BossAI>().isInvincible)
             {
                 currentHealth -= damage;
-                
+                photonView.RPC("SetHealthBar", RpcTarget.All, currentHealth);
                 GetComponent<BossAI>().isInvincible = true;
                 StartCoroutine(InvincibilityFlash(gameObject.name));
                 StartCoroutine(HandleInvincibilityDelay());
@@ -130,9 +140,9 @@ public class Enemy : MonoBehaviourPunCallbacks
         else
         {
             currentHealth -= damage;
-            
+            lifebar.GetComponent<HPBar>().SetHealth(currentHealth);
         }
-        lifebar.GetComponent<HPBar>().SetHealth(currentHealth);
+        
         
         
         if (transform.parent.name.StartsWith("Harpie"))
