@@ -12,7 +12,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     private bool isGrounded = false;
     // private GameObject lifebar;
     private int currentHealth;
-    public bool hasLost;
+    public bool isInvincible = false; // triggered when enemy contact
 
     private Rigidbody2D rigidbody2d;
     private PolygonCollider2D polygonCollider2D;
@@ -78,6 +78,9 @@ public class BossAI : MonoBehaviourPunCallbacks
     [Header("Players")]
     private Vector2 playerTopPos;
     private Vector2 playerBotPos;
+    
+    [Header("Particles")]
+    public ParticleSystem confetti;
     
     // Start is called before the first frame update
     void Start()
@@ -320,10 +323,12 @@ public class BossAI : MonoBehaviourPunCallbacks
             
             
             // if all harpies are dead you win, the bitch falls in lava
-            if (CheckWinCondition())
+            if (CheckWinCondition() && !hasDestroyedlast)
             {
                 // phase3 = false;
-                hasLost = true;
+                photonView.RPC("FocusOnBlob", RpcTarget.All);
+                
+                // FocusOn = true;
                 rigidbody2d.isKinematic = false;
                 rigidbody2d.simulated = true;
                 // Switch camera for both players to blob falling into lava bitch
@@ -338,46 +343,60 @@ public class BossAI : MonoBehaviourPunCallbacks
                     hasDestroyedlast = true;
                 }
 
-                if (isTouchingDanger())
-                {
-                    GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
-                    gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
-                    gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
-                    gameOverPanel.SetActive(true);
-                    GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
-    
-                    GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
-                }
+                
                 
                 
             }
             else
             {
-                // MOVE UP WITH THEM
-                if (Vector2.Distance(transform.position, dest) <= 0)
+                if (hasDestroyedlast)
                 {
-                    // YOU LOSE
-                    GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
-                    gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
-                    gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
-                    gameOverPanel.SetActive(true);
-                    GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
-    
-                    GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
-                
+                    if (isTouchingDanger())
+                    {
+                        // le faire couler dans la lave lentement
+                        
+                        
+                        GetComponent<Enemy>().TakeDamage(100);
+                        
+                    }
                 }
                 else
                 {
-                    transform.position = Vector2.MoveTowards(transform.position, dest, escapeSpeed * Time.deltaTime);
+                    // MOVE UP WITH THEM
+                    if (Vector2.Distance(transform.position, dest) <= 0)
+                    {
+                        // YOU LOSE
+                        GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                        gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
+                        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
+                        gameOverPanel.SetActive(true);
+                        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
+    
+                        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
+                
+                    }
+                    else
+                    {
+                        transform.position = Vector2.MoveTowards(transform.position, dest, escapeSpeed * Time.deltaTime);
+                    }
                 }
             }
-            
-            
-
         }
     }
 
+    
 
+    private void OnDestroy()
+    {
+        // photonView.RPC("Victory", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void FocusOnBlob()
+    {
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
+    }
 
     // [PunRPC]
     //

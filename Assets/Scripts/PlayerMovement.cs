@@ -101,6 +101,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [Header("Cameras")] 
     private GameObject[] cameras;
     private int cameraIndex;
+    public bool focusOnKingBlob;
 
 
     public AudioManager am;
@@ -598,6 +599,23 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     }
 
 
+    // [PunRPC]
+    // private void FocusOnBlob()
+    // {
+    //     GameObject[] cameras = GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().cameras;
+    //     if (cameras[5].activeSelf == false)
+    //     {
+    //         cameras[4].SetActive(false);
+    //         cameras[2].SetActive(false);
+    //         cameras[1].SetActive(false);
+    //         cameras[0].SetActive(false);
+    //         cameras[3].SetActive(false);
+    //         cameras[5].SetActive(true);
+    //         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+    //         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+    //     }
+    // }
+
     private void LateUpdate()
     {
         if (isDead)
@@ -609,23 +627,18 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             if (SceneManager.GetActiveScene().name == "BossRoom")
             {
-
-
-                // if (GameObject.Find("RoiBlob").GetComponent<BossAI>().hasLost)
-                // {
-                //     if (cameras[5].activeSelf == false)
-                //     {
-                //         cameras[4].SetActive(false);
-                //         cameras[2].SetActive(false);
-                //         cameras[1].SetActive(false);
-                //         cameras[0].SetActive(false);
-                //         cameras[3].SetActive(false);
-                //         cameras[5].SetActive(true);
-                //         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
-                //         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
-                //     }
-                // }
-                if (transform.position.x > 184)
+                if (focusOnKingBlob)
+                {
+                    cameras[4].SetActive(false);
+                    cameras[2].SetActive(false);
+                    cameras[1].SetActive(false);
+                    cameras[0].SetActive(false);
+                    cameras[3].SetActive(false);
+                    cameras[5].SetActive(true);
+                    GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+                    GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+                }
+                else if (transform.position.x > 184)
                 {
                     if (cameras[3].activeSelf == false)
                     {
@@ -957,19 +970,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Debug.Log(hitEnemies.Length);
         foreach (var enemy in hitEnemies)
         {
-
-
             Debug.Log("We hit " + enemy.transform.parent.name);
-
             if (!hasAttacked)
             {
                 int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
                 
                 photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
                 photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
-                
             }
-            
         }
         hasAttacked = true;
     }

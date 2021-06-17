@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraFollowBlobKing : MonoBehaviour
 {
@@ -14,7 +12,7 @@ public class CameraFollowBlobKing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        blobPos = GameObject.Find("RoiBlob").transform.position;
-        transform.position = blobPos;
+        blobPos = GameObject.Find("RoiBlob").transform.Find("Graphics").transform.position;
+        transform.position = new Vector3(blobPos.x, blobPos.y, -10);
     }
 }

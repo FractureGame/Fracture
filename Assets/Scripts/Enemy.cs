@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviourPunCallbacks
 {
     [Header("Health")]
     public int maxHealth = 100;
@@ -87,34 +89,85 @@ public class Enemy : MonoBehaviour
         rigidbody2d.drag = linearDrag;
         rigidbody2d.gravityScale = gravity * fallMultiplier;
     }
+    
+    
+    [PunRPC]
+    private void ChangeBodyVisibility(float r, float g, float b, float a)
+    {
+        GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
+    }
+    public IEnumerator InvincibilityFlash(string playerName)
+    {
+        while(GetComponent<BossAI>().isInvincible)
+        {
+            photonView.RPC("ChangeBodyVisibility", RpcTarget.All, 1f, 0f, 0f, 0f);
+            yield return new WaitForSeconds(0.15f);
+            photonView.RPC("ChangeBodyVisibility", RpcTarget.All, 1f, 0f, 0f, 1f);
+            yield return new WaitForSeconds(0.15f);
+        }
+    }
 
+    public IEnumerator HandleInvincibilityDelay()
+    {
+        yield return new WaitForSeconds(2f);
+        GetComponent<BossAI>().isInvincible = false;
+    }
+    
     public int TakeDamage(int damage)
     {
-        currentHealth -= damage;
+        
         if (transform.parent.name.StartsWith("RoiBlob"))
         {
-            
+            if(!GetComponent<BossAI>().isInvincible)
+            {
+                currentHealth -= damage;
+                
+                GetComponent<BossAI>().isInvincible = true;
+                StartCoroutine(InvincibilityFlash(gameObject.name));
+                StartCoroutine(HandleInvincibilityDelay());
+            }
         }
         else
         {
-            lifebar.GetComponent<HPBar>().SetHealth(currentHealth);
+            currentHealth -= damage;
+            
         }
-
+        lifebar.GetComponent<HPBar>().SetHealth(currentHealth);
         
         
         if (transform.parent.name.StartsWith("Harpie"))
         {
             GetComponent<HarpieAI>().PushBack();
         }
+
         
         if (currentHealth <= 0)
         {
+            if (transform.parent.name.StartsWith("RoiBlob"))
+            {
+                photonView.RPC("Victory", RpcTarget.All);
+            }
             Die();
         }
 
         return currentHealth;
     }
 
+    [PunRPC]
+    private void Victory()
+    {
+        // Confetti
+        Instantiate(GetComponent<BossAI>().confetti, transform.position, Quaternion.identity);
+        // Display Congrats
+        GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+        gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
+        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
+        gameOverPanel.SetActive(true);
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
+    }
+    
+    
     void Die()
     {
         Debug.Log("Enemy Died " + gameObject.name);
@@ -122,5 +175,7 @@ public class Enemy : MonoBehaviour
         // Destroy(gameObject);
         // PhotonNetwork.Destroy(gameObject);
     }
+    
+    
     
 }
