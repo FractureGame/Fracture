@@ -102,6 +102,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private GameObject[] cameras;
     private int cameraIndex;
     public bool focusOnKingBlob;
+    public bool watchKingBlobEscape;
 
 
     public AudioManager am;
@@ -627,6 +628,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             if (SceneManager.GetActiveScene().name == "BossRoom")
             {
+                Debug.LogFormat("ESCAPADe {0}", watchKingBlobEscape);
                 if (focusOnKingBlob)
                 {
                     cameras[4].SetActive(false);
@@ -635,8 +637,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                     cameras[0].SetActive(false);
                     cameras[3].SetActive(false);
                     cameras[5].SetActive(true);
+                    cameras[6].SetActive(false);
                     GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
                     GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+                }
+                if (watchKingBlobEscape)
+                {
+                    Debug.Log("qdfqdsf");
+                    cameras[6].SetActive(true);
+                    cameras[4].SetActive(false);
+                    cameras[2].SetActive(false);
+                    cameras[1].SetActive(false);
+                    cameras[0].SetActive(false);
+                    cameras[3].SetActive(false);
+                    cameras[5].SetActive(false);
+                    
+                    
+                    GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
+                    GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
                 }
                 else if (transform.position.x > 184)
                 {
@@ -648,6 +666,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[0].SetActive(false);
                         cameras[3].SetActive(true);
                         cameras[5].SetActive(false);
+                        cameras[6].SetActive(false);
+
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[3].GetComponent<Camera>();
                         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[3].GetComponent<Camera>();
                     }
@@ -663,6 +683,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[0].SetActive(false);
                         cameras[2].SetActive(true);
                         cameras[5].SetActive(false);
+                        cameras[6].SetActive(false);
+
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[2].GetComponent<Camera>();
                         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[2].GetComponent<Camera>();
                     }
@@ -679,6 +701,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[0].SetActive(false);
                         cameras[1].SetActive(true);
                         cameras[5].SetActive(false);
+                        cameras[6].SetActive(false);
+
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[1].GetComponent<Camera>();
                         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[1].GetComponent<Camera>();
                     }
@@ -694,7 +718,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[1].SetActive(false);
                         cameras[0].SetActive(true);
                         cameras[5].SetActive(false);
-
+                        cameras[6].SetActive(false);
+                        
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[0].GetComponent<Camera>();
                         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[0].GetComponent<Camera>();
                     }
@@ -709,30 +734,40 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                         cameras[2].SetActive(false);
                         cameras[1].SetActive(false);
                         cameras[0].SetActive(false);
-                        cameras[4].SetActive(true);
+                        cameras[4].SetActive(true); 
                         cameras[5].SetActive(false);
+                        cameras[6].SetActive(false);
 
                         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[4].GetComponent<Camera>();
                         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[4].GetComponent<Camera>();
                     }
                 }
             }
-            if (Camera.current.GetComponent<CameraMovement>().horizontalLeft)
+
+            try
             {
-                Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyLeft(gameObject);
+                if (Camera.current.GetComponent<CameraMovement>().horizontalLeft)
+                {
+                    Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyLeft(gameObject);
+                }
+                else if (Camera.current.GetComponent<CameraMovement>().horizontalRight)
+                {
+                    Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyRight(gameObject);
+                }
+                else if (Camera.current.GetComponent<CameraMovement>().verticalUp)
+                {
+                    Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
+                }
+                else if (Camera.current.GetComponent<CameraMovement>().verticalDown)
+                {
+                    Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
+                }
             }
-            else if (Camera.current.GetComponent<CameraMovement>().horizontalRight)
+            catch (Exception)
             {
-                Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyRight(gameObject);
+                
             }
-            else if (Camera.current.GetComponent<CameraMovement>().verticalUp)
-            {
-                Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
-            }
-            else if (Camera.current.GetComponent<CameraMovement>().verticalDown)
-            {
-                Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
-            }
+
         }
     }
 

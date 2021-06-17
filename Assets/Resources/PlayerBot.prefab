@@ -1203,6 +1203,7 @@ MonoBehaviour:
   bloodEffect: {fileID: 1242838869165408022, guid: 937499e39a50e6832a0634db6ac798bb,
     type: 3}
   focusOnKingBlob: 0
+  watchKingBlobEscape: 0
   am: {fileID: 0}
 --- !u!114 &8779285736605368648
 MonoBehaviour:

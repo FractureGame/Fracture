@@ -40,6 +40,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     public Tilemap lastTilemap;
     public LayerMask dangerLayerMask;
     public Grid grid;
+    [HideInInspector] private bool finished;
 
     [Header("Abilities")] 
     public GameObject throwBlobsParticle;
@@ -154,6 +155,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     
     private void Update()
     {
+
         playerTopPos = GameObject.Find("PlayerTop(Clone)").transform.position;
         playerBotPos = GameObject.Find("PlayerBot(Clone)").transform.position;
 
@@ -312,8 +314,9 @@ public class BossAI : MonoBehaviourPunCallbacks
 
 
             // Everybody moves UP at same speed
-            Vector2 dest = new Vector2(transform.position.x, waypoints[2].transform.position.y);
-            
+            Vector2 dest = new Vector2(transform.position.x, waypoints[3].transform.position.y);
+
+
             
             // if all harpies are dead you win, the bitch falls in lava
             if (CheckWinCondition() && !hasDestroyedlast)
@@ -321,24 +324,13 @@ public class BossAI : MonoBehaviourPunCallbacks
                 // phase3 = false;
                 photonView.RPC("FocusOnBlob", RpcTarget.All);
                 
-                // FocusOn = true;
                 rigidbody2d.isKinematic = false;
                 rigidbody2d.simulated = true;
-                // Switch camera for both players to blob falling into lava bitch
-                
-                // photonView.RPC("CameraFollowKing", RpcTarget.All);
-                
-                // False into the lava
                 if (isGrounded && !hasDestroyedlast)
                 {
-                    
                     photonView.RPC("DestroyLastTilemap", RpcTarget.All);
                     hasDestroyedlast = true;
                 }
-
-                
-                
-                
             }
             else
             {
@@ -356,52 +348,72 @@ public class BossAI : MonoBehaviourPunCallbacks
                 else
                 {
                     // MOVE UP WITH THEM
-                    if (Vector2.Distance(transform.position, dest) <= 0)
+                    // CHeck if one of them is unreachable
+                    if (HarpiesEscaped() && !finished)
                     {
+                        // CHANGE CAMERA FOR BOTH PLAYERS
+                        photonView.RPC("WatchBlobEscape", RpcTarget.All);
+                        
                         // YOU LOSE
                         GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
                         gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
                         gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
                         gameOverPanel.SetActive(true);
                         GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
-    
+                        
                         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
-                
+                        finished = true;
                     }
-                    else
-                    {
-                        transform.position = Vector2.MoveTowards(transform.position, dest, escapeSpeed * Time.deltaTime);
-                    }
+
+                    transform.position = Vector2.MoveTowards(transform.position, dest, escapeSpeed * Time.deltaTime);
+                    
                 }
             }
         }
     }
 
-    
+
+    private bool HarpiesEscaped()
+    {
+        foreach (var harpy in rocketHarpies)
+        {
+            try
+            {            
+                if (harpy.transform.position.y > waypoints[2].transform.position.y)
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                
+            }
+
+        }
+
+        return false;
+    }
 
     private void OnDestroy()
     {
         // photonView.RPC("Victory", RpcTarget.All);
     }
 
+
+    [PunRPC]
+    private void WatchBlobEscape()
+    {
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().watchKingBlobEscape = true;
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().watchKingBlobEscape = true;
+    }
+    
     [PunRPC]
     private void FocusOnBlob()
     {
         GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
     }
-
-    // [PunRPC]
-    //
-    // private void CameraFollowKing()
-    // {
-    //     GameObject[] cameras = GameObject.Find("Main Camera").GetComponent<CameraMovement>().cameras;
-    //     for (int i = 0; i < 5; i++)
-    //     {
-    //         cameras[i].SetActive(false);
-    //     }
-    //     cameras[5].SetActive(true);
-    // }
+    
     
     private bool CheckWinCondition()
     {

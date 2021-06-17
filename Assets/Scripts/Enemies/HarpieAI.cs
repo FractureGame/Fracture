@@ -105,45 +105,21 @@ public class HarpieAI : MonoBehaviourPunCallbacks
         {
             
             blobKing = GameObject.Find("RoiBlob");
+            
+            
             if (ignition)
             {
                 AnimationCurve curve = new AnimationCurve();
-                
                 curve.AddKey(0, 1);
                 curve.AddKey(1, 1);
-                // Debug.LogFormat("OKAY {0} , {1} : {2}, {3}", GetComponentInChildren<LineRenderer>().widthCurve[0].time, GetComponentInChildren<LineRenderer>().widthCurve[0].value, GetComponentInChildren<LineRenderer>().widthCurve[1].time, GetComponentInChildren<LineRenderer>().widthCurve[1].value);
-                // Debug.LogFormat("BEFORE {0}", GetComponentInChildren<LineRenderer>().widthCurve.length);
                 GetComponentInChildren<LineRenderer>().widthCurve = curve;
-                // Debug.LogFormat("AFTER {0}", GetComponentInChildren<LineRenderer>().widthCurve.length);
-                Vector2 dest = new Vector2(transform.position.x, blobKing.GetComponentInChildren<BossAI>().waypoints[2].transform.position.y);
-                // MOVE UP WITH THEM
-                if (Vector2.Distance(transform.position, dest) <= 0)
-                {
-                    // YOU LOSE
-                }
-                else
-                {
-                    transform.position = Vector2.MoveTowards(transform.position, dest, blobKing.GetComponentInChildren<BossAI>().escapeSpeed * Time.deltaTime);
-                }
+                
+                Vector2 dest = new Vector2(transform.position.x, blobKing.GetComponentInChildren<BossAI>().waypoints[3].transform.position.y);
+                transform.position = Vector2.MoveTowards(transform.position, dest, blobKing.GetComponentInChildren<BossAI>().escapeSpeed * Time.deltaTime);
             }
             else
             {
                 readyToCarryKingBlob = true;
-                // blobKing = GameObject.Find("RoiBlob");
-                // if (escortBlobKing)
-                // {
-                //     if (Vector2.Distance(transform.position, waypoints[1].position) <= 0)
-                //     {
-                //         transform.Rotate(0, 180, 0);
-                //         readyToCarryKingBlob = true;
-                //     }
-                //     else
-                //     {
-                //         transform.position = Vector2.MoveTowards(transform.position, waypoints[1].transform.position,
-                //             speedEnemy * Time.deltaTime);
-                //     }
-                //
-                // }
             }
 
             
