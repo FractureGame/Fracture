@@ -159,14 +159,7 @@ public class BossAI : MonoBehaviourPunCallbacks
 
 
         playerNearby = Math.Abs(transform.position.x - playerTopPos.x) <= distanceFromPlayer || Math.Abs(transform.position.x - playerBotPos.x) <= distanceFromPlayer;
-
         
-        
-
-        // if (movingToPhase2)
-        // {
-        //     rigidbody2d.isKinematic = true;
-        // }
 
         currentHealth = GetComponent<Enemy>().currentHealth;
         isGrounded = IsGrounded();
