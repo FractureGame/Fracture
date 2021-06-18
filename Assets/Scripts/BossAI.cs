@@ -96,8 +96,8 @@ public class BossAI : MonoBehaviourPunCallbacks
         // lifebar = GameObject.Find("Canvas").transform.Find("BossLifeBar").gameObject;
         
         // TEST
-        phase1 = false;
-        movingToPhase2 = true;
+        // phase1 = false;
+        // movingToPhase2 = true;
         
     }
     
@@ -178,71 +178,76 @@ public class BossAI : MonoBehaviourPunCallbacks
         isGrounded = IsGrounded();
         // Debug.LogFormat("isGrounded : {0}", isGrounded);
 
-        if (phase1)
+        // if (phase1)
+        // {
+        //     if (!isPhase1Playing)
+        //     {
+        //         isPhase1Playing = true;
+        //
+        //         coroutine = StartCoroutine(Phase1());
+        //         
+        //     }
+        //
+        //     if (jumpCDStatus <= 0 && isGrounded && playerNearby)
+        //     {
+        //         isJumping = true;
+        //     }
+        //     else if (jumpCDStatus > 0 && isGrounded)
+        //     {
+        //         jumpCDStatus -= Time.deltaTime;
+        //     }
+        //
+        //     if (isJumping)
+        //     {
+        //         jumpCDStatus = jumpCD;
+        //         rigidbody2d.AddForce(jumpVelocity * Vector2.up, ForceMode2D.Impulse);
+        //         isJumping = false;
+        //         falling = true;
+        //         isGrounded = false;
+        //
+        //     }
+        //     
+        //     if (falling && isGrounded)
+        //     {
+        //         PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(0, -5),
+        //             Quaternion.identity, 1);
+        //
+        //         falling = false;
+        //     }
+        //     
+        //
+        // }
+        //
+        // if (currentHealth < 400 && currentHealth > 300 && phase1 && isGrounded)
+        // {
+        //     phase1 = false;
+        //     StopCoroutine(coroutine);
+        //     isPhase1Playing = false;
+        //     movingToPhase2 = true;
+        //     // BomberHarpie
+        //     PhotonNetwork.Instantiate(BomberHarpiePrefab.name, new Vector2(-27, 0), Quaternion.identity, 1);
+        // }
+        //
+        // if (movingToPhase2)
+        // {
+        //     // rigidbody2d.isKinematic = true;
+        //     // rigidbody2d.simulated = false;
+        //     if (Vector2.Distance(transform.position, new Vector2(waypoints[0].transform.position.x, transform.position.y)) <= 0)
+        //     {
+        //         movingToPhase2 = false;
+        //         nbJump = 0;
+        //         phase2 = true;
+        //     }
+        //     else
+        //     {
+        //         transform.position =
+        //             Vector2.MoveTowards(transform.position, new Vector2(waypoints[0].transform.position.x, transform.position.y), speed * Time.deltaTime);
+        //     }
+        // }
+
+        if (playerNearby)
         {
-            if (!isPhase1Playing)
-            {
-                isPhase1Playing = true;
-
-                coroutine = StartCoroutine(Phase1());
-                
-            }
-
-            if (jumpCDStatus <= 0 && isGrounded && playerNearby)
-            {
-                isJumping = true;
-            }
-            else if (jumpCDStatus > 0 && isGrounded)
-            {
-                jumpCDStatus -= Time.deltaTime;
-            }
-
-            if (isJumping)
-            {
-                jumpCDStatus = jumpCD;
-                rigidbody2d.AddForce(jumpVelocity * Vector2.up, ForceMode2D.Impulse);
-                isJumping = false;
-                falling = true;
-                isGrounded = false;
-
-            }
-            
-            if (falling && isGrounded)
-            {
-                PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(0, -5),
-                    Quaternion.identity, 1);
-
-                falling = false;
-            }
-            
-
-        }
-        
-        if (currentHealth < 400 && currentHealth > 300 && phase1 && isGrounded)
-        {
-            phase1 = false;
-            StopCoroutine(coroutine);
-            isPhase1Playing = false;
-            movingToPhase2 = true;
-            // BomberHarpie
-            PhotonNetwork.Instantiate(BomberHarpiePrefab.name, new Vector2(-27, 0), Quaternion.identity, 1);
-        }
-
-        if (movingToPhase2)
-        {
-            // rigidbody2d.isKinematic = true;
-            // rigidbody2d.simulated = false;
-            if (Vector2.Distance(transform.position, new Vector2(waypoints[0].transform.position.x, transform.position.y)) <= 0)
-            {
-                movingToPhase2 = false;
-                nbJump = 0;
-                phase2 = true;
-            }
-            else
-            {
-                transform.position =
-                    Vector2.MoveTowards(transform.position, new Vector2(waypoints[0].transform.position.x, transform.position.y), speed * Time.deltaTime);
-            }
+            phase2 = true;
         }
         
         if (phase2 && nbJump < nbJumpBeforeDestruction)

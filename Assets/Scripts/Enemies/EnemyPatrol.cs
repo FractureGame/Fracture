@@ -5,8 +5,7 @@ public class EnemyPatrol : MonoBehaviour
 {
     public float speed;
     public Transform[] waypoints;
-
-    public SpriteRenderer graphics;
+    
     private Transform target;
     private int destPoint;
     
@@ -27,15 +26,7 @@ public class EnemyPatrol : MonoBehaviour
         {
             destPoint = (destPoint + 1) % waypoints.Length;
             target = waypoints[destPoint];
-            try
-            {
-                graphics.flipX = !graphics.flipX;
-            }
-            catch (Exception )
-            {
-                transform.Rotate(0, 180, 0);
-            }
-            
+            transform.Rotate(0, 180, 0);
         }
     }
 }
