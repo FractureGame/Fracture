@@ -40,7 +40,8 @@ public class BossAI : MonoBehaviourPunCallbacks
     public Tilemap lastTilemap;
     public LayerMask dangerLayerMask;
     public Grid grid;
-    [HideInInspector] private bool finished;
+    public bool isEscaping;
+    public bool abdcef = false;
 
     [Header("Abilities")] 
     public GameObject throwBlobsParticle;
@@ -297,7 +298,6 @@ public class BossAI : MonoBehaviourPunCallbacks
             {
                 CallHarpies();
                 hasCalledHarpies = true;
-                Debug.Log("CALLIUNG HARTPIING");
             }
             else
             {
@@ -321,8 +321,24 @@ public class BossAI : MonoBehaviourPunCallbacks
             // if all harpies are dead you win, the bitch falls in lava
             if (CheckWinCondition() && !hasDestroyedlast)
             {
+                abdcef = true;
+                photonView.RPC("callPlayers", RpcTarget.All);
                 // phase3 = false;
-                photonView.RPC("FocusOnBlob", RpcTarget.All);
+                // photonView.RPC("FocusOnBlob", RpcTarget.All);
+                // GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
+                // GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
+                // GameObject[] cameras = GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().cameras;
+                // cameras[5].SetActive(true);
+                // cameras[4].SetActive(false);
+                // cameras[2].SetActive(false);
+                // cameras[1].SetActive(false);
+                // cameras[0].SetActive(false);
+                // cameras[3].SetActive(false);
+                // cameras[6].SetActive(false);
+                // GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
+                // GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
+                // GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+                // GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
                 
                 rigidbody2d.isKinematic = false;
                 rigidbody2d.simulated = true;
@@ -338,24 +354,20 @@ public class BossAI : MonoBehaviourPunCallbacks
                 {
                     if (isTouchingDanger())
                     {
-                        // le faire couler dans la lave lentement
-                        
-                        
                         GetComponent<Enemy>().TakeDamage(100);
-                        
                     }
                 }
                 else
                 {
                     // MOVE UP WITH THEM
                     // CHeck if one of them is unreachable
-                    if (HarpiesEscaped() && !finished)
+                    if (HarpiesEscaped())
                     {
+                        isEscaping = true;
                         // CHANGE CAMERA FOR BOTH PLAYERS
-                        photonView.RPC("WatchBlobEscape", RpcTarget.All);
-                        
-                        
-                        finished = true;
+                        // photonView.RPC("WatchBlobEscape", RpcTarget.All);
+
+
                     }
 
                     transform.position = Vector2.MoveTowards(transform.position, dest, escapeSpeed * Time.deltaTime);
@@ -365,6 +377,29 @@ public class BossAI : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
+    private void callPlayers()
+    {
+        GameObject.Find("RoiBlob").GetComponentInChildren<BossAI>().abdcef = true;
+    }
+
+    // [PunRPC]
+    // private void FocusOnBlob()
+    // {
+    //     GameObject.Find("RoiBlob").GetComponentInChildren<BossAI>().isFalling = true;
+    //     GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
+    //     GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
+    //     GameObject[] cameras = GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().cameras;
+    //     cameras[5].SetActive(true);
+    //     cameras[4].SetActive(false);
+    //     cameras[2].SetActive(false);
+    //     cameras[1].SetActive(false);
+    //     cameras[0].SetActive(false);
+    //     cameras[3].SetActive(false);
+    //     cameras[6].SetActive(false);
+    //     GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+    //     GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+    // }
 
     private bool HarpiesEscaped()
     {
@@ -390,42 +425,6 @@ public class BossAI : MonoBehaviourPunCallbacks
     private void OnDestroy()
     {
         // photonView.RPC("Victory", RpcTarget.All);
-    }
-
-
-    [PunRPC]
-    private void WatchBlobEscape()
-    {
-        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().watchKingBlobEscape = true;
-        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().watchKingBlobEscape = true;
-        GameObject[] cameras = GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().cameras;
-        Debug.Log("qdfqdsf");
-        cameras[6].SetActive(true);
-        cameras[4].SetActive(false);
-        cameras[2].SetActive(false);
-        cameras[1].SetActive(false);
-        cameras[0].SetActive(false);
-        cameras[3].SetActive(false);
-        cameras[5].SetActive(false);
-        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
-        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
-        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().watchKingBlobEscape = true;
-        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().watchKingBlobEscape = true;
-        // YOU LOSE
-        GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
-        gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
-        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
-        gameOverPanel.SetActive(true);
-        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
-                        
-        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
-    }
-    
-    [PunRPC]
-    private void FocusOnBlob()
-    {
-        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
-        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
     }
     
     

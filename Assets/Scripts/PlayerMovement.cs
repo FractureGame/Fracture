@@ -102,8 +102,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public GameObject[] cameras;
     private int cameraIndex;
     public bool focusOnKingBlob;
-    public bool watchKingBlobEscape;
-
+    
+    [Header("BossRoom")]
+    GameObject blobking;
 
     public AudioManager am;
     
@@ -623,27 +624,32 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             return;
         }
+
+        
+        if (blobking == null)
+        {
+            blobking = GameObject.Find("RoiBlob");
+        }
         
         if (photonView.IsMine)
         {
             if (SceneManager.GetActiveScene().name == "BossRoom")
             {
-                Debug.LogFormat("ESCAPADe {0}", watchKingBlobEscape);
-                if (focusOnKingBlob)
+                if (blobking.GetComponentInChildren<BossAI>().abdcef)
                 {
+                    Debug.Log("YES SIR");
+                    cameras[5].SetActive(true);
                     cameras[4].SetActive(false);
                     cameras[2].SetActive(false);
                     cameras[1].SetActive(false);
                     cameras[0].SetActive(false);
                     cameras[3].SetActive(false);
-                    cameras[5].SetActive(true);
                     cameras[6].SetActive(false);
                     GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
                     GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
                 }
-                if (watchKingBlobEscape)
+                else if (blobking.GetComponentInChildren<BossAI>().isEscaping)
                 {
-                    Debug.Log("qdfqdsf");
                     cameras[6].SetActive(true);
                     cameras[4].SetActive(false);
                     cameras[2].SetActive(false);
@@ -651,17 +657,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                     cameras[0].SetActive(false);
                     cameras[3].SetActive(false);
                     cameras[5].SetActive(false);
-                    
-                    
+
                     GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
                     GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
+                    
                     // YOU LOSE
                     GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
                     gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
                     gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
                     gameOverPanel.SetActive(true);
                     GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
-                        
                     GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
                 }
                 else if (transform.position.x > 184)

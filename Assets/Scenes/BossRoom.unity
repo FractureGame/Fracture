@@ -86599,6 +86599,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   grid: {fileID: 1932328968}
+  isFalling: 0
+  isEscaping: 0
   throwBlobsParticle: {fileID: 1318256181048250141, guid: 5fe1c5927ab4ac94ca354983f58443e5,
     type: 3}
   BomberHarpiePrefab: {fileID: 5772708982873422063, guid: da5bc72bff84dbace879b39fcfe9a399,

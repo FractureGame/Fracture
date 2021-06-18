@@ -1204,7 +1204,6 @@ MonoBehaviour:
     type: 3}
   cameras: []
   focusOnKingBlob: 0
-  watchKingBlobEscape: 0
   am: {fileID: 0}
 --- !u!114 &8779285736605368648
 MonoBehaviour:
