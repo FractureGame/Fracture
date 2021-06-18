@@ -99,7 +99,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private int dangerousTilesDmg = 30;
 
     [Header("Cameras")] 
-    private GameObject[] cameras;
+    public GameObject[] cameras;
     private int cameraIndex;
     public bool focusOnKingBlob;
     public bool watchKingBlobEscape;
@@ -655,6 +655,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                     
                     GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
                     GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
+                    // YOU LOSE
+                    GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                    gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
+                    gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
+                    gameOverPanel.SetActive(true);
+                    GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
+                        
+                    GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
                 }
                 else if (transform.position.x > 184)
                 {

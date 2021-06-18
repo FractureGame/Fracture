@@ -354,14 +354,7 @@ public class BossAI : MonoBehaviourPunCallbacks
                         // CHANGE CAMERA FOR BOTH PLAYERS
                         photonView.RPC("WatchBlobEscape", RpcTarget.All);
                         
-                        // YOU LOSE
-                        GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
-                        gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
-                        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
-                        gameOverPanel.SetActive(true);
-                        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
                         
-                        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
                         finished = true;
                     }
 
@@ -405,6 +398,27 @@ public class BossAI : MonoBehaviourPunCallbacks
     {
         GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().watchKingBlobEscape = true;
         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().watchKingBlobEscape = true;
+        GameObject[] cameras = GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().cameras;
+        Debug.Log("qdfqdsf");
+        cameras[6].SetActive(true);
+        cameras[4].SetActive(false);
+        cameras[2].SetActive(false);
+        cameras[1].SetActive(false);
+        cameras[0].SetActive(false);
+        cameras[3].SetActive(false);
+        cameras[5].SetActive(false);
+        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
+        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().watchKingBlobEscape = true;
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().watchKingBlobEscape = true;
+        // YOU LOSE
+        GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+        gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
+        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
+        gameOverPanel.SetActive(true);
+        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
+                        
+        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
     }
     
     [PunRPC]

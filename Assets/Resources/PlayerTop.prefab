@@ -1146,6 +1146,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   bloodEffect: {fileID: 1242838869165408022, guid: 937499e39a50e6832a0634db6ac798bb,
     type: 3}
+  cameras: []
   focusOnKingBlob: 0
   watchKingBlobEscape: 0
   am: {fileID: 0}
