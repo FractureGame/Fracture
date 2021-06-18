@@ -49461,6 +49461,11 @@ PrefabInstance:
       propertyPath: viewIdField
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 4001256762597716188, guid: 55040935d6b4e3723970d4c6b2cef842,
+        type: 3}
+      propertyPath: freeCanon
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4001256762597716191, guid: 55040935d6b4e3723970d4c6b2cef842,
         type: 3}
       propertyPath: m_Name
@@ -51609,6 +51614,11 @@ PrefabInstance:
         type: 3}
       propertyPath: viewIdField
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4001256762597716188, guid: 55040935d6b4e3723970d4c6b2cef842,
+        type: 3}
+      propertyPath: freeCanon
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4001256762597716191, guid: 55040935d6b4e3723970d4c6b2cef842,
         type: 3}

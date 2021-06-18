@@ -76,7 +76,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     
     [Header("JumpAttack")]
     public GameObject JumpGroundParticles;
-    private float distanceFromPlayer = 15; 
+    private float distanceFromPlayer = 25; 
 
     [Header("Players")]
     private Vector2 playerTopPos;

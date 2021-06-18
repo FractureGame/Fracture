@@ -146,81 +146,79 @@ public class HarpieAI : MonoBehaviourPunCallbacks
                 }
 
 
-
-                if (!isPatrolling)
-                { 
-                    if (horizontal)
+                
+                if (horizontal)
+                {
+                    if (followPlayerTop && playerTopPos.y > playerBotPos.y)
                     {
-                        if (followPlayerTop && playerTopPos.y > playerBotPos.y)
-                        {
-                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
-                        }
-                        else if (followPlayerTop && playerTopPos.y < playerBotPos.y)
-                        {
-                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                        }
-                        else if (!followPlayerTop && playerTopPos.y > playerBotPos.y)
-                        {
-                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                        }
-                        else if (!followPlayerTop && playerTopPos.y < playerBotPos.y)
-                        {
-                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
-                        }
+                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
                     }
-                    else
+                    else if (followPlayerTop && playerTopPos.y < playerBotPos.y)
                     {
-                        if (followPlayerTop && playerTopPos.x > playerBotPos.x)
-                        {
-                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
-                        }
-                        else if (followPlayerTop && playerTopPos.x < playerBotPos.x)
-                        {
-                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                        }
-                        else if (!followPlayerTop && playerTopPos.x > playerBotPos.x)
-                        {
-                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                        }
-                        else if (!followPlayerTop && playerTopPos.x < playerBotPos.x)
-                        {
-                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
-                        }
+                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
                     }
-
-                    if (playerToFollow == GameObject.Find("PlayerTop(Clone)"))
+                    else if (!followPlayerTop && playerTopPos.y > playerBotPos.y)
                     {
-                        try
-                        {
-                            if (photonView.Owner.Equals(PhotonNetwork.PlayerList[0]) == false)
-                            {
-                                photonView.TransferOwnership(PhotonNetwork.PlayerList[0]);
-                            }
-                        }
-                        catch (NullReferenceException)
+                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                    }
+                    else if (!followPlayerTop && playerTopPos.y < playerBotPos.y)
+                    {
+                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                    }
+                }
+                else
+                {
+                    if (followPlayerTop && playerTopPos.x > playerBotPos.x)
+                    {
+                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                    }
+                    else if (followPlayerTop && playerTopPos.x < playerBotPos.x)
+                    {
+                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                    }
+                    else if (!followPlayerTop && playerTopPos.x > playerBotPos.x)
+                    {
+                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                    }
+                    else if (!followPlayerTop && playerTopPos.x < playerBotPos.x)
+                    {
+                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                    }
+                }
+
+                if (playerToFollow == GameObject.Find("PlayerTop(Clone)"))
+                {
+                    try
+                    {
+                        if (photonView.Owner.Equals(PhotonNetwork.PlayerList[0]) == false)
                         {
                             photonView.TransferOwnership(PhotonNetwork.PlayerList[0]);
                         }
-
                     }
-                    else
+                    catch (NullReferenceException)
                     {
-                        try
-                        {
-                            if (photonView.Owner.Equals(PhotonNetwork.PlayerList[1]) == false)
-                            {
-                                photonView.TransferOwnership(PhotonNetwork.PlayerList[1]);
-                            }
-                        }
-                        catch (NullReferenceException)
+                        photonView.TransferOwnership(PhotonNetwork.PlayerList[0]);
+                    }
+
+                }
+                else
+                {
+                    try
+                    {
+                        if (photonView.Owner.Equals(PhotonNetwork.PlayerList[1]) == false)
                         {
                             photonView.TransferOwnership(PhotonNetwork.PlayerList[1]);
                         }
                     }
-
-                    playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
+                    catch (NullReferenceException)
+                    {
+                        photonView.TransferOwnership(PhotonNetwork.PlayerList[1]);
+                    }
                 }
-                else
+
+                playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
+                
+                if (isPatrolling)
                 {
                     transform.position =
                         Vector2.MoveTowards(transform.position, target.position, speedEnemy * Time.deltaTime);
