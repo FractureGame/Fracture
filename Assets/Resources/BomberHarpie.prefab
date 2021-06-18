@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 2648646937176109818}
   - component: {fileID: 7030071869294687508}
   - component: {fileID: 496987136641802596}
+  - component: {fileID: 4538356723728347400}
   m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
@@ -315,6 +316,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.0702944, y: 0.7735596}
   m_EdgeRadius: 0
+--- !u!114 &4538356723728347400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2853923336796822312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8726807ed7db4e43ebbef6ebf1b17537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firingDuration: 5
+  reloadingDuration: 2
 --- !u!1 &3335711924736792995
 GameObject:
   m_ObjectHideFlags: 0
@@ -5497,7 +5512,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
