@@ -23,7 +23,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     public float gravity;
     public float fallMultiplier;
 
-    private float speed = 10;
+    private float speed = 13;
 
     
     [Header("Timeline")] 

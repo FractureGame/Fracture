@@ -597,7 +597,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void OnParticleCollision(GameObject other)
     {
-        TakeDamage(10);
+        TakeDamage(30);
     }
 
 
