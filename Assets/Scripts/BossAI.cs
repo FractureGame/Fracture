@@ -58,6 +58,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     public float escapeSpeed;
     private bool hasCalledIgnition;
     private bool hasDestroyedlast;
+    private bool hasdestroyedCastleAndGround;
     
     [Header("Jump")]
     private float jumpCD = 5f;
@@ -67,7 +68,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     private Vector2 jumpDest;
     private bool falling;
     private bool isJumpPlaying;
-    private int nbJumpBeforeDestruction = 3;
+    private int nbJumpBeforeDestruction = 2;
     private int nbJump;
     private bool isJumping;
     private bool playerNearby;
@@ -96,7 +97,7 @@ public class BossAI : MonoBehaviourPunCallbacks
         
         // TEST
         phase1 = false;
-        movingToPhase3 = true;
+        movingToPhase2 = true;
         
     }
     
@@ -143,8 +144,17 @@ public class BossAI : MonoBehaviourPunCallbacks
     [PunRPC]
     private void DestroyCastleAndGround()
     {
-        Destroy(GameObject.Find("Grid").transform.Find(castleTilemap.name).gameObject);
-        Destroy(GameObject.Find("Grid").transform.Find(castleGround.name).gameObject);
+        try
+        {
+            Destroy(GameObject.Find("Grid").transform.Find(castleTilemap.name).gameObject);
+            Destroy(GameObject.Find("Grid").transform.Find(castleGround.name).gameObject);
+        }
+        catch (Exception)
+        {
+        }
+        
+
+        
     }
 
     [PunRPC]
@@ -166,7 +176,7 @@ public class BossAI : MonoBehaviourPunCallbacks
 
         currentHealth = GetComponent<Enemy>().currentHealth;
         isGrounded = IsGrounded();
-        Debug.LogFormat("isGrounded : {0}", isGrounded);
+        // Debug.LogFormat("isGrounded : {0}", isGrounded);
 
         if (phase1)
         {
@@ -268,12 +278,13 @@ public class BossAI : MonoBehaviourPunCallbacks
             
             
         }
-        else if (phase2 && nbJump >= nbJumpBeforeDestruction && isGrounded)
+        else if (phase2 && nbJump >= nbJumpBeforeDestruction && isGrounded && !hasdestroyedCastleAndGround)
         {
             photonView.RPC("DestroyCastleAndGround", RpcTarget.All);
             phase2 = false;
             movingToPhase3 = true;
             isGrounded = false;
+            hasdestroyedCastleAndGround = true;
         }
         
         
@@ -281,8 +292,9 @@ public class BossAI : MonoBehaviourPunCallbacks
         {
             rigidbody2d.isKinematic = true;
             rigidbody2d.simulated = false;
-            if (Vector2.Distance(transform.position, new Vector2(waypoints[1].transform.position.x, transform.position.y)) <= 0)
+            if (Math.Abs(transform.position.x - waypoints[1].transform.position.x) <= 0.1)
             {
+                Debug.Log("YOOOO");
                 // CHECK IF there is a player nearby
                 if (isPlayerNearby())
                 {
@@ -322,6 +334,7 @@ public class BossAI : MonoBehaviourPunCallbacks
 
 
             
+            // if all harpies are dead you win, the bitch falls in lava
             // if all harpies are dead you win, the bitch falls in lava
             if (CheckWinCondition() && !hasDestroyedlast)
             {
@@ -368,6 +381,7 @@ public class BossAI : MonoBehaviourPunCallbacks
                     if (HarpiesEscaped())
                     {
                         isEscaping = true;
+                        photonView.RPC("callPlayers2", RpcTarget.All);
                         // CHANGE CAMERA FOR BOTH PLAYERS
                         // photonView.RPC("WatchBlobEscape", RpcTarget.All);
 
@@ -387,6 +401,13 @@ public class BossAI : MonoBehaviourPunCallbacks
         GameObject.Find("RoiBlob").GetComponentInChildren<BossAI>().abdcef = true;
     }
 
+    [PunRPC]
+    private void callPlayers2()
+    {
+        GameObject.Find("RoiBlob").GetComponentInChildren<BossAI>().isEscaping = true;
+    }
+    
+    
     // [PunRPC]
     // private void FocusOnBlob()
     // {
@@ -453,6 +474,7 @@ public class BossAI : MonoBehaviourPunCallbacks
 
     private bool isPlayerNearby()
     {
+        Debug.LogFormat("nearby {0}",Math.Abs(transform.position.x - playerTopPos.x));
         if (Math.Abs(transform.position.x - playerTopPos.x) <= 25 || Math.Abs(transform.position.x - playerBotPos.x) <= 25)
         {
             return true;
