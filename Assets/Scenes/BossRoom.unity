@@ -90319,7 +90319,7 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       m_AllTileFlags: 1073741825
-  - first: {x: 190, y: -65, z: 0}
+  - first: {x: 189, y: -65, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 5
@@ -90328,7 +90328,7 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       m_AllTileFlags: 1073741825
-  - first: {x: 191, y: -65, z: 0}
+  - first: {x: 190, y: -65, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 5
@@ -104003,14 +104003,30 @@ CompositeCollider2D:
         Y: -650000000
       - X: 2060000000
         Y: -650000000
-    - - X: 1920000000
-        Y: -640000000
-      - X: 1900000000
-        Y: -640000000
-      - X: 1900000000
+    - - X: 1900000100
+        Y: -650000041
+      - X: 1900000100
         Y: -650000000
-      - X: 1920000000
+      - X: 1909999900
         Y: -650000000
+      - X: 1909999900
+        Y: -640000000
+      - X: 1900000100
+        Y: -640000000
+      - X: 1900000100
+        Y: -639999959
+      - X: 1900000041
+        Y: -639999900
+      - X: 1889999959
+        Y: -639999900
+      - X: 1889999900
+        Y: -639999959
+      - X: 1889999900
+        Y: -650000041
+      - X: 1889999959
+        Y: -650000100
+      - X: 1900000041
+        Y: -650000100
     - - X: 2220000000
         Y: -690000000
       - X: 2190000128
@@ -104478,10 +104494,10 @@ CompositeCollider2D:
       - {x: 196.00003, y: -64}
       - {x: 197, y: -64.00003}
       - {x: 197.00003, y: -65}
-    - - {x: 191.99997, y: -65}
-      - {x: 191.99997, y: -64}
-      - {x: 190, y: -64.00003}
-      - {x: 190.00003, y: -65}
+    - - {x: 188.99998, y: -64.99998}
+      - {x: 190.99998, y: -64.99997}
+      - {x: 190.99997, y: -64}
+      - {x: 188.99998, y: -64.00002}
     - - {x: 201.99997, y: -73}
       - {x: 202.00003, y: -72}
       - {x: 204, y: -71.99997}
@@ -125134,6 +125150,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1318256181048250143, guid: 5fe1c5927ab4ac94ca354983f58443e5,
+        type: 3}
+      propertyPath: VelocityModule.x.scalar
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1318256181048250143, guid: 5fe1c5927ab4ac94ca354983f58443e5,
+        type: 3}
+      propertyPath: VelocityModule.y.scalar
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1318256181048250143, guid: 5fe1c5927ab4ac94ca354983f58443e5,
+        type: 3}
+      propertyPath: useRigidbodyForVelocity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1318256181048250143, guid: 5fe1c5927ab4ac94ca354983f58443e5,
+        type: 3}
+      propertyPath: ClampVelocityModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1318256181048250143, guid: 5fe1c5927ab4ac94ca354983f58443e5,
+        type: 3}
+      propertyPath: ClampVelocityModule.magnitude.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1318256181048250143, guid: 5fe1c5927ab4ac94ca354983f58443e5,
+        type: 3}
+      propertyPath: ClampVelocityModule.magnitude.minScalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1318256181048250143, guid: 5fe1c5927ab4ac94ca354983f58443e5,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].cycleCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1318256181048250143, guid: 5fe1c5927ab4ac94ca354983f58443e5,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 3119885417224161757, guid: 5fe1c5927ab4ac94ca354983f58443e5,
         type: 3}

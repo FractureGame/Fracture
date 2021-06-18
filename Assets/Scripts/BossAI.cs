@@ -84,6 +84,11 @@ public class BossAI : MonoBehaviourPunCallbacks
     
     [Header("Particles")]
     public ParticleSystem confetti;
+
+    [Header("CastlePhase")] 
+    private float actionCD = 2;
+
+    private bool isCastlePhasePlaying;
     
     // Start is called before the first frame update
     void Start()
@@ -129,12 +134,6 @@ public class BossAI : MonoBehaviourPunCallbacks
                 if (prob == 0)
                 {
                     castleTilemap.SetTile(coordinate, null);
-                    // Vector3 pos = castleTilemap.CellToWorld(coordinate);
-                    // prob = rand.Next(15);
-                    // if (prob == 0)
-                    // {
-                    //     PhotonNetwork.Instantiate(explosionParticle.name, pos, Quaternion.identity, 1);
-                    // }
                 }
             }
         }
@@ -152,9 +151,6 @@ public class BossAI : MonoBehaviourPunCallbacks
         catch (Exception)
         {
         }
-        
-
-        
     }
 
     [PunRPC]
@@ -163,6 +159,38 @@ public class BossAI : MonoBehaviourPunCallbacks
     {
         Destroy(GameObject.Find("Grid").transform.Find(lastTilemap.name).gameObject);
     }
+
+
+    private void ThrowBlobs()
+    {
+        PhotonNetwork.Instantiate(throwBlobsParticle.name, transform.position, Quaternion.identity, 1);
+    }
+
+    private void Jump()
+    {
+        rigidbody2d.AddForce(jumpVelocity * Vector2.up, ForceMode2D.Impulse);
+        falling = true;
+        isGrounded = false;
+    }
+    
+    public IEnumerator CastlePhase()
+    {
+        yield return new WaitForSeconds(actionCD);
+        Random rand = new Random();
+        int actionCode = rand.Next(2);
+        if (actionCode == 0)
+        {
+            Jump();
+        }
+        else if (actionCode == 1)
+        {
+            ThrowBlobs();
+        }
+
+        isCastlePhasePlaying = false;
+
+    }
+    
     
     private void Update()
     {
@@ -176,117 +204,33 @@ public class BossAI : MonoBehaviourPunCallbacks
 
         currentHealth = GetComponent<Enemy>().currentHealth;
         isGrounded = IsGrounded();
-        // Debug.LogFormat("isGrounded : {0}", isGrounded);
-
-        // if (phase1)
-        // {
-        //     if (!isPhase1Playing)
-        //     {
-        //         isPhase1Playing = true;
-        //
-        //         coroutine = StartCoroutine(Phase1());
-        //         
-        //     }
-        //
-        //     if (jumpCDStatus <= 0 && isGrounded && playerNearby)
-        //     {
-        //         isJumping = true;
-        //     }
-        //     else if (jumpCDStatus > 0 && isGrounded)
-        //     {
-        //         jumpCDStatus -= Time.deltaTime;
-        //     }
-        //
-        //     if (isJumping)
-        //     {
-        //         jumpCDStatus = jumpCD;
-        //         rigidbody2d.AddForce(jumpVelocity * Vector2.up, ForceMode2D.Impulse);
-        //         isJumping = false;
-        //         falling = true;
-        //         isGrounded = false;
-        //
-        //     }
-        //     
-        //     if (falling && isGrounded)
-        //     {
-        //         PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(0, -5),
-        //             Quaternion.identity, 1);
-        //
-        //         falling = false;
-        //     }
-        //     
-        //
-        // }
-        //
-        // if (currentHealth < 400 && currentHealth > 300 && phase1 && isGrounded)
-        // {
-        //     phase1 = false;
-        //     StopCoroutine(coroutine);
-        //     isPhase1Playing = false;
-        //     movingToPhase2 = true;
-        //     // BomberHarpie
-        //     PhotonNetwork.Instantiate(BomberHarpiePrefab.name, new Vector2(-27, 0), Quaternion.identity, 1);
-        // }
-        //
-        // if (movingToPhase2)
-        // {
-        //     // rigidbody2d.isKinematic = true;
-        //     // rigidbody2d.simulated = false;
-        //     if (Vector2.Distance(transform.position, new Vector2(waypoints[0].transform.position.x, transform.position.y)) <= 0)
-        //     {
-        //         movingToPhase2 = false;
-        //         nbJump = 0;
-        //         phase2 = true;
-        //     }
-        //     else
-        //     {
-        //         transform.position =
-        //             Vector2.MoveTowards(transform.position, new Vector2(waypoints[0].transform.position.x, transform.position.y), speed * Time.deltaTime);
-        //     }
-        // }
 
         if (playerNearby)
         {
             phase2 = true;
         }
-        
+
         if (phase2 && nbJump < nbJumpBeforeDestruction)
         {
-            if (jumpCDStatus <= 0 && isGrounded && playerNearby)
+            if (!isCastlePhasePlaying)
             {
-                // jumpDest = new Vector2(transform.position.x, transform.position.y + jumpHeight);
-                isJumping = true;
-            }
-            else if (jumpCDStatus > 0 && isGrounded)
-            {
-                jumpCDStatus -= Time.deltaTime;
+                isCastlePhasePlaying = true;
+                coroutine = StartCoroutine(CastlePhase());
             }
 
-            if (isJumping)
-            {
-                jumpCDStatus = jumpCD;
-                rigidbody2d.AddForce(jumpVelocity * Vector2.up, ForceMode2D.Impulse);
-                isJumping = false;
-                falling = true;
-                isGrounded = false;
-                
-            }
             if (falling && isGrounded)
             {
                 nbJump += 1;
                 photonView.RPC("DestroyTiles", RpcTarget.All);
-                PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(transform.position.x, transform.position.y - 3),
-                    Quaternion.identity, 1);
-
+                PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(0, -5), Quaternion.identity, 1);
                 falling = false;
             }
-            
-            
         }
         else if (phase2 && nbJump >= nbJumpBeforeDestruction && isGrounded && !hasdestroyedCastleAndGround)
         {
             photonView.RPC("DestroyCastleAndGround", RpcTarget.All);
             phase2 = false;
+            isCastlePhasePlaying = true;
             movingToPhase3 = true;
             isGrounded = false;
             hasdestroyedCastleAndGround = true;
@@ -299,9 +243,8 @@ public class BossAI : MonoBehaviourPunCallbacks
             rigidbody2d.simulated = false;
             if (Math.Abs(transform.position.x - waypoints[1].transform.position.x) <= 0.1)
             {
-                Debug.Log("YOOOO");
                 // CHECK IF there is a player nearby
-                if (isPlayerNearby())
+                if (playerNearby)
                 {
                     movingToPhase3 = false;
                     phase3 = true;
@@ -340,28 +283,11 @@ public class BossAI : MonoBehaviourPunCallbacks
 
             
             // if all harpies are dead you win, the bitch falls in lava
-            // if all harpies are dead you win, the bitch falls in lava
             if (CheckWinCondition() && !hasDestroyedlast)
             {
                 abdcef = true;
                 photonView.RPC("callPlayers", RpcTarget.All);
-                // phase3 = false;
-                // photonView.RPC("FocusOnBlob", RpcTarget.All);
-                // GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
-                // GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
-                // GameObject[] cameras = GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().cameras;
-                // cameras[5].SetActive(true);
-                // cameras[4].SetActive(false);
-                // cameras[2].SetActive(false);
-                // cameras[1].SetActive(false);
-                // cameras[0].SetActive(false);
-                // cameras[3].SetActive(false);
-                // cameras[6].SetActive(false);
-                // GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
-                // GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
-                // GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
-                // GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
-                
+
                 rigidbody2d.isKinematic = false;
                 rigidbody2d.simulated = true;
                 if (isGrounded && !hasDestroyedlast)
@@ -387,10 +313,6 @@ public class BossAI : MonoBehaviourPunCallbacks
                     {
                         isEscaping = true;
                         photonView.RPC("callPlayers2", RpcTarget.All);
-                        // CHANGE CAMERA FOR BOTH PLAYERS
-                        // photonView.RPC("WatchBlobEscape", RpcTarget.All);
-
-
                     }
 
                     transform.position = Vector2.MoveTowards(transform.position, dest, escapeSpeed * Time.deltaTime);
@@ -411,25 +333,6 @@ public class BossAI : MonoBehaviourPunCallbacks
     {
         GameObject.Find("RoiBlob").GetComponentInChildren<BossAI>().isEscaping = true;
     }
-    
-    
-    // [PunRPC]
-    // private void FocusOnBlob()
-    // {
-    //     GameObject.Find("RoiBlob").GetComponentInChildren<BossAI>().isFalling = true;
-    //     GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
-    //     GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().focusOnKingBlob = true;
-    //     GameObject[] cameras = GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().cameras;
-    //     cameras[5].SetActive(true);
-    //     cameras[4].SetActive(false);
-    //     cameras[2].SetActive(false);
-    //     cameras[1].SetActive(false);
-    //     cameras[0].SetActive(false);
-    //     cameras[3].SetActive(false);
-    //     cameras[6].SetActive(false);
-    //     GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
-    //     GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
-    // }
 
     private bool HarpiesEscaped()
     {
@@ -452,12 +355,6 @@ public class BossAI : MonoBehaviourPunCallbacks
         return false;
     }
 
-    private void OnDestroy()
-    {
-        // photonView.RPC("Victory", RpcTarget.All);
-    }
-    
-    
     private bool CheckWinCondition()
     {
         foreach (var harpie in rocketHarpies)
@@ -477,17 +374,6 @@ public class BossAI : MonoBehaviourPunCallbacks
         return true;
     }
 
-    private bool isPlayerNearby()
-    {
-        Debug.LogFormat("nearby {0}",Math.Abs(transform.position.x - playerTopPos.x));
-        if (Math.Abs(transform.position.x - playerTopPos.x) <= 25 || Math.Abs(transform.position.x - playerBotPos.x) <= 25)
-        {
-            return true;
-        }
-
-        return false;
-    }
-    
     private void CallHarpies()
     {
         foreach (var rocketHarpy in rocketHarpies)
