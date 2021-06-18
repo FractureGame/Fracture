@@ -283,8 +283,12 @@ public class BossAI : MonoBehaviourPunCallbacks
             rigidbody2d.simulated = false;
             if (Vector2.Distance(transform.position, new Vector2(waypoints[1].transform.position.x, transform.position.y)) <= 0)
             {
-                movingToPhase3 = false;
-                phase3 = true;
+                // CHECK IF there is a player nearby
+                if (isPlayerNearby())
+                {
+                    movingToPhase3 = false;
+                    phase3 = true;
+                }
             }
             transform.position =
                 Vector2.MoveTowards(transform.position, new Vector2(waypoints[1].transform.position.x, transform.position.y), speed * Time.deltaTime);
@@ -445,6 +449,16 @@ public class BossAI : MonoBehaviourPunCallbacks
             }
         }
         return true;
+    }
+
+    private bool isPlayerNearby()
+    {
+        if (Math.Abs(transform.position.x - playerTopPos.x) <= 25 || Math.Abs(transform.position.x - playerBotPos.x) <= 25)
+        {
+            return true;
+        }
+
+        return false;
     }
     
     private void CallHarpies()
