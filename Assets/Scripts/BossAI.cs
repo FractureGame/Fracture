@@ -88,7 +88,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     public ParticleSystem confetti;
 
     [Header("CastlePhase")] 
-    private float actionCD = 2;
+    private float actionCD = 1.5f;
     private bool isCastlePhasePlaying;
     
     // Start is called before the first frame update

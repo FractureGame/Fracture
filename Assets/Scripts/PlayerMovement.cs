@@ -647,7 +647,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                     cameras[6].SetActive(false);
                     GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
                     GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
-                    // cameras[5].transform.position = new Vector3(blobking.transform.position.x, blobking.transform.position.y, -10);
                 }
                 else if (blobking.GetComponent<BossAI>().isEscaping)
                 {
