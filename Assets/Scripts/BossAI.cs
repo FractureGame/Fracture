@@ -76,7 +76,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     
     [Header("JumpAttack")]
     public GameObject JumpGroundParticles;
-    private float distanceFromPlayer = 25; 
+    private float distanceFromPlayer = 25;
 
     [Header("Players")]
     private Vector2 playerTopPos;
@@ -87,7 +87,6 @@ public class BossAI : MonoBehaviourPunCallbacks
 
     [Header("CastlePhase")] 
     private float actionCD = 2;
-
     private bool isCastlePhasePlaying;
     
     // Start is called before the first frame update
@@ -115,11 +114,11 @@ public class BossAI : MonoBehaviourPunCallbacks
         isPhase1Playing = false;
     }
 
-    public IEnumerator MovingToPhase4()
-    {
-        yield return new WaitForSeconds(spawnBlob);
-        Instantiate(blobPrefab, new Vector2(transform.position.x -4, transform.position.y), Quaternion.identity);
-    }
+    // public IEnumerator MovingToPhase4()
+    // {
+    //     yield return new WaitForSeconds(spawnBlob);
+    //     Instantiate(blobPrefab, new Vector2(transform.position.x -4, transform.position.y), Quaternion.identity);
+    // }
 
     [PunRPC]
     private void DestroyTiles()
@@ -169,28 +168,33 @@ public class BossAI : MonoBehaviourPunCallbacks
     private void Jump()
     {
         rigidbody2d.AddForce(jumpVelocity * Vector2.up, ForceMode2D.Impulse);
-        falling = true;
-        isGrounded = false;
     }
     
     public IEnumerator CastlePhase()
     {
         yield return new WaitForSeconds(actionCD);
         Random rand = new Random();
-        int actionCode = rand.Next(2);
+        int actionCode = rand.Next(1);
         if (actionCode == 0)
         {
             Jump();
+            isJumping = true;
         }
         else if (actionCode == 1)
         {
-            ThrowBlobs();
+            // ThrowBlobs();
         }
 
         isCastlePhasePlaying = false;
 
     }
-    
+
+
+    [PunRPC]
+    private void InstanciateGroundParticles(string groundParticlesName, float x, float y)
+    {
+        PhotonNetwork.Instantiate(groundParticlesName, new Vector2(x, y), Quaternion.identity, 1);
+    }
     
     private void Update()
     {
@@ -218,11 +222,17 @@ public class BossAI : MonoBehaviourPunCallbacks
                 coroutine = StartCoroutine(CastlePhase());
             }
 
-            if (falling && isGrounded)
+            if (transform.position.y > 0)
+            {
+                falling = true;
+            }
+            
+            if (isGrounded && falling)
             {
                 nbJump += 1;
                 photonView.RPC("DestroyTiles", RpcTarget.All);
-                PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(0, -5), Quaternion.identity, 1);
+                photonView.RPC("InstanciateGroundParticles", RpcTarget.All, JumpGroundParticles.name, transform.position.x, transform.position.y);
+                // PhotonNetwork.Instantiate(JumpGroundParticles.name, transform.position, Quaternion.identity, 1);
                 falling = false;
             }
         }
