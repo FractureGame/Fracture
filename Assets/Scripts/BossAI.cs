@@ -255,10 +255,7 @@ public class BossAI : MonoBehaviourPunCallbacks
                 // photonView.RPC("ShakeCamera1", RpcTarget.All);
                 shake.camAnim = GameObject.Find("Camera1").GetComponent<Animator>();
                 shake.CamShake();
-
-                // set old direction of both players to zero
-                playerTop.GetComponent<PlayerMovement>().oldDirection = Vector2.zero;
-                playerBot.GetComponent<PlayerMovement>().oldDirection = Vector2.zero;
+                
 
 
             }

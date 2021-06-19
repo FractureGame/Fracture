@@ -628,14 +628,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (blobking == null)
         {
-            blobking = GameObject.Find("RoiBlob");
+            blobking = GameObject.Find("RoiBlob").transform.Find("Graphics").gameObject;
         }
         
         if (photonView.IsMine)
         {
             if (SceneManager.GetActiveScene().name == "BossRoom")
             {
-                if (blobking.GetComponentInChildren<BossAI>().abdcef)
+                if (blobking.GetComponent<BossAI>().abdcef)
                 {
                     Debug.Log("YES SIR");
                     cameras[5].SetActive(true);
@@ -647,8 +647,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                     cameras[6].SetActive(false);
                     GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
                     GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+                    // cameras[5].transform.position = new Vector3(blobking.transform.position.x, blobking.transform.position.y, -10);
                 }
-                else if (blobking.GetComponentInChildren<BossAI>().isEscaping)
+                else if (blobking.GetComponent<BossAI>().isEscaping)
                 {
                     cameras[6].SetActive(true);
                     cameras[4].SetActive(false);
