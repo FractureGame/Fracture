@@ -9,10 +9,10 @@ using Random = System.Random;
 public class BossAI : MonoBehaviourPunCallbacks
 {
     [Header("Health")]
-    private bool isGrounded = false;
+    private bool isGrounded;
     // private GameObject lifebar;
     private int currentHealth;
-    public bool isInvincible = false; // triggered when enemy contact
+    public bool isInvincible; // triggered when enemy contact
 
     private Rigidbody2D rigidbody2d;
     private PolygonCollider2D polygonCollider2D;
@@ -22,37 +22,23 @@ public class BossAI : MonoBehaviourPunCallbacks
     public float linearDrag;
     public float gravity;
     public float fallMultiplier;
-
     private float speed = 13;
 
     
     [Header("Timeline")] 
     public GameObject[] waypoints;
-    private bool phase1 = true;
     private bool movingToPhase2;
     private bool phase2;
     private bool movingToPhase3;
     private bool phase3;
-    private bool isPhase1Playing;
     private Coroutine coroutine;
     public Tilemap castleTilemap;
     public Tilemap castleGround;
     public Tilemap lastTilemap;
     public LayerMask dangerLayerMask;
-    public Grid grid;
     public bool isEscaping;
     public bool abdcef = false;
 
-    [Header("Abilities")] 
-    public GameObject throwBlobsParticle;
-    private float throwBlobsCD = 5f;
-    public GameObject BomberHarpiePrefab;
-    public GameObject explosionParticle;
-    public GameObject blobPrefab;
-    private float spawnBlob = 0.5f;
-
-
-    private Vector2 pos;
     public HarpieAI[] rocketHarpies;
     private bool hasCalledHarpies;
     public float escapeSpeed;
@@ -61,11 +47,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     private bool hasdestroyedCastleAndGround;
     
     [Header("Jump")]
-    private float jumpCD = 5f;
-    private float jumpCDStatus;
     private float jumpVelocity = 200f;
-    private float jumpHeight = 8f;
-    private Vector2 jumpDest;
     private bool falling;
     private bool isJumpPlaying;
     private int nbJumpBeforeDestruction = 2;
@@ -88,41 +70,19 @@ public class BossAI : MonoBehaviourPunCallbacks
     public ParticleSystem confetti;
 
     [Header("CastlePhase")] 
-    private float actionCD = 1.5f;
+    private float actionCD = 0;
     private bool isCastlePhasePlaying;
+    private bool started;
     
     // Start is called before the first frame update
     void Start()
     {
-        jumpCDStatus = 0;
-        pos = transform.position;
         rigidbody2d = GetComponent<Rigidbody2D>();
         polygonCollider2D = GetComponent<PolygonCollider2D>();
         transform.position = Vector2.MoveTowards(transform.position, transform.position, speed * Time.deltaTime);
-        // lifebar = GameObject.Find("Canvas").transform.Find("BossLifeBar").gameObject;
-        
-        // TEST
-        // phase1 = false;
-        // movingToPhase2 = true;
         shake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<Shake>();
-
     }
     
-    
-    public IEnumerator Phase1()
-    {
-        // throw blobs
-        yield return new WaitForSeconds(throwBlobsCD);
-        PhotonNetwork.Instantiate(throwBlobsParticle.name, transform.position, Quaternion.identity, 1);
-        isPhase1Playing = false;
-    }
-
-    // public IEnumerator MovingToPhase4()
-    // {
-    //     yield return new WaitForSeconds(spawnBlob);
-    //     Instantiate(blobPrefab, new Vector2(transform.position.x -4, transform.position.y), Quaternion.identity);
-    // }
-
     // [PunRPC]
     private void DestroyTiles()
     {
@@ -161,13 +121,6 @@ public class BossAI : MonoBehaviourPunCallbacks
     {
         Destroy(GameObject.Find("Grid").transform.Find(lastTilemap.name).gameObject);
     }
-
-
-    private void ThrowBlobs()
-    {
-        PhotonNetwork.Instantiate(throwBlobsParticle.name, transform.position, Quaternion.identity, 1);
-    }
-
     private void Jump()
     {
         rigidbody2d.AddForce(jumpVelocity * Vector2.up, ForceMode2D.Impulse);
@@ -175,19 +128,16 @@ public class BossAI : MonoBehaviourPunCallbacks
     
     public IEnumerator CastlePhase()
     {
-        yield return new WaitForSeconds(actionCD);
-        Random rand = new Random();
-        int actionCode = rand.Next(1);
-        if (actionCode == 0)
-        {
-            Jump();
-            isJumping = true;
-        }
-        else if (actionCode == 1)
-        {
-            // ThrowBlobs();
-        }
 
+        yield return new WaitForSeconds(actionCD);
+        if (actionCD == 0)
+        {
+            actionCD += 1.5f;
+        }
+  
+        Jump();
+        isJumping = true;
+        
         isCastlePhasePlaying = false;
 
     }
@@ -218,15 +168,38 @@ public class BossAI : MonoBehaviourPunCallbacks
         playerBotPos = playerBot.transform.position;
 
 
-        playerNearby = Math.Abs(transform.position.x - playerTopPos.x) <= distanceFromPlayer || Math.Abs(transform.position.x - playerBotPos.x) <= distanceFromPlayer;
+        if (transform.position.y > -10)
+        {
+            playerNearby = Math.Abs(transform.position.x - playerTopPos.x) <= 20 || Math.Abs(transform.position.x - playerBotPos.x) <= 20;
+        }
+        else
+        {
+            playerNearby = Math.Abs(transform.position.x - playerTopPos.x) <= 25 || Math.Abs(transform.position.x - playerBotPos.x) <= 25;
+        }
+        
         
 
         currentHealth = GetComponent<Enemy>().currentHealth;
         isGrounded = IsGrounded();
 
-        if (playerNearby)
+        if (playerNearby && !started)
         {
-            phase2 = true;
+            movingToPhase2 = true;
+            started = true;
+        }
+
+        if (movingToPhase2)
+        {
+            if (Math.Abs(transform.position.x - waypoints[0].transform.position.x) > 0)
+            {
+                transform.position = Vector2.MoveTowards(transform.position,
+                    new Vector2(waypoints[0].transform.position.x, transform.position.y), speed * Time.deltaTime);
+            }
+            else
+            {
+                movingToPhase2 = false;
+                phase2 = true;
+            }
         }
 
         if (phase2 && nbJump < nbJumpBeforeDestruction)
