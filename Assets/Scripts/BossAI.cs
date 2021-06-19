@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -171,7 +172,8 @@ public class BossAI : MonoBehaviourPunCallbacks
         shakeManager.GetComponent<Shake>().CamShake();
     }
 
-
+    
+    
     private void Update()
     {
 
@@ -199,6 +201,10 @@ public class BossAI : MonoBehaviourPunCallbacks
         {
             movingToPhase2 = true;
             started = true;
+            GameObject objective = GameObject.Find("Canvas").transform.Find("ObjImage").transform.Find("Objective")
+                .gameObject;
+            objective.GetComponent<TextMeshProUGUI>().text = "Objective : Follow Blob King";
+
         }
 
         if (movingToPhase2)
@@ -268,6 +274,9 @@ public class BossAI : MonoBehaviourPunCallbacks
                 {
                     movingToPhase3 = false;
                     phase3 = true;
+                    GameObject objective = GameObject.Find("Canvas").transform.Find("ObjImage").transform.Find("Objective")
+                        .gameObject;
+                    objective.GetComponent<TextMeshProUGUI>().text = "Objective : \nKill the harpies to stop the king from escaping";
                 }
             }
             transform.position =
