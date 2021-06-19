@@ -19,9 +19,9 @@ public class BossAI : MonoBehaviourPunCallbacks
     [SerializeField] private LayerMask platformLayerMask;
     
     [Header("Physics")] 
-    public float linearDrag;
-    public float gravity;
-    public float fallMultiplier;
+    private float linearDrag = 1;
+    private float gravity = 1;
+    private float fallMultiplier = 9;
     private float speed = 13;
 
     
@@ -47,7 +47,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     private bool hasdestroyedCastleAndGround;
     
     [Header("Jump")]
-    private float jumpVelocity = 200f;
+    private float jumpVelocity = 40;
     private bool falling;
     private bool isJumpPlaying;
     private int nbJumpBeforeDestruction = 2;
@@ -81,6 +81,14 @@ public class BossAI : MonoBehaviourPunCallbacks
         polygonCollider2D = GetComponent<PolygonCollider2D>();
         transform.position = Vector2.MoveTowards(transform.position, transform.position, speed * Time.deltaTime);
         shake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<Shake>();
+    }
+    
+    private void modifyPhysics()
+    {
+        // Drag can be used to slow down an object. The higher the drag the more the object slows down.
+        rigidbody2d.drag = linearDrag;
+        rigidbody2d.gravityScale = gravity * fallMultiplier;
+        
     }
     
     // [PunRPC]
@@ -134,9 +142,14 @@ public class BossAI : MonoBehaviourPunCallbacks
         {
             actionCD += 1.5f;
         }
-  
-        Jump();
-        isJumping = true;
+
+
+        if (transform.position.y > -5)
+        {
+            Jump();
+            isJumping = true;
+        }
+
         
         isCastlePhasePlaying = false;
 
@@ -331,6 +344,8 @@ public class BossAI : MonoBehaviourPunCallbacks
                 }
             }
         }
+        modifyPhysics();
+        
     }
 
     [PunRPC]
