@@ -1123,6 +1123,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8192
   moveSpeed: 10
+  oldDirection: {x: 1, y: 0}
   jumpVelocity: 16
   onGround: 0
   linearDrag: 1

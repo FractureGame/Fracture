@@ -77,6 +77,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     [Header("JumpAttack")]
     public GameObject JumpGroundParticles;
     private float distanceFromPlayer = 25;
+    private Shake shake;
 
     [Header("Players")] private GameObject playerTop;
     private GameObject playerBot;
@@ -103,7 +104,8 @@ public class BossAI : MonoBehaviourPunCallbacks
         // TEST
         // phase1 = false;
         // movingToPhase2 = true;
-        
+        shake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<Shake>();
+
     }
     
     
@@ -196,7 +198,17 @@ public class BossAI : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.Instantiate(groundParticlesName, new Vector2(x, y), Quaternion.identity, 1);
     }
-    
+
+    [PunRPC]
+    private void ShakeCamera1()
+    {
+        GameObject cam1 = GameObject.Find("Camera1");
+        GameObject shakeManager = GameObject.Find("ShakeManager");
+        shakeManager.GetComponent<Shake>().camAnim = cam1.GetComponent<Animator>();
+        shakeManager.GetComponent<Shake>().CamShake();
+    }
+
+
     private void Update()
     {
 
@@ -239,10 +251,15 @@ public class BossAI : MonoBehaviourPunCallbacks
                 // PhotonNetwork.Instantiate(JumpGroundParticles.name, transform.position, Quaternion.identity, 1);
                 falling = false;
                 
+                // Shake Camera
+                // photonView.RPC("ShakeCamera1", RpcTarget.All);
+                shake.camAnim = GameObject.Find("Camera1").GetComponent<Animator>();
+                shake.CamShake();
+
                 // set old direction of both players to zero
                 playerTop.GetComponent<PlayerMovement>().oldDirection = Vector2.zero;
                 playerBot.GetComponent<PlayerMovement>().oldDirection = Vector2.zero;
-                
+
 
             }
         }
@@ -312,6 +329,10 @@ public class BossAI : MonoBehaviourPunCallbacks
                 rigidbody2d.simulated = true;
                 if (isGrounded && !hasDestroyedlast)
                 {
+                    // Shake Camera
+                    shake.camAnim = GameObject.Find("CameraOnBlob").GetComponent<Animator>();
+                    shake.CamShake();
+                    
                     photonView.RPC("DestroyLastTilemap", RpcTarget.All);
                     hasDestroyedlast = true;
                 }
