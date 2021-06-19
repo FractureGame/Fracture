@@ -120,7 +120,7 @@ public class BossAI : MonoBehaviourPunCallbacks
     //     Instantiate(blobPrefab, new Vector2(transform.position.x -4, transform.position.y), Quaternion.identity);
     // }
 
-    [PunRPC]
+    // [PunRPC]
     private void DestroyTiles()
     {
         Random rand = new Random();
@@ -230,7 +230,8 @@ public class BossAI : MonoBehaviourPunCallbacks
             if (isGrounded && falling)
             {
                 nbJump += 1;
-                photonView.RPC("DestroyTiles", RpcTarget.All);
+                DestroyTiles();
+                // photonView.RPC("DestroyTiles", RpcTarget.All);
                 photonView.RPC("InstanciateGroundParticles", RpcTarget.All, JumpGroundParticles.name, transform.position.x, transform.position.y);
                 // PhotonNetwork.Instantiate(JumpGroundParticles.name, transform.position, Quaternion.identity, 1);
                 falling = false;
