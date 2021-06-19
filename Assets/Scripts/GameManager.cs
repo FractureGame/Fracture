@@ -185,11 +185,11 @@ namespace Com.MyCompany.MyGame
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(0, 1f,0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(-35, 8.5f,0f), Quaternion.identity, 0);
                 }
                 else
                 {
-                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(0, 1f,0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(-35, -5f,0f), Quaternion.identity, 0);
                 }
             }
         }
