@@ -80,7 +80,7 @@ namespace Com.MyCompany.MyGame
         {
             Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName);
             
-            // So that the player leave alone and the player who did not left is not brutally kicked of the game
+            // So that the player leaves alone and the player who did not leave is not brutally kicked of the game
             PhotonNetwork.AutomaticallySyncScene = false;
             if (PhotonNetwork.IsMasterClient)
             {
@@ -126,7 +126,7 @@ namespace Com.MyCompany.MyGame
                 }
                 else
                 {
-                    GameObject e = Instantiate(Enemylifebar, GameObject.Find("Canvas").transform);
+                    GameObject e = Instantiate(Enemylifebar, GameObject.Find("LifeBars").transform);
                     e.name = enemy.name + "LifeBar";
                     e.tag = "LifeBar";
                     e.transform.position = new Vector3(enemy.GetComponentInChildren<BoxCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
@@ -185,11 +185,11 @@ namespace Com.MyCompany.MyGame
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(-15f, 3f,0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(-35, 8.5f,0f), Quaternion.identity, 0);
                 }
                 else
                 {
-                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(-15f, -10f,0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(-35, -5f,0f), Quaternion.identity, 0);
                 }
             }
         }

@@ -31,6 +31,7 @@ public class HarpieAI : MonoBehaviourPunCallbacks
     private Vector2 stunPos;
     private Vector2 endStunPos;
     
+    
     public bool isRocket;
     private GameObject blobKing;
     public bool escortBlobKing;
@@ -86,6 +87,13 @@ public class HarpieAI : MonoBehaviourPunCallbacks
             // transform.Rotate(0, 180, 0);
         }
         originDir = direction;
+        if (isRocket)
+        {
+            AnimationCurve curve = new AnimationCurve();
+            curve.AddKey(0, 0);
+            curve.AddKey(1, 0);
+            GetComponentInChildren<LineRenderer>().widthCurve = curve;
+        }
     }
     
     
@@ -93,38 +101,26 @@ public class HarpieAI : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
+        
         if (isRocket)
         {
+            
+            blobKing = GameObject.Find("RoiBlob");
+            
+            
             if (ignition)
             {
-                Vector2 dest = new Vector2(transform.position.x, blobKing.GetComponentInChildren<BossAI>().waypoints[2].transform.position.y);
-                // MOVE UP WITH THEM
-                if (Vector2.Distance(transform.position, dest) <= 0)
-                {
-                    // YOU LOSE
-                }
-                else
-                {
-                    transform.position = Vector2.MoveTowards(transform.position, dest, blobKing.GetComponentInChildren<BossAI>().escapeSpeed * Time.deltaTime);
-                }
+                AnimationCurve curve = new AnimationCurve();
+                curve.AddKey(0, 1);
+                curve.AddKey(1, 1);
+                GetComponentInChildren<LineRenderer>().widthCurve = curve;
+                
+                Vector2 dest = new Vector2(transform.position.x, blobKing.GetComponentInChildren<BossAI>().waypoints[3].transform.position.y);
+                transform.position = Vector2.MoveTowards(transform.position, dest, blobKing.GetComponentInChildren<BossAI>().escapeSpeed * Time.deltaTime);
             }
             else
             {
-                blobKing = GameObject.Find("RoiBlob");
-                if (escortBlobKing)
-                {
-                    if (Vector2.Distance(transform.position, waypoints[1].position) <= 0)
-                    {
-                        transform.Rotate(0, 180, 0);
-                        readyToCarryKingBlob = true;
-                    }
-                    else
-                    {
-                        transform.position = Vector2.MoveTowards(transform.position, waypoints[1].transform.position,
-                            speedEnemy * Time.deltaTime);
-                    }
-                
-                }
+                readyToCarryKingBlob = true;
             }
 
             
@@ -148,82 +144,83 @@ public class HarpieAI : MonoBehaviourPunCallbacks
                 {
 
                 }
-                
 
 
-
-                if (horizontal)
+                if (canChase)
                 {
-                    if (followPlayerTop && playerTopPos.y > playerBotPos.y)
+                    if (horizontal)
                     {
-                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                        if (followPlayerTop && playerTopPos.y > playerBotPos.y)
+                        {
+                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                        }
+                        else if (followPlayerTop && playerTopPos.y < playerBotPos.y)
+                        {
+                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                        }
+                        else if (!followPlayerTop && playerTopPos.y > playerBotPos.y)
+                        {
+                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                        }
+                        else if (!followPlayerTop && playerTopPos.y < playerBotPos.y)
+                        {
+                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                        }
                     }
-                    else if (followPlayerTop && playerTopPos.y < playerBotPos.y)
+                    else
                     {
-                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                        if (followPlayerTop && playerTopPos.x > playerBotPos.x)
+                        {
+                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                        }
+                        else if (followPlayerTop && playerTopPos.x < playerBotPos.x)
+                        {
+                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                        }
+                        else if (!followPlayerTop && playerTopPos.x > playerBotPos.x)
+                        {
+                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                        }
+                        else if (!followPlayerTop && playerTopPos.x < playerBotPos.x)
+                        {
+                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                        }
                     }
-                    else if (!followPlayerTop && playerTopPos.y > playerBotPos.y)
-                    {
-                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                    }
-                    else if (!followPlayerTop && playerTopPos.y < playerBotPos.y)
-                    {
-                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
-                    }
-                }
-                else
-                {
-                    if (followPlayerTop && playerTopPos.x > playerBotPos.x)
-                    {
-                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
-                    }
-                    else if (followPlayerTop && playerTopPos.x < playerBotPos.x)
-                    {
-                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                    }
-                    else if (!followPlayerTop && playerTopPos.x > playerBotPos.x)
-                    {
-                        playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                    }
-                    else if (!followPlayerTop && playerTopPos.x < playerBotPos.x)
-                    {
-                        playerToFollow = GameObject.Find("PlayerTop(Clone)");
-                    }
-                }
 
-                if (playerToFollow == GameObject.Find("PlayerTop(Clone)"))
-                {
-                    try
+                    if (playerToFollow == GameObject.Find("PlayerTop(Clone)"))
                     {
-                        if (photonView.Owner.Equals(PhotonNetwork.PlayerList[0]) == false)
+                        try
+                        {
+                            if (photonView.Owner.Equals(PhotonNetwork.PlayerList[0]) == false)
+                            {
+                                photonView.TransferOwnership(PhotonNetwork.PlayerList[0]);
+                            }
+                        }
+                        catch (NullReferenceException)
                         {
                             photonView.TransferOwnership(PhotonNetwork.PlayerList[0]);
                         }
-                    }
-                    catch (NullReferenceException)
-                    {
-                        photonView.TransferOwnership(PhotonNetwork.PlayerList[0]);
-                    }
 
-                }
-                else
-                {
-                    try
+                    }
+                    else
                     {
-                        if (photonView.Owner.Equals(PhotonNetwork.PlayerList[1]) == false)
+                        try
+                        {
+                            if (photonView.Owner.Equals(PhotonNetwork.PlayerList[1]) == false)
+                            {
+                                photonView.TransferOwnership(PhotonNetwork.PlayerList[1]);
+                            }
+                        }
+                        catch (NullReferenceException)
                         {
                             photonView.TransferOwnership(PhotonNetwork.PlayerList[1]);
                         }
                     }
-                    catch (NullReferenceException)
-                    {
-                        photonView.TransferOwnership(PhotonNetwork.PlayerList[1]);
-                    }
+
+                    playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
                 }
 
-                playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
-
-
+                
                 if (isPatrolling)
                 {
                     transform.position =
@@ -234,6 +231,7 @@ public class HarpieAI : MonoBehaviourPunCallbacks
                         target = waypoints[destPoint];
                     }
                 }
+                
 
                 if (canChase)
                 {

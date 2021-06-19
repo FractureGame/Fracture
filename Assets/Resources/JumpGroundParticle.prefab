@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7137467784428515439}
   - component: {fileID: 8611366011690422161}
   - component: {fileID: 3905224604147064829}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: GroundExplosionParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4845,7 +4845,7 @@ GameObject:
   - component: {fileID: 8243293179855991381}
   - component: {fileID: 8243293179855991382}
   - component: {fileID: 8243293179855991383}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: JumpGroundParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

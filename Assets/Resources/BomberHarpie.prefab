@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 2648646937176109818}
   - component: {fileID: 7030071869294687508}
   - component: {fileID: 496987136641802596}
+  - component: {fileID: 4538356723728347400}
   m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
@@ -182,7 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 15
-  speedEnemy: 9
+  speedEnemy: 7
   waypoints:
   - {fileID: 3143475821298656590}
   - {fileID: 4886374949198988216}
@@ -315,6 +316,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.0702944, y: 0.7735596}
   m_EdgeRadius: 0
+--- !u!114 &4538356723728347400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2853923336796822312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8726807ed7db4e43ebbef6ebf1b17537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firingDuration: 5
+  reloadingDuration: 2
 --- !u!1 &3335711924736792995
 GameObject:
   m_ObjectHideFlags: 0
@@ -1677,8 +1692,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 0}
+        key0: {r: 1, g: 0, b: 0, a: 1}
+        key1: {r: 1, g: 0, b: 0, a: 0}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -5203,8 +5218,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5772708982873422063}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.91, y: -0.62, z: -478.44296}
-  m_LocalScale: {x: 4, y: 4, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -478.44296}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children:
   - {fileID: 1031864678756823053}
   - {fileID: 3143475821298656590}
@@ -5435,7 +5450,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0, b: 0, a: 1}
+      maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5497,7 +5512,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -9943,7 +9958,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -10082,12 +10097,12 @@ PrefabInstance:
     - target: {fileID: 2809367367460684955, guid: fe354c928848008449217848c6ce806f,
         type: 3}
       propertyPath: m_Bounds.m_Center.y
-      value: 0.00085002184
+      value: 0.000849843
       objectReference: {fileID: 0}
     - target: {fileID: 2809367367460684955, guid: fe354c928848008449217848c6ce806f,
         type: 3}
       propertyPath: m_Bounds.m_Extent.x
-      value: 0.45837018
+      value: 0.45837024
       objectReference: {fileID: 0}
     - target: {fileID: 3147828002555413871, guid: fe354c928848008449217848c6ce806f,
         type: 3}
@@ -10107,12 +10122,12 @@ PrefabInstance:
     - target: {fileID: 3789709226249176671, guid: fe354c928848008449217848c6ce806f,
         type: 3}
       propertyPath: m_Bounds.m_Center.y
-      value: -0.0003399849
+      value: -0.0003399551
       objectReference: {fileID: 0}
     - target: {fileID: 3789709226249176671, guid: fe354c928848008449217848c6ce806f,
         type: 3}
       propertyPath: m_Bounds.m_Extent.x
-      value: 1.3799998
+      value: 1.3799999
       objectReference: {fileID: 0}
     - target: {fileID: 4257382821170238936, guid: fe354c928848008449217848c6ce806f,
         type: 3}
@@ -10177,12 +10192,12 @@ PrefabInstance:
     - target: {fileID: 4302718577133510618, guid: fe354c928848008449217848c6ce806f,
         type: 3}
       propertyPath: m_Bounds.m_Center.y
-      value: -0.0009951591
+      value: -0.0009950995
       objectReference: {fileID: 0}
     - target: {fileID: 4302718577133510618, guid: fe354c928848008449217848c6ce806f,
         type: 3}
       propertyPath: m_Bounds.m_Extent.x
-      value: 0.66125005
+      value: 0.6612501
       objectReference: {fileID: 0}
     - target: {fileID: 4302718577133510618, guid: fe354c928848008449217848c6ce806f,
         type: 3}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -9,62 +10,48 @@ using Random = System.Random;
 public class BossAI : MonoBehaviourPunCallbacks
 {
     [Header("Health")]
-    private bool isGrounded = false;
+    private bool isGrounded;
     // private GameObject lifebar;
     private int currentHealth;
+    public bool isInvincible; // triggered when enemy contact
 
     private Rigidbody2D rigidbody2d;
     private PolygonCollider2D polygonCollider2D;
     [SerializeField] private LayerMask platformLayerMask;
     
     [Header("Physics")] 
-    public float linearDrag;
-    public float gravity;
-    public float fallMultiplier;
-
-    private float speed = 10;
+    private float linearDrag = 1;
+    private float gravity = 1;
+    private float fallMultiplier = 9;
+    private float speed = 13;
 
     
     [Header("Timeline")] 
     public GameObject[] waypoints;
-    private bool phase1 = true;
     private bool movingToPhase2;
     private bool phase2;
     private bool movingToPhase3;
     private bool phase3;
-    private bool isPhase1Playing;
     private Coroutine coroutine;
     public Tilemap castleTilemap;
     public Tilemap castleGround;
     public Tilemap lastTilemap;
     public LayerMask dangerLayerMask;
-    public Grid grid;
+    public bool isEscaping;
+    public bool abdcef = false;
 
-    [Header("Abilities")] 
-    public GameObject throwBlobsParticle;
-    private float throwBlobsCD = 5f;
-    public GameObject BomberHarpiePrefab;
-    public GameObject explosionParticle;
-    public GameObject blobPrefab;
-    private float spawnBlob = 0.5f;
-
-
-    private Vector2 pos;
     public HarpieAI[] rocketHarpies;
     private bool hasCalledHarpies;
     public float escapeSpeed;
     private bool hasCalledIgnition;
     private bool hasDestroyedlast;
+    private bool hasdestroyedCastleAndGround;
     
     [Header("Jump")]
-    private float jumpCD = 5f;
-    private float jumpCDStatus;
-    private float jumpVelocity = 20f;
-    private float jumpHeight = 8f;
-    private Vector2 jumpDest;
+    private float jumpVelocity = 40;
     private bool falling;
     private bool isJumpPlaying;
-    private int nbJumpBeforeDestruction = 3;
+    private int nbJumpBeforeDestruction = 2;
     private int nbJump;
     private bool isJumping;
     private bool playerNearby;
@@ -72,39 +59,40 @@ public class BossAI : MonoBehaviourPunCallbacks
     
     [Header("JumpAttack")]
     public GameObject JumpGroundParticles;
-    private float distanceFromPlayer = 15; 
+    private float distanceFromPlayer = 25;
+    private Shake shake;
 
-    [Header("Players")]
+    [Header("Players")] private GameObject playerTop;
+    private GameObject playerBot;
     private Vector2 playerTopPos;
     private Vector2 playerBotPos;
+    
+    [Header("Particles")]
+    public ParticleSystem confetti;
+
+    [Header("CastlePhase")] 
+    private float actionCD = 0;
+    private bool isCastlePhasePlaying;
+    private bool started;
     
     // Start is called before the first frame update
     void Start()
     {
-        jumpCDStatus = 0;
-        pos = transform.position;
         rigidbody2d = GetComponent<Rigidbody2D>();
         polygonCollider2D = GetComponent<PolygonCollider2D>();
         transform.position = Vector2.MoveTowards(transform.position, transform.position, speed * Time.deltaTime);
-        // lifebar = GameObject.Find("Canvas").transform.Find("BossLifeBar").gameObject;
+        shake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<Shake>();
     }
     
+    private void modifyPhysics()
+    {
+        // Drag can be used to slow down an object. The higher the drag the more the object slows down.
+        rigidbody2d.drag = linearDrag;
+        rigidbody2d.gravityScale = gravity * fallMultiplier;
+        
+    }
     
-    public IEnumerator Phase1()
-    {
-        // throw blobs
-        yield return new WaitForSeconds(throwBlobsCD);
-        PhotonNetwork.Instantiate(throwBlobsParticle.name, transform.position, Quaternion.identity, 1);
-        isPhase1Playing = false;
-    }
-
-    public IEnumerator MovingToPhase4()
-    {
-        yield return new WaitForSeconds(spawnBlob);
-        Instantiate(blobPrefab, new Vector2(transform.position.x -4, transform.position.y), Quaternion.identity);
-    }
-
-    [PunRPC]
+    // [PunRPC]
     private void DestroyTiles()
     {
         Random rand = new Random();
@@ -117,12 +105,6 @@ public class BossAI : MonoBehaviourPunCallbacks
                 if (prob == 0)
                 {
                     castleTilemap.SetTile(coordinate, null);
-                    // Vector3 pos = castleTilemap.CellToWorld(coordinate);
-                    // prob = rand.Next(15);
-                    // if (prob == 0)
-                    // {
-                    //     PhotonNetwork.Instantiate(explosionParticle.name, pos, Quaternion.identity, 1);
-                    // }
                 }
             }
         }
@@ -132,8 +114,14 @@ public class BossAI : MonoBehaviourPunCallbacks
     [PunRPC]
     private void DestroyCastleAndGround()
     {
-        Destroy(GameObject.Find("Grid").transform.Find(castleTilemap.name).gameObject);
-        Destroy(GameObject.Find("Grid").transform.Find(castleGround.name).gameObject);
+        try
+        {
+            Destroy(GameObject.Find("Grid").transform.Find(castleTilemap.name).gameObject);
+            Destroy(GameObject.Find("Grid").transform.Find(castleGround.name).gameObject);
+        }
+        catch (Exception)
+        {
+        }
     }
 
     [PunRPC]
@@ -142,166 +130,154 @@ public class BossAI : MonoBehaviourPunCallbacks
     {
         Destroy(GameObject.Find("Grid").transform.Find(lastTilemap.name).gameObject);
     }
+    private void Jump()
+    {
+        rigidbody2d.AddForce(jumpVelocity * Vector2.up, ForceMode2D.Impulse);
+    }
+    
+    public IEnumerator CastlePhase()
+    {
+
+        yield return new WaitForSeconds(actionCD);
+        if (actionCD == 0)
+        {
+            actionCD += 2;
+        }
+
+
+        if (transform.position.y > -5)
+        {
+            Jump();
+            isJumping = true;
+        }
+
+        
+        isCastlePhasePlaying = false;
+
+    }
+
+
+    [PunRPC]
+    private void InstanciateGroundParticles(string groundParticlesName, float x, float y)
+    {
+        PhotonNetwork.Instantiate(groundParticlesName, new Vector2(x, y), Quaternion.identity, 1);
+    }
+
+    [PunRPC]
+    private void ShakeCamera1()
+    {
+        GameObject cam1 = GameObject.Find("Camera1");
+        GameObject shakeManager = GameObject.Find("ShakeManager");
+        shakeManager.GetComponent<Shake>().camAnim = cam1.GetComponent<Animator>();
+        shakeManager.GetComponent<Shake>().CamShake();
+    }
+
+    
     
     private void Update()
     {
-        playerTopPos = GameObject.Find("PlayerTop(Clone)").transform.position;
-        playerBotPos = GameObject.Find("PlayerBot(Clone)").transform.position;
+
+        playerTop = GameObject.Find("PlayerTop(Clone)");
+        playerBot = GameObject.Find("PlayerBot(Clone)");
+        playerTopPos = playerTop.transform.position;
+        playerBotPos = playerBot.transform.position;
 
 
-        playerNearby = Math.Abs(transform.position.x - playerTopPos.x) <= distanceFromPlayer || Math.Abs(transform.position.x - playerBotPos.x) <= distanceFromPlayer;
-
-        
-        
-
-        if (movingToPhase2)
+        if (transform.position.y > -10)
         {
-            rigidbody2d.isKinematic = true;
+            playerNearby = Math.Abs(transform.position.x - playerTopPos.x) <= 20 || Math.Abs(transform.position.x - playerBotPos.x) <= 20;
         }
+        else
+        {
+            playerNearby = Math.Abs(transform.position.x - playerTopPos.x) <= 25 || Math.Abs(transform.position.x - playerBotPos.x) <= 25;
+        }
+        
+        
 
         currentHealth = GetComponent<Enemy>().currentHealth;
         isGrounded = IsGrounded();
-        Debug.LogFormat("isGrounded : {0}", isGrounded);
 
-        if (phase1)
+        if (playerNearby && !started)
         {
-            if (!isPhase1Playing)
-            {
-                isPhase1Playing = true;
-
-                coroutine = StartCoroutine(Phase1());
-                
-            }
-
-            if (jumpCDStatus <= 0 && isGrounded && playerNearby)
-            {
-                // Random rand = new Random();
-                // int n = rand.Next(2);
-                // int x = rand.Next(5);
-                // if (n == 0)
-                // {
-                //     x = -x;
-                // }
-                jumpDest = new Vector2(transform.position.x , transform.position.y + jumpHeight);
-                isJumping = true;
-            }
-            else if (jumpCDStatus > 0 && isGrounded)
-            {
-                jumpCDStatus -= Time.deltaTime;
-            }
-
-            if (isJumping)
-            {
-                if (Vector2.Distance(transform.position, jumpDest) <= 1)
-                {
-                    jumpCDStatus = jumpCD;
-                    rigidbody2d.isKinematic = false;
-                    falling = true;
-                    isJumping = false;
-                }
-                else
-                {
-                    rigidbody2d.isKinematic = true;
-                    transform.position = Vector2.MoveTowards(transform.position, jumpDest, jumpVelocity * Time.deltaTime);
-                }
-            }
-
-            if (falling && isGrounded)
-            {
-                // Show the attack range with particules
-                PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(0, -5),
-                    Quaternion.identity, 1);
-
-                falling = false;
-            }
-            
-
-        }
-        
-        if (currentHealth < 400 && currentHealth > 300 && phase1 && isGrounded)
-        {
-            phase1 = false;
-            StopCoroutine(coroutine);
-            isPhase1Playing = false;
             movingToPhase2 = true;
-            // BomberHarpie
-            PhotonNetwork.Instantiate(BomberHarpiePrefab.name, new Vector2(-27, 0), Quaternion.identity, 1);
+            started = true;
+            GameObject objective = GameObject.Find("Canvas").transform.Find("ObjImage").transform.Find("Objective")
+                .gameObject;
+            objective.GetComponent<TextMeshProUGUI>().text = "Objective : Chase Blob King";
+
         }
 
         if (movingToPhase2)
         {
-            if (Vector2.Distance(transform.position, new Vector2(waypoints[0].transform.position.x, transform.position.y)) <= 0)
+            if (Math.Abs(transform.position.x - waypoints[0].transform.position.x) > 0)
             {
-                movingToPhase2 = false;
-                nbJump = 0;
-                phase2 = true;
+                transform.position = Vector2.MoveTowards(transform.position,
+                    new Vector2(waypoints[0].transform.position.x, transform.position.y), speed * Time.deltaTime);
             }
             else
             {
-                transform.position =
-                    Vector2.MoveTowards(transform.position, new Vector2(waypoints[0].transform.position.x, transform.position.y), speed * Time.deltaTime);
+                movingToPhase2 = false;
+                phase2 = true;
             }
         }
-        
+
         if (phase2 && nbJump < nbJumpBeforeDestruction)
         {
-            if (jumpCDStatus <= 0 && isGrounded && playerNearby)
+            if (!isCastlePhasePlaying)
             {
-                jumpDest = new Vector2(transform.position.x, transform.position.y + jumpHeight);
-                isJumping = true;
-            }
-            else if (jumpCDStatus > 0 && isGrounded)
-            {
-                jumpCDStatus -= Time.deltaTime;
+                isCastlePhasePlaying = true;
+                coroutine = StartCoroutine(CastlePhase());
             }
 
-            if (isJumping)
+            if (transform.position.y > 0)
             {
-                if (Vector2.Distance(transform.position, jumpDest) <= 1)
-                {
-                    falling = true;
-                    jumpCDStatus = jumpCD;
-                    rigidbody2d.isKinematic = false;
-                    nbJump += 1;
-                    isJumping = false;
-                }
-                else
-                {
-                    rigidbody2d.isKinematic = true;
-                    transform.position = Vector2.MoveTowards(transform.position, jumpDest, jumpVelocity * Time.deltaTime);
-                }
+                falling = true;
             }
-            if (falling && isGrounded)
+            
+            if (isGrounded && falling)
             {
-                photonView.RPC("DestroyTiles", RpcTarget.All);
-                PhotonNetwork.Instantiate(JumpGroundParticles.name, new Vector2(transform.position.x, transform.position.y - 3),
-                    Quaternion.identity, 1);
-
+                nbJump += 1;
+                DestroyTiles();
+                // photonView.RPC("DestroyTiles", RpcTarget.All);
+                photonView.RPC("InstanciateGroundParticles", RpcTarget.All, JumpGroundParticles.name, transform.position.x, transform.position.y);
+                // PhotonNetwork.Instantiate(JumpGroundParticles.name, transform.position, Quaternion.identity, 1);
                 falling = false;
+                
+                // Shake Camera
+                // photonView.RPC("ShakeCamera1", RpcTarget.All);
+                shake.camAnim = GameObject.Find("Camera1").GetComponent<Animator>();
+                shake.CamShake();
+                
+
+
             }
-            
-            
         }
-        else if (phase2 && nbJump >= nbJumpBeforeDestruction && rigidbody2d.IsTouchingLayers(platformLayerMask))
+        else if (phase2 && nbJump >= nbJumpBeforeDestruction && isGrounded && !hasdestroyedCastleAndGround)
         {
-            rigidbody2d.isKinematic = false;
             photonView.RPC("DestroyCastleAndGround", RpcTarget.All);
             phase2 = false;
+            isCastlePhasePlaying = true;
             movingToPhase3 = true;
-            
-            
+            isGrounded = false;
+            hasdestroyedCastleAndGround = true;
         }
         
         
-        
-
-        if (movingToPhase3 && isGrounded)
+        if (movingToPhase3 && IsGrounded())
         {
             rigidbody2d.isKinematic = true;
-            if (Vector2.Distance(transform.position, new Vector2(waypoints[1].transform.position.x, transform.position.y)) <= 0)
+            rigidbody2d.simulated = false;
+            if (Math.Abs(transform.position.x - waypoints[1].transform.position.x) <= 0.1)
             {
-                movingToPhase3 = false;
-                phase3 = true;
+                // CHECK IF there is a player nearby
+                if (playerNearby)
+                {
+                    movingToPhase3 = false;
+                    phase3 = true;
+                    GameObject objective = GameObject.Find("Canvas").transform.Find("ObjImage").transform.Find("Objective")
+                        .gameObject;
+                    objective.GetComponent<TextMeshProUGUI>().text = "Objective : \nKill the harpies to stop the king from escaping";
+                }
             }
             transform.position =
                 Vector2.MoveTowards(transform.position, new Vector2(waypoints[1].transform.position.x, transform.position.y), speed * Time.deltaTime);
@@ -309,111 +285,136 @@ public class BossAI : MonoBehaviourPunCallbacks
 
         if (phase3)
         {
-            rigidbody2d.isKinematic = true;
-            // StopCoroutine(coroutine);
-            // CALL THE HARPIES
+            
+            // Harpies deploy cables
             if (!hasCalledHarpies)
             {
                 CallHarpies();
                 hasCalledHarpies = true;
             }
-
-            if (IsReady())
+            else
             {
-                Vector2 dest = new Vector2(transform.position.x, waypoints[2].transform.position.y);
-                
-                
-                // if all harpies are dead you win, the bitch falls in lava
-                if (CheckWinCondition())
-                {
-                    phase3 = false;
-                    rigidbody2d.isKinematic = false;
-                    // False into the lava
-                    if (isGrounded && !hasDestroyedlast)
-                    {
-                        photonView.RPC("DestroyLastTilemap", RpcTarget.All);
-                        hasDestroyedlast = true;
-                    }
-
-                    if (isTouchingDanger())
-                    {
-                        GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
-                        gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Congratulations !";
-                        gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = PhotonNetwork.PlayerList[0].NickName + " and " + PhotonNetwork.PlayerList[1].NickName + " won";
-                        gameOverPanel.SetActive(true);
-                        GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
-        
-                        GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
-                    }
-                    
-                    
-                }
-                
-                
-                
-                // MOVE UP WITH THEM
-                if (Vector2.Distance(transform.position, dest) <= 0)
-                {
-                    // YOU LOSE
-                    GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
-                    gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
-                    gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text = "The Blob king escaped !";
-                    gameOverPanel.SetActive(true);
-                    GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
-        
-                    GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
-                    
-                }
-                else
-                {
-                    transform.position = Vector2.MoveTowards(transform.position, dest, escapeSpeed * Time.deltaTime);
-                }
-
                 if (!hasCalledIgnition)
                 {
                     foreach (var rocketHarpy in rocketHarpies)
                     {
                         rocketHarpy.ignition = true;
                     }
-                    hasCalledHarpies = true;
+                    hasCalledIgnition = true;
+                }
+            }
+            
+
+
+            // Everybody moves UP at same speed
+            Vector2 dest = new Vector2(transform.position.x, waypoints[3].transform.position.y);
+
+
+            
+            // if all harpies are dead you win, the bitch falls in lava
+            if (CheckWinCondition() && !hasDestroyedlast)
+            {
+                abdcef = true;
+                photonView.RPC("callPlayers", RpcTarget.All);
+
+                rigidbody2d.isKinematic = false;
+                rigidbody2d.simulated = true;
+                if (isGrounded && !hasDestroyedlast)
+                {
+                    // Shake Camera
+                    shake.camAnim = GameObject.Find("CameraOnBlob").GetComponent<Animator>();
+                    shake.CamShake();
+                    
+                    photonView.RPC("DestroyLastTilemap", RpcTarget.All);
+                    hasDestroyedlast = true;
+                }
+            }
+            else
+            {
+                if (hasDestroyedlast)
+                {
+                    if (isTouchingDanger())
+                    {
+                        GetComponent<Enemy>().TakeDamage(150);
+                    }
+                }
+                else
+                {
+                    // MOVE UP WITH THEM
+                    // CHeck if one of them is unreachable
+                    if (HarpiesEscaped())
+                    {
+                        isEscaping = true;
+                        photonView.RPC("callPlayers2", RpcTarget.All);
+                    }
+
+                    transform.position = Vector2.MoveTowards(transform.position, dest, escapeSpeed * Time.deltaTime);
+                    
                 }
             }
         }
-        
-        // rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
-        // modifyPhysics();
+        modifyPhysics();
         
     }
 
+    [PunRPC]
+    private void callPlayers()
+    {
+        GameObject.Find("RoiBlob").GetComponentInChildren<BossAI>().abdcef = true;
+    }
+
+    [PunRPC]
+    private void callPlayers2()
+    {
+        GameObject.Find("RoiBlob").GetComponentInChildren<BossAI>().isEscaping = true;
+    }
+
+    private bool HarpiesEscaped()
+    {
+        foreach (var harpy in rocketHarpies)
+        {
+            try
+            {            
+                if (harpy.transform.position.y > waypoints[2].transform.position.y)
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                
+            }
+
+        }
+
+        return false;
+    }
 
     private bool CheckWinCondition()
     {
         foreach (var harpie in rocketHarpies)
         {
-            if (GameObject.Find(harpie.name) != null)
+            try
             {
-                return false;
+                if (harpie.name == "Graphics")
+                {
+                    return false;
+                }
             }
-        }
-
-        return true;
-    }
-
-    private bool IsReady()
-    {
-        foreach (var rocketHarpy in rocketHarpies)
-        {
-            if (rocketHarpy.readyToCarryKingBlob == false)
+            catch (MissingReferenceException)
             {
-                return false;
+
             }
         }
         return true;
     }
+
     private void CallHarpies()
     {
         foreach (var rocketHarpy in rocketHarpies)
         {
+            rocketHarpy.transform.Find("Cable").gameObject.GetComponent<LineRenderer>().startWidth = 0.2f;
+            rocketHarpy.transform.Find("Cable").gameObject.GetComponent<LineRenderer>().endWidth = 0.2f;
             rocketHarpy.escortBlobKing = true;
         }
     }
