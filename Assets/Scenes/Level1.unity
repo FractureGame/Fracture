@@ -243,6 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d14afa283deb041d19c44ea4642b0285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonPrefab: {fileID: 0}
   victory1: {fileID: 152431954}
   victory2: {fileID: 34423587}
   confetti: {fileID: 5907559814512820751, guid: b33f0b312335d4727a6ed2b990ea41cd,
@@ -517,7 +518,7 @@ PrefabInstance:
     - target: {fileID: 4590895985146015873, guid: 4ac5072547022a0459a99908e4a23b78,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4590895985146015873, guid: 4ac5072547022a0459a99908e4a23b78,
         type: 3}
@@ -16319,7 +16320,7 @@ PrefabInstance:
     - target: {fileID: 4590895985146015873, guid: 13e6980c11d59b34c9e90adcaaed400a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4590895985146015873, guid: 13e6980c11d59b34c9e90adcaaed400a,
         type: 3}
@@ -17353,10 +17354,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1093302258}
-  - {fileID: 1419218668}
   - {fileID: 916721864}
   - {fileID: 676388685}
+  - {fileID: 1093302258}
+  - {fileID: 1419218668}
   - {fileID: 2350229302137936257}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -50735,7 +50736,7 @@ PrefabInstance:
     - target: {fileID: 890756340360103663, guid: 2835d6f4b568275b4b03ba8502bbaa54,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 890756340360103663, guid: 2835d6f4b568275b4b03ba8502bbaa54,
         type: 3}
@@ -50854,7 +50855,7 @@ PrefabInstance:
     - target: {fileID: 1468309198730165021, guid: 4979a4f6a19da13ab98b5b4007b4739c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1468309198730165021, guid: 4979a4f6a19da13ab98b5b4007b4739c,
         type: 3}
@@ -50879,12 +50880,12 @@ PrefabInstance:
     - target: {fileID: 1468309198730165021, guid: 4979a4f6a19da13ab98b5b4007b4739c,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -249.31088
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1468309198730165021, guid: 4979a4f6a19da13ab98b5b4007b4739c,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 202.86887
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1468309198730165021, guid: 4979a4f6a19da13ab98b5b4007b4739c,
         type: 3}

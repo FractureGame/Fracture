@@ -156,7 +156,7 @@ PrefabInstance:
     - target: {fileID: 4590895985146015873, guid: 13e6980c11d59b34c9e90adcaaed400a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4590895985146015873, guid: 13e6980c11d59b34c9e90adcaaed400a,
         type: 3}
@@ -11767,7 +11767,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -11804,10 +11804,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1419218668}
-  - {fileID: 1478466426}
   - {fileID: 1757951388}
   - {fileID: 16094739}
+  - {fileID: 1478466426}
+  - {fileID: 1419218668}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11857,6 +11857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d14afa283deb041d19c44ea4642b0285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonPrefab: {fileID: 0}
   victory1: {fileID: 2049727089}
   victory2: {fileID: 910495121}
   confetti: {fileID: 5907559814512820751, guid: b33f0b312335d4727a6ed2b990ea41cd,
@@ -11904,7 +11905,7 @@ RectTransform:
   m_Children:
   - {fileID: 203249479}
   m_Father: {fileID: 1162505723}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -11997,7 +11998,7 @@ PrefabInstance:
     - target: {fileID: 1468309198730165021, guid: 4979a4f6a19da13ab98b5b4007b4739c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1468309198730165021, guid: 4979a4f6a19da13ab98b5b4007b4739c,
         type: 3}
@@ -12022,12 +12023,12 @@ PrefabInstance:
     - target: {fileID: 1468309198730165021, guid: 4979a4f6a19da13ab98b5b4007b4739c,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -249.31088
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1468309198730165021, guid: 4979a4f6a19da13ab98b5b4007b4739c,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 202.86887
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1468309198730165021, guid: 4979a4f6a19da13ab98b5b4007b4739c,
         type: 3}
@@ -13424,7 +13425,7 @@ PrefabInstance:
     - target: {fileID: 4590895985146015873, guid: 4ac5072547022a0459a99908e4a23b78,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4590895985146015873, guid: 4ac5072547022a0459a99908e4a23b78,
         type: 3}
