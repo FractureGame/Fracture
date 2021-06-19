@@ -78,7 +78,8 @@ public class BossAI : MonoBehaviourPunCallbacks
     public GameObject JumpGroundParticles;
     private float distanceFromPlayer = 25;
 
-    [Header("Players")]
+    [Header("Players")] private GameObject playerTop;
+    private GameObject playerBot;
     private Vector2 playerTopPos;
     private Vector2 playerBotPos;
     
@@ -199,8 +200,10 @@ public class BossAI : MonoBehaviourPunCallbacks
     private void Update()
     {
 
-        playerTopPos = GameObject.Find("PlayerTop(Clone)").transform.position;
-        playerBotPos = GameObject.Find("PlayerBot(Clone)").transform.position;
+        playerTop = GameObject.Find("PlayerTop(Clone)");
+        playerBot = GameObject.Find("PlayerBot(Clone)");
+        playerTopPos = playerTop.transform.position;
+        playerBotPos = playerBot.transform.position;
 
 
         playerNearby = Math.Abs(transform.position.x - playerTopPos.x) <= distanceFromPlayer || Math.Abs(transform.position.x - playerBotPos.x) <= distanceFromPlayer;
@@ -235,6 +238,12 @@ public class BossAI : MonoBehaviourPunCallbacks
                 photonView.RPC("InstanciateGroundParticles", RpcTarget.All, JumpGroundParticles.name, transform.position.x, transform.position.y);
                 // PhotonNetwork.Instantiate(JumpGroundParticles.name, transform.position, Quaternion.identity, 1);
                 falling = false;
+                
+                // set old direction of both players to zero
+                playerTop.GetComponent<PlayerMovement>().oldDirection = Vector2.zero;
+                playerBot.GetComponent<PlayerMovement>().oldDirection = Vector2.zero;
+                
+
             }
         }
         else if (phase2 && nbJump >= nbJumpBeforeDestruction && isGrounded && !hasdestroyedCastleAndGround)
