@@ -58,9 +58,9 @@ public class LevelSelector : MonoBehaviour
             button2.GetComponent<LevelButton>().buildIndex = kvp.Value;
             Vector3 pos = button2.transform.position;
             Vector3 scale = button2.transform.localScale;
-            scale.x = scale.x * buttonScale;
+            /*scale.x = scale.x * buttonScale;
             scale.y = scale.y * buttonScale;
-            scale.z = scale.z * buttonScale;
+            scale.z = scale.z * buttonScale;*/
             pos.y -= i * spacing;
             button2.transform.position = pos;
             i++;
