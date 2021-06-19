@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class CanonAI : MonoBehaviour
 {
-
     private bool horizontal;
     private bool followPlayerTop;
     public float fireRange;

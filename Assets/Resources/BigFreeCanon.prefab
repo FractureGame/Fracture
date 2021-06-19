@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8663630881790630592}
   - component: {fileID: 8663630881790630593}
   m_Layer: 0
-  m_Name: Canon1
+  m_Name: BigFreeCanon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
   fireRange: 30
   fireBall: {fileID: 1672137189201381630, guid: 7033481e39f3a2efc8b3601893e270df,
     type: 3}
-  force: 800
+  force: 1500
   shootPoint: {fileID: 8663630883153788889}
   freeCanon: 1
 --- !u!114 &8663630881790630620

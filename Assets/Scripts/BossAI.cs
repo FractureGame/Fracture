@@ -141,7 +141,7 @@ public class BossAI : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(actionCD);
         if (actionCD == 0)
         {
-            actionCD += 1.5f;
+            actionCD += 2;
         }
 
 
@@ -203,7 +203,7 @@ public class BossAI : MonoBehaviourPunCallbacks
             started = true;
             GameObject objective = GameObject.Find("Canvas").transform.Find("ObjImage").transform.Find("Objective")
                 .gameObject;
-            objective.GetComponent<TextMeshProUGUI>().text = "Objective : Follow Blob King";
+            objective.GetComponent<TextMeshProUGUI>().text = "Objective : Chase Blob King";
 
         }
 
@@ -335,7 +335,7 @@ public class BossAI : MonoBehaviourPunCallbacks
                 {
                     if (isTouchingDanger())
                     {
-                        GetComponent<Enemy>().TakeDamage(250);
+                        GetComponent<Enemy>().TakeDamage(150);
                     }
                 }
                 else
