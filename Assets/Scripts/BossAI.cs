@@ -340,7 +340,7 @@ public class BossAI : MonoBehaviourPunCallbacks
                 {
                     if (isTouchingDanger())
                     {
-                        GetComponent<Enemy>().TakeDamage(100);
+                        GetComponent<Enemy>().TakeDamage(250);
                     }
                 }
                 else

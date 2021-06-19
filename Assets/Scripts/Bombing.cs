@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bombing : MonoBehaviour
 {
     [Header("CDManagement")] 
-    public float firingDuration = 5;
+    public float firingDuration = 3;
     public float reloadingDuration = 2;
     private float firingStatus;
     private float reloadingStatus;
