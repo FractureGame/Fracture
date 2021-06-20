@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Photon.Pun;
 using UnityEngine;
 
@@ -30,7 +30,7 @@ public class HarpieAI : MonoBehaviourPunCallbacks
     public bool isStunned = false;
     private Vector2 stunPos;
     private Vector2 endStunPos;
-    
+    public bool isFree;
     
     public bool isRocket;
     private GameObject blobKing;
@@ -102,6 +102,10 @@ public class HarpieAI : MonoBehaviourPunCallbacks
     void Update()
     {
         
+        playerTop = GameObject.Find("PlayerTop(Clone)");
+        playerBot = GameObject.Find("PlayerBot(Clone)");
+
+
         if (isRocket)
         {
             
@@ -148,46 +152,75 @@ public class HarpieAI : MonoBehaviourPunCallbacks
 
                 if (canChase)
                 {
-                    if (horizontal)
+                    
+                    if (isFree)
                     {
-                        if (followPlayerTop && playerTopPos.y > playerBotPos.y)
+                        float distanceP1 = Vector2.Distance(transform.position, playerTop.transform.position);
+                        float distanceP2 = Vector2.Distance(transform.position, playerBot.transform.position);
+                        Debug.Log(distanceP1);
+                        Debug.Log(distanceP2);
+                        if (distanceP1 < distance && distanceP1 < distanceP2)
                         {
-                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                            playerToFollow = playerTop;
                         }
-                        else if (followPlayerTop && playerTopPos.y < playerBotPos.y)
+                        else if (distanceP2 < distance && distanceP2 < distanceP1)
                         {
-                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                            playerToFollow = playerBot;
                         }
-                        else if (!followPlayerTop && playerTopPos.y > playerBotPos.y)
-                        {
-                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                        }
-                        else if (!followPlayerTop && playerTopPos.y < playerBotPos.y)
-                        {
-                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
-                        }
+                        // playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
+
+                        // if (Vector2.Distance(transform.position, playerToFollowPos) > 0.2 && Vector2.Distance(transform.position, playerToFollowPos) < distance)
+                        // {
+                        //     transform.position =
+                        //         Vector2.MoveTowards(transform.position, playerToFollowPos, speedEnemy * Time.deltaTime);
+                        // }
+            
                     }
                     else
                     {
-                        if (followPlayerTop && playerTopPos.x > playerBotPos.x)
+                        if (horizontal)
                         {
-                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                            if (followPlayerTop && playerTopPos.y > playerBotPos.y)
+                            {
+                                playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                            }
+                            else if (followPlayerTop && playerTopPos.y < playerBotPos.y)
+                            {
+                                playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                            }
+                            else if (!followPlayerTop && playerTopPos.y > playerBotPos.y)
+                            {
+                                playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                            }
+                            else if (!followPlayerTop && playerTopPos.y < playerBotPos.y)
+                            {
+                                playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                            }
                         }
-                        else if (followPlayerTop && playerTopPos.x < playerBotPos.x)
+                        else
                         {
-                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                        }
-                        else if (!followPlayerTop && playerTopPos.x > playerBotPos.x)
-                        {
-                            playerToFollow = GameObject.Find("PlayerBot(Clone)");
-                        }
-                        else if (!followPlayerTop && playerTopPos.x < playerBotPos.x)
-                        {
-                            playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                            if (followPlayerTop && playerTopPos.x > playerBotPos.x)
+                            {
+                                playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                            }
+                            else if (followPlayerTop && playerTopPos.x < playerBotPos.x)
+                            {
+                                playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                            }
+                            else if (!followPlayerTop && playerTopPos.x > playerBotPos.x)
+                            {
+                                playerToFollow = GameObject.Find("PlayerBot(Clone)");
+                            }
+                            else if (!followPlayerTop && playerTopPos.x < playerBotPos.x)
+                            {
+                                playerToFollow = GameObject.Find("PlayerTop(Clone)");
+                            }
                         }
                     }
+                    
 
-                    if (playerToFollow == GameObject.Find("PlayerTop(Clone)"))
+
+                    if (playerToFollow == playerTop)
                     {
                         try
                         {

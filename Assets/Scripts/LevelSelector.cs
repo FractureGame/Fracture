@@ -19,7 +19,8 @@ public class LevelSelector : MonoBehaviour
         if (this.gameObject.name == "GameOverPanel")
         {
             Debug.Log("In game");
-            if (PhotonNetwork.IsMasterClient)
+            Debug.Log(PhotonNetwork.PlayerList.Length);
+            if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length > 1)
             {
                 Debug.Log("Is master, we display buttons");
                 GameObject.Find("LevelButtons").SetActive(true);
@@ -28,7 +29,15 @@ public class LevelSelector : MonoBehaviour
             else
             {
                 Debug.Log("Isnt master, displaying text");
-                GameObject.Find("WaitingMaster").SetActive(true);
+                if (PhotonNetwork.PlayerList.Length > 1)
+                {
+                    GameObject.Find("WaitingMaster").SetActive(true);
+                }
+                else
+                {
+                    GameObject.Find("WaitingMaster").SetActive(false);
+                }
+                
             }
         }
         else
