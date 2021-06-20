@@ -11,8 +11,9 @@ public class LevelSelector : MonoBehaviour
     // Start is called before the first frame update
     public GameObject buttonPrefab;
     public GameObject parent;
-    public int spacing;
+    public float spacing;
     public float buttonScale;
+    public float beginningSpacing = 75;
     public void Start()
     {
         if (this.gameObject.name == "GameOverPanel")
@@ -61,7 +62,7 @@ public class LevelSelector : MonoBehaviour
             /*scale.x = scale.x * buttonScale;
             scale.y = scale.y * buttonScale;
             scale.z = scale.z * buttonScale;*/
-            pos.y -= i * spacing;
+            pos.y -= i * spacing + beginningSpacing;
             button2.transform.position = pos;
             i++;
         }

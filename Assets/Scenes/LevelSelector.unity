@@ -269,8 +269,9 @@ MonoBehaviour:
   buttonPrefab: {fileID: 3558831737254527967, guid: c411b19abb42fff47840b7360c2d2d4d,
     type: 3}
   parent: {fileID: 340066627}
-  spacing: 150
+  spacing: 80
   buttonScale: 0.7
+  beginningSpacing: 8
 --- !u!114 &640774667
 MonoBehaviour:
   m_ObjectHideFlags: 0
