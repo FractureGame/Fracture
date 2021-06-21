@@ -7,16 +7,22 @@ using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private static Dictionary<string, KeyCode> actionKeys;
-    public GameObject keybindingPrefab;
-    private string actionToRebind;
-    private Dictionary<string, Text> buttonToLabel;
-    Array kcs = Enum.GetValues(typeof(KeyCode));
-    
-    private void Start()
+    public static InputManager instance;
+    public Dictionary<string, KeyCode> actionKeys;
+
+
+    private void Awake()
     {
-        buttonToLabel = new Dictionary<string, Text>();
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        DontDestroyOnLoad(gameObject);
         actionKeys = new Dictionary<string, KeyCode>
         {
             ["Jump"] = KeyCode.Space,
@@ -25,50 +31,17 @@ public class InputManager : MonoBehaviour
             ["Attack"] = KeyCode.A,
             ["Dash"] = KeyCode.LeftShift
         };
-        GameObject parent = GameObject.Find("Keybinding Menu");
-        foreach (var kvp in actionKeys)
-        {
-            GameObject binding = Instantiate(keybindingPrefab, parent.transform);
-            binding.transform.Find("Action Text").GetComponent<Text>().text = kvp.Key;
-            Text buttonText = binding.transform.Find("Button/Key Text").GetComponent<Text>();
-            buttonText.text = kvp.Value.ToString();
-            buttonToLabel[kvp.Key] = buttonText;
-            Button keyButton = binding.transform.Find("Button").GetComponent<Button>();
-            keyButton.onClick.AddListener(() => StartRebindFor(kvp.Key));
-        }
     }
 
     private void Update()
     {
-        if (actionToRebind != null)
-        {
-            if (Input.anyKeyDown)
-            {
-                foreach (KeyCode kc in kcs)
-                {
-                    if (Input.GetKeyDown(kc))
-                    {
-                         SetKeyForAction(actionToRebind,kc);
-                         actionToRebind = null;
-                         break;
-                    }
-                }
-            }
-        }
+        
     }
 
-    void StartRebindFor(string action)
-    {
-        actionToRebind = action;
-    }
+    
 
-    void SetKeyForAction(string action, KeyCode key)
-    {
-        Debug.Log(action + " should now be bound to " + key.ToString());
-        actionKeys[action] = key;
-        buttonToLabel[action].text = key.ToString();
-    }
-    public static bool GetKeyDown(string action)
+    
+    public bool GetKeyDown(string action)
     {
         if (!actionKeys.ContainsKey(action))
         {

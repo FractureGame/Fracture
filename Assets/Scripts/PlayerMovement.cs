@@ -8,6 +8,7 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
+    private InputManager inputManager;
     [Header("Health")]
     public int maxHealth;
     private int currentHealth;
@@ -111,6 +112,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     private void Start()
     {
+        inputManager = FindObjectOfType<InputManager>();
         am = FindObjectOfType<AudioManager>();
         currentHealth = maxHealth;
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
@@ -234,13 +236,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
             
 
-        if (InputManager.GetKeyDown("Jump") && nbJump < nbJumpsAllowed)
+        if (inputManager.GetKeyDown("Jump") && nbJump < nbJumpsAllowed)
         {
             jumpTimer = Time.time + jumpDelay;
             nbJump += 1;
         }
 
-        if (canDash && InputManager.GetKeyDown("Dash") && dashCooldownStatus <= 0f)
+        if (canDash && inputManager.GetKeyDown("Dash") && dashCooldownStatus <= 0f)
         {
             isDashing = true;
             dashTime = startDashTime;
@@ -264,7 +266,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
 
 
-        if (InputManager.GetKeyDown("Attack") && attackCooldownStatus <= 0f)
+        if (inputManager.GetKeyDown("Attack") && attackCooldownStatus <= 0f)
         {
             Debug.Log("Attacking");
             isAttacking = true;
@@ -277,7 +279,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             switchCooldownStatus -= Time.deltaTime;
         }
         
-        if (InputManager.GetKeyDown("Switch") && switchCooldownStatus <= 0f)
+        if (inputManager.GetKeyDown("Switch") && switchCooldownStatus <= 0f)
         {
             Debug.Log("Switching");
             isSwitching = true;
@@ -328,7 +330,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
 
         
-        if (isWallSliding && InputManager.GetKeyDown("Jump"))
+        if (isWallSliding && inputManager.GetKeyDown("Jump"))
         {
             isWallJumping = true;
             isWallSliding = false;
