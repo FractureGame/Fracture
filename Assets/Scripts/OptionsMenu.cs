@@ -2,36 +2,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using TMPro;
 public class OptionsMenu : MonoBehaviour
 {
-    public Resolution[] resolutions;
-
-    private int i;
-    private bool fullscreen;
+    public Toggle fullscreenToggle;
+    UnityEngine.Resolution[] resolutions;
+    public GameObject resOptions;
     public void SetRes(int val)
     {
-        i = val;
+        
     }
     public void SetScreenMode(bool b)
     {
-        fullscreen = b;
-    }
-    public void ApplyChangeRes()
-    {
-        if (fullscreen)
-        {
-            Screen.SetResolution(resolutions[i].width,resolutions[i].height,FullScreenMode.FullScreenWindow);
-        }
-        else
-        {
-            Screen.SetResolution(resolutions[i].width,resolutions[i].height,FullScreenMode.Windowed);
-        }
+        Screen.fullScreen = b;
     }
 
-    public void Start()
+    public void Awake()
     {
-        //i = 1;
-        //fullscreen = false;
+        if (Screen.fullScreen)
+        {
+            Debug.Log("game is in fullscreen");
+        }
+        fullscreenToggle.isOn = Screen.fullScreen;
+        TMP_Dropdown resolutionsDropdown = resOptions.GetComponent<TMP_Dropdown>();
+        resolutions = Screen.resolutions;
+        resolutionsDropdown.ClearOptions();
+        List<string> resStrings = new List<string>();
+        foreach (var e in resolutions)
+        {
+            string option = e.width + " x " + e.height;
+            Debug.Log(option);
+            resStrings.Add(option);
+        }
+        resolutionsDropdown.AddOptions(resStrings);
     }
 }
