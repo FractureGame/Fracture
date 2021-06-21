@@ -11,10 +11,12 @@ public class InputManager : MonoBehaviour
     private static Dictionary<string, KeyCode> actionKeys;
     public GameObject keybindingPrefab;
     private string actionToRebind;
+    private Dictionary<string, Text> buttonToLabel;
     Array kcs = Enum.GetValues(typeof(KeyCode));
     
     private void Start()
     {
+        buttonToLabel = new Dictionary<string, Text>();
         actionKeys = new Dictionary<string, KeyCode>
         {
             ["Jump"] = KeyCode.Space,
@@ -28,7 +30,9 @@ public class InputManager : MonoBehaviour
         {
             GameObject binding = Instantiate(keybindingPrefab, parent.transform);
             binding.transform.Find("Action Text").GetComponent<Text>().text = kvp.Key;
-            binding.transform.Find("Button/Key Text").GetComponent<Text>().text = kvp.Value.ToString();
+            Text buttonText = binding.transform.Find("Button/Key Text").GetComponent<Text>();
+            buttonText.text = kvp.Value.ToString();
+            buttonToLabel[kvp.Key] = buttonText;
             Button keyButton = binding.transform.Find("Button").GetComponent<Button>();
             keyButton.onClick.AddListener(() => StartRebindFor(kvp.Key));
         }
@@ -62,6 +66,7 @@ public class InputManager : MonoBehaviour
     {
         Debug.Log(action + " should now be bound to " + key.ToString());
         actionKeys[action] = key;
+        buttonToLabel[action].text = key.ToString();
     }
     public static bool GetKeyDown(string action)
     {
