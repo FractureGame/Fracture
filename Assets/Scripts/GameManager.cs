@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+using System;
+using System.IO;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
@@ -15,6 +17,7 @@ namespace Com.MyCompany.MyGame
         public GameObject playerBotPrefab;
         public GameObject Enemylifebar;
         public GameObject BossLifeBar;
+        private bool hasTransitionned;
         
         
         #endregion
@@ -192,29 +195,70 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(-35, -5f,0f), Quaternion.identity, 0);
                 }
             }
+            else if (SceneManager.GetActiveScene().name == "Transition" && PhotonNetwork.PlayerList.Length > 1)
+            {
+
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(33, 4f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(26f, 6f,0f), Quaternion.identity, 0);
+                }
+            }
         }
 
+
+        public void DisplayLevels()
+        {
+
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (GameObject.Find("Change Level").GetComponentInChildren<Text>().text == "Levels")
+                {
+                    GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                    gameoverPanel.SetActive(true);
+                    GameObject.Find("gameover Label").GetComponent<Text>().text = "";
+                    GameObject.Find("gameover Reason").GetComponent<Text>().text = "";
+                    GameObject.Find("Change Level").GetComponentInChildren<Text>().text = "Back";
+                }
+                else
+                {
+                    GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                    gameoverPanel.SetActive(false);
+                    GameObject.Find("Change Level").GetComponentInChildren<Text>().text = "Levels";
+                }
+
+            }
+        }
+        
+        
+        
+        
         private void Update()
         {
-            // foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
-            // {
-            //     if (enemy.GetComponentInChildren<Enemy>().currentHealth <= 0)
-            //     {
-            //         Destroy(enemy);
-            //     }
-            //     if (GameObject.Find(enemy.name + "LifeBar") == null)
-            //     {
-            //         Destroy(enemy);
-            //     }
-            // }
-            //
-            // foreach (var lifebar in GameObject.FindGameObjectsWithTag("LifeBar"))
-            // {
-            //     if (GameObject.Find(lifebar.name.Replace("LifeBar", "")) == null)
-            //     {
-            //         Destroy(lifebar);
-            //     }
-            // }
+
+            foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
+            {
+                if (enemy.GetComponentInChildren<Enemy>().currentHealth <= 0)
+                {
+                    Destroy(enemy);
+                }
+                if (GameObject.Find(enemy.name + "LifeBar") == null)
+                {
+                    Destroy(enemy);
+                }
+            }
+            
+            foreach (var lifebar in GameObject.FindGameObjectsWithTag("LifeBar"))
+            {
+                if (GameObject.Find(lifebar.name.Replace("LifeBar", "")) == null)
+                {
+                    Destroy(lifebar);
+                }
+            }
         }
     }
 }

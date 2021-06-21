@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
@@ -14,6 +15,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public bool isDead;
     public GameObject thisBar;
     public GameObject otherBar;
+    private bool hasPlayedDeathAnim;
 
     [Header("Abilities")]
     public bool canDash;
@@ -107,7 +109,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     GameObject blobking;
 
     public AudioManager am;
-    
+    private bool hastransitioned;
     
     private void Start()
     {
@@ -141,6 +143,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         am.StopSound("Walk");
     }
 
+    
+    
+    
+    
+    
     private void OnCollisionEnter2D(Collision2D other)
     {
         
@@ -181,6 +188,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             return;
         }
 
+
+        if (SceneManager.GetActiveScene().name == "Transition" && !hastransitioned)
+        {
+            if (PhotonNetwork.IsMasterClient && playerBot != null)
+            {
+                PhotonNetwork.AutomaticallySyncScene = true;
+                hastransitioned = true;
+                StreamReader sr = new StreamReader("transition.txt");
+
+                int redirectIndex = Int32.Parse(sr.ReadLine());
+                sr.Close();
+                PhotonNetwork.LoadLevel(redirectIndex);
+            }
+
+            return;
+        }
+        
+        
         GameObject playerTopsign = GameObject.Find("playertop_label");
         if (playerTopsign == null)
         {
@@ -229,11 +254,43 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (isDead)
         {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                try
+                {
+                    GameObject.Find("Change Level").SetActive(false);
+                    GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+                }
+                catch (Exception)
+                {
+                }
+
+            }
+            if (!hasPlayedDeathAnim && currentHealth <= 0)
+            {
+                animator.SetBool("isDead", true);
+                hasPlayedDeathAnim = true;
+            }
             // PhotonNetwork.Destroy(gameObject);
             return;
         }
-            
 
+
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            try
+            {
+                GameObject.Find("Change Level").SetActive(false);
+                GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            }
+            catch (Exception)
+            {
+            }
+
+
+        }
+        
+        
         if (Input.GetKeyDown(KeyCode.Space) && nbJump < nbJumpsAllowed)
         {
             jumpTimer = Time.time + jumpDelay;
@@ -340,9 +397,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             oldDirection = direction;
         }
-        
+
         if (direction != Vector2.zero)
+        {
             animator.SetBool("isWalking", true);
+            animator.SetTrigger("walk");
+        }
         else
         {
             animator.SetBool("isWalking", false);
@@ -560,6 +620,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
             // animator.ResetTrigger("attack");
             animator.SetBool("isAttacking", true);
+            animator.SetTrigger("attack");
             Attack();
             attackCooldownStatus = ATTACK_COOLDOWN;
             isAttacking = false;
