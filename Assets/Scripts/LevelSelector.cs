@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -77,4 +78,12 @@ public class LevelSelector : MonoBehaviour
         }
     }
     // Update is called once per frame
+    private void Update()
+    {
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == 1)
+        {
+            GameObject.Find("LevelButtons").SetActive(false);
+            GameObject.Find("WaitingMaster").SetActive(false);
+        }
+    }
 }
