@@ -51470,7 +51470,12 @@ PrefabInstance:
     - target: {fileID: 2311960780579727245, guid: 86dcaba1d2b96014cbb7eace44347231,
         type: 3}
       propertyPath: viewIdField
-      value: 19
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824308568158340974, guid: 86dcaba1d2b96014cbb7eace44347231,
+        type: 3}
+      propertyPath: viewIdField
+      value: 21
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86dcaba1d2b96014cbb7eace44347231, type: 3}
@@ -51929,6 +51934,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5193712581471016371, guid: d5f9e4d1eab0d2b469a25d5245c23ca5,
+        type: 3}
+      propertyPath: viewIdField
+      value: 21
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5f9e4d1eab0d2b469a25d5245c23ca5, type: 3}

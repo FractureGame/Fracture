@@ -51,18 +51,18 @@ public class LevelSelector : MonoBehaviour
     void CreateButtons()
     {
         parent.SetActive(true);
-        int? toSkip = null;
-        if (this.gameObject.name == "GameOverPanel")
-        {
-            toSkip = SceneManager.GetActiveScene().buildIndex;
-        }
+        // int? toSkip = null;
+        // if (this.gameObject.name == "GameOverPanel")
+        // {
+        //     toSkip = SceneManager.GetActiveScene().buildIndex;
+        // }
         int i = 0;
         foreach (var kvp in Levels.scenes)
         {
-            if (toSkip != null && kvp.Value == toSkip)
-            {
-                continue;
-            }
+            // if (toSkip != null && kvp.Value == toSkip)
+            // {
+            //     continue;
+            // }
             GameObject button2 = Instantiate(buttonPrefab, parent.transform) as GameObject;
             button2.name = kvp.Key + " Button";
             button2.GetComponentInChildren<TextMeshProUGUI>().text = kvp.Key;

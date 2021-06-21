@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
@@ -107,7 +108,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     GameObject blobking;
 
     public AudioManager am;
-    
+    private bool hastransitioned;
     
     private void Start()
     {
@@ -141,6 +142,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         am.StopSound("Walk");
     }
 
+    
+    
+    
+    
+    
     private void OnCollisionEnter2D(Collision2D other)
     {
         
@@ -181,6 +187,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             return;
         }
 
+
+        if (SceneManager.GetActiveScene().name == "Transition" && !hastransitioned)
+        {
+            if (PhotonNetwork.IsMasterClient && playerBot != null)
+            {
+                PhotonNetwork.AutomaticallySyncScene = true;
+                hastransitioned = true;
+                StreamReader sr = new StreamReader("transition.txt");
+
+                int redirectIndex = Int32.Parse(sr.ReadLine());
+                sr.Close();
+                PhotonNetwork.LoadLevel(redirectIndex);
+            }
+
+            return;
+        }
+        
+        
         GameObject playerTopsign = GameObject.Find("playertop_label");
         if (playerTopsign == null)
         {

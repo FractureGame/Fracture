@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
@@ -15,6 +17,7 @@ namespace Com.MyCompany.MyGame
         public GameObject playerBotPrefab;
         public GameObject Enemylifebar;
         public GameObject BossLifeBar;
+        private bool hasTransitionned;
         
         
         #endregion
@@ -192,10 +195,24 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(-35, -5f,0f), Quaternion.identity, 0);
                 }
             }
-        }
+            else if (SceneManager.GetActiveScene().name == "Transition" && PhotonNetwork.PlayerList.Length > 1)
+            {
 
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(33, 4f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(26f, 6f,0f), Quaternion.identity, 0);
+                }
+            }
+        }
+        
+        
         private void Update()
         {
+
             foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
             {
                 if (enemy.GetComponentInChildren<Enemy>().currentHealth <= 0)
