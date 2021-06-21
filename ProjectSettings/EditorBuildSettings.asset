@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/VLevel4.unity
     guid: 933e68904feafbf489beef80289f20f5
   - enabled: 1
+    path: Assets/Scenes/HLevel5.unity
+    guid: 7ae9798a731e2854a82147ceff54c6a1
+  - enabled: 1
     path: Assets/Scenes/BossRoom.unity
     guid: b5246143e52e52af5a0b2a74dcdc37bf
   - enabled: 1
