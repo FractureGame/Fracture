@@ -262,8 +262,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             // PhotonNetwork.Destroy(gameObject);
             return;
         }
-            
 
+
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            GameObject.Find("Change Level").SetActive(false);
+            GameObject.Find("Leave Button").transform.position = new Vector2(0, 0);
+        }
+        
+        
         if (Input.GetKeyDown(KeyCode.Space) && nbJump < nbJumpsAllowed)
         {
             jumpTimer = Time.time + jumpDelay;

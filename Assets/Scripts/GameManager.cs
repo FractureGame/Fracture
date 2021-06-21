@@ -208,6 +208,33 @@ namespace Com.MyCompany.MyGame
                 }
             }
         }
+
+
+        public void DisplayLevels()
+        {
+
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (GameObject.Find("Change Level").GetComponentInChildren<Text>().text == "Levels")
+                {
+                    GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                    gameoverPanel.SetActive(true);
+                    GameObject.Find("gameover Label").SetActive(false);
+                    GameObject.Find("gameover Reason").SetActive(false);
+                    GameObject.Find("Change Level").GetComponentInChildren<Text>().text = "Back";
+                }
+                else
+                {
+                    GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                    gameoverPanel.SetActive(false);
+                    GameObject.Find("Change Level").GetComponentInChildren<Text>().text = "Levels";
+                }
+
+            }
+        }
+        
+        
         
         
         private void Update()
