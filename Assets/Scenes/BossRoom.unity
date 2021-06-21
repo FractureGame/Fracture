@@ -436,7 +436,7 @@ RectTransform:
   m_Children:
   - {fileID: 399225723}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1084,7 +1084,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &258386543
 MonoBehaviour:
@@ -46040,6 +46040,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1625256590134127511, guid: f54d07dd076cbdd4897e5efeea201524,
+        type: 3}
+      propertyPath: viewIdField
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3623508371184486473, guid: f54d07dd076cbdd4897e5efeea201524,
         type: 3}
       propertyPath: m_RootOrder
@@ -120753,7 +120758,7 @@ RectTransform:
   - {fileID: 1308626098}
   - {fileID: 662599386}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -121508,7 +121513,7 @@ PrefabInstance:
     - target: {fileID: 178852129549791314, guid: e07d570cb75cb2bb58fabf059ebde66a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 178852129549791314, guid: e07d570cb75cb2bb58fabf059ebde66a,
         type: 3}
@@ -130916,7 +130921,7 @@ Transform:
   - {fileID: 758129541}
   - {fileID: 513341350}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1962444279
 PrefabInstance:
@@ -131186,7 +131191,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2068297867
 MonoBehaviour:
@@ -131841,7 +131846,7 @@ Animator:
   m_GameObject: {fileID: 9109332483900628164}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e5336be4306c51c47ba51bb90a0368e7, type: 2}
+  m_Controller: {fileID: 9100000, guid: bfdaf1af513a2354da0716ab275e19f4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -131889,7 +131894,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: -1879919442813945334, guid: 58a9a503f66c37c44a8f3936529ad2a4,
+  m_Sprite: {fileID: -7422921002362160082, guid: 70ab919519dea4245853d0a2e77ef904,
     type: 3}
   m_Color: {r: 1, g: 0.0000002204203, b: 0, a: 1}
   m_FlipX: 1
