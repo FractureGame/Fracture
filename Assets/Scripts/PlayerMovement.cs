@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public bool isDead;
     public GameObject thisBar;
     public GameObject otherBar;
+    private bool hasPlayedDeathAnim;
 
     [Header("Abilities")]
     public bool canDash;
@@ -253,6 +254,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (isDead)
         {
+            if (!hasPlayedDeathAnim && currentHealth <= 0)
+            {
+                animator.SetBool("isDead", true);
+                hasPlayedDeathAnim = true;
+            }
             // PhotonNetwork.Destroy(gameObject);
             return;
         }

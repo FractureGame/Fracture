@@ -1641,6 +1641,9 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 2
     Name: walk
+  - Type: 4
+    SynchronizeType: 2
+    Name: isDead
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
