@@ -234,13 +234,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
             
 
-        if (Input.GetKeyDown(KeyCode.Space) && nbJump < nbJumpsAllowed)
+        if (InputManager.GetKeyDown("Jump") && nbJump < nbJumpsAllowed)
         {
             jumpTimer = Time.time + jumpDelay;
             nbJump += 1;
         }
 
-        if (canDash && Input.GetKeyDown(KeyCode.LeftShift) && dashCooldownStatus <= 0f)
+        if (canDash && InputManager.GetKeyDown("Dash") && dashCooldownStatus <= 0f)
         {
             isDashing = true;
             dashTime = startDashTime;
@@ -264,7 +264,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
 
 
-        if (Input.GetKeyDown(KeyCode.A) && attackCooldownStatus <= 0f)
+        if (InputManager.GetKeyDown("Attack") && attackCooldownStatus <= 0f)
         {
             Debug.Log("Attacking");
             isAttacking = true;
@@ -277,7 +277,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             switchCooldownStatus -= Time.deltaTime;
         }
         
-        if (Input.GetKeyDown(KeyCode.S) && switchCooldownStatus <= 0f)
+        if (InputManager.GetKeyDown("Switch") && switchCooldownStatus <= 0f)
         {
             Debug.Log("Switching");
             isSwitching = true;
@@ -328,7 +328,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
 
         
-        if (isWallSliding && Input.GetKeyDown(KeyCode.Space))
+        if (isWallSliding && InputManager.GetKeyDown("Jump"))
         {
             isWallJumping = true;
             isWallSliding = false;
@@ -369,11 +369,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (direction != Vector2.zero)
             orientation = direction;
 
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Debug.Log("Damage");
-            TakeDamage(20);
-        }
+        
+        
     }
 
     
