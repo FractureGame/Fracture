@@ -49,13 +49,9 @@ public class OptionsMenu : MonoBehaviour
         for (int i = 0; i < resolutions.Length; i++)
         {
             string option = resolutions[i].width + " x " + resolutions[i].height;
-            if (resStrings.Contains(option))
-            {
-                continue;
-            }
             resStrings.Add(option);
-            if (resolutions[i].height == Screen.currentResolution.height &&
-                resolutions[i].width == Screen.currentResolution.width)
+            if (resolutions[i].height == Screen.height &&
+                resolutions[i].width == Screen.width)
             {
                 currentResolutionIndex = i;
             }
