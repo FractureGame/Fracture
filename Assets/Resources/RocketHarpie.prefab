@@ -55,6 +55,8 @@ MonoBehaviour:
   maxHealth: 150
   currentHealth: 0
   enemyDamage: 30
+  bloodParticle: {fileID: 1242838869165408022, guid: 937499e39a50e6832a0634db6ac798bb,
+    type: 3}
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -82,6 +84,7 @@ MonoBehaviour:
   canChase: 0
   facingRight: 1
   isStunned: 0
+  isFree: 0
   isRocket: 1
   escortBlobKing: 0
   readyToCarryKingBlob: 0

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 410854220823986408}
   - component: {fileID: 4899977321396310148}
   m_Layer: 0
-  m_Name: ExplosionParticle
+  m_Name: BloodExplosionParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -256,8 +256,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                GameObject.Find("Change Level").SetActive(false);
-                GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+                try
+                {
+                    GameObject.Find("Change Level").SetActive(false);
+                    GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+                }
+                catch (Exception)
+                {
+                }
+
             }
             if (!hasPlayedDeathAnim && currentHealth <= 0)
             {
@@ -271,8 +278,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         if (!PhotonNetwork.IsMasterClient)
         {
-            GameObject.Find("Change Level").SetActive(false);
-            GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            try
+            {
+                GameObject.Find("Change Level").SetActive(false);
+                GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            }
+            catch (Exception)
+            {
+            }
 
 
         }

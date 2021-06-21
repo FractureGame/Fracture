@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviourPunCallbacks
 
     [Header("Damage")]
     public int enemyDamage;
+
+    public ParticleSystem bloodParticle;
     
     private Rigidbody2D rigidbody2d;
     private BoxCollider2D boxCollider2d;
@@ -185,7 +187,9 @@ public class Enemy : MonoBehaviourPunCallbacks
         Destroy(gameObject);
         // PhotonNetwork.Destroy(gameObject);
     }
-    
-    
-    
+
+    private void OnDestroy()
+    {
+        PhotonNetwork.Instantiate(bloodParticle.name, transform.position, Quaternion.identity, 1);
+    }
 }
