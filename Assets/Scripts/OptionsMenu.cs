@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -20,21 +21,30 @@ public class OptionsMenu : MonoBehaviour
 
     public void Awake()
     {
+        //Fullscreen stuff
         if (Screen.fullScreen)
         {
             Debug.Log("game is in fullscreen");
         }
         fullscreenToggle.isOn = Screen.fullScreen;
+        //Resolution stuff
         TMP_Dropdown resolutionsDropdown = resOptions.GetComponent<TMP_Dropdown>();
         resolutions = Screen.resolutions;
         resolutionsDropdown.ClearOptions();
         List<string> resStrings = new List<string>();
-        foreach (var e in resolutions)
+        int currentResolutionIndex = 0;
+        for (int i = 0; i < resolutions.Length; i++)
         {
-            string option = e.width + " x " + e.height;
-            Debug.Log(option);
+            string option = resolutions[i].width + " x " + resolutions[i].height;
             resStrings.Add(option);
+            if (resolutions[i].height == Screen.currentResolution.height &&
+                resolutions[i].width == Screen.currentResolution.width)
+            {
+                currentResolutionIndex = i;
+            }
         }
         resolutionsDropdown.AddOptions(resStrings);
+        resolutionsDropdown.value = currentResolutionIndex;
+        resolutionsDropdown.RefreshShownValue();
     }
 }
