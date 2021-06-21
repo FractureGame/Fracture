@@ -364,9 +364,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             oldDirection = direction;
         }
-        
+
         if (direction != Vector2.zero)
+        {
             animator.SetBool("isWalking", true);
+            animator.SetTrigger("walk");
+        }
         else
         {
             animator.SetBool("isWalking", false);
@@ -584,6 +587,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
             // animator.ResetTrigger("attack");
             animator.SetBool("isAttacking", true);
+            animator.SetTrigger("attack");
             Attack();
             attackCooldownStatus = ATTACK_COOLDOWN;
             isAttacking = false;

@@ -731,6 +731,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isAttacking
+  - Type: 9
+    SynchronizeType: 2
+    Name: walk
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
