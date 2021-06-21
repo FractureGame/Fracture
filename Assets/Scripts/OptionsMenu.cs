@@ -10,9 +10,9 @@ public class OptionsMenu : MonoBehaviour
     public Toggle fullscreenToggle;
     UnityEngine.Resolution[] resolutions;
     public GameObject resOptions;
-    public void SetRes(int val)
+    public void SetRes(int resIndex)
     {
-        
+        Screen.SetResolution(resolutions[resIndex].width, resolutions[resIndex].height,Screen.fullScreen);
     }
     public void SetScreenMode(bool b)
     {
