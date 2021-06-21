@@ -293,7 +293,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         
         
-        if (Input.GetKeyDown(KeyCode.Space) && nbJump < nbJumpsAllowed)
+        if (inputManager.GetKeyDown("Jump") && nbJump < nbJumpsAllowed)
         {
             jumpTimer = Time.time + jumpDelay;
             nbJump += 1;
