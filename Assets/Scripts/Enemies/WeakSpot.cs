@@ -13,12 +13,14 @@ public class WeakSpot : MonoBehaviour
             {
                 if (collision.transform.position.y > transform.parent.position.y)
                 {
-                    PhotonNetwork.Destroy(objectToDestroy);
+                    Destroy(objectToDestroy);
+                    // PhotonNetwork.Destroy(objectToDestroy);
                 }
                     
             }
             else
             {
+                Destroy(objectToDestroy);
                 PhotonNetwork.Destroy(objectToDestroy);
             }
         }
