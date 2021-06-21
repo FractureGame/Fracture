@@ -254,6 +254,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         if (isDead)
         {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                GameObject.Find("Change Level").SetActive(false);
+                GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            }
             if (!hasPlayedDeathAnim && currentHealth <= 0)
             {
                 animator.SetBool("isDead", true);
@@ -267,7 +272,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient)
         {
             GameObject.Find("Change Level").SetActive(false);
-            GameObject.Find("Leave Button").transform.position = new Vector2(0, 0);
+            GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+
+
         }
         
         

@@ -220,8 +220,8 @@ namespace Com.MyCompany.MyGame
                 {
                     GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
                     gameoverPanel.SetActive(true);
-                    GameObject.Find("gameover Label").SetActive(false);
-                    GameObject.Find("gameover Reason").SetActive(false);
+                    GameObject.Find("gameover Label").GetComponent<Text>().text = "";
+                    GameObject.Find("gameover Reason").GetComponent<Text>().text = "";
                     GameObject.Find("Change Level").GetComponentInChildren<Text>().text = "Back";
                 }
                 else

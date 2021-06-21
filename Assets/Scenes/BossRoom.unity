@@ -129950,6 +129950,16 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: LeaveRoom
       objectReference: {fileID: 0}
+    - target: {fileID: 3250542962337582469, guid: 2835d6f4b568275b4b03ba8502bbaa54,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1011230487}
+    - target: {fileID: 3250542962337582469, guid: 2835d6f4b568275b4b03ba8502bbaa54,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DisplayLevels
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2835d6f4b568275b4b03ba8502bbaa54, type: 3}
 --- !u!224 &1751117966 stripped
