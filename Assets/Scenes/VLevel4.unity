@@ -71198,6 +71198,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8314020947102869202, guid: 8913adc0f1cc578d18f5139ed98866da,
         type: 3}
+      propertyPath: canChase
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8314020947102869202, guid: 8913adc0f1cc578d18f5139ed98866da,
+        type: 3}
       propertyPath: canPatrol
       value: 0
       objectReference: {fileID: 0}
