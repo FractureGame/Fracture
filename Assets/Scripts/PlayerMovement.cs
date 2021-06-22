@@ -307,10 +307,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         }
 
-        if (CheckWinCondition() && GameObject.Find("Grid").transform.Find("Destroy2") != null)
+        if (SceneManager.GetActiveScene().name == "BossRoom")
         {
-            photonView.RPC("KingBLobFalls", RpcTarget.All);
+            if (CheckWinCondition() && GameObject.Find("Grid").transform.Find("Destroy2") != null)
+            {
+                photonView.RPC("KingBLobFalls", RpcTarget.All);
+            }
         }
+
         
         
         

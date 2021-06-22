@@ -59,14 +59,22 @@ public class Enemy : MonoBehaviourPunCallbacks
         
         if (transform.parent.name != "RoiBlob" && transform.parent.name != "BomberHarpie")
         {
-            lifebar = GameObject.Find("LifeBars").transform.Find(transform.parent.name + "LifeBar").gameObject;
-            lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
+            try
+            {
+                lifebar = GameObject.Find("LifeBars").transform.Find(transform.parent.name + "LifeBar").gameObject;
+                lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
+            }
+            catch (Exception e)
+            {
+                Debug.Log("NOT FOUND");
+                Destroy(gameObject);
+            }
+            
         }
         else if (transform.parent.name == "RoiBlob")
         {
             lifebar = GameObject.Find("Canvas").transform.Find(transform.parent.name + "LifeBar").gameObject;
         }
-            
 
         
         

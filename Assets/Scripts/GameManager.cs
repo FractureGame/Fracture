@@ -240,23 +240,23 @@ namespace Com.MyCompany.MyGame
         private void Update()
         {
 
-            foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
-            {
-                if (enemy.GetComponentInChildren<Enemy>().currentHealth <= 0)
-                {
-                    Destroy(enemy);
-                }
-                if (GameObject.Find(enemy.name + "LifeBar") == null)
-                {
-                    Destroy(enemy);
-                }
-            }
+            // foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
+            // {
+            //     if (enemy.GetComponentInChildren<Enemy>().currentHealth <= 0)
+            //     {
+            //         PhotonNetwork.Destroy(enemy);
+            //     }
+            //     if (GameObject.Find(enemy.name + "LifeBar") == null)
+            //     {
+            //         PhotonNetwork.Destroy(enemy);
+            //     }
+            // }
             
             foreach (var lifebar in GameObject.FindGameObjectsWithTag("LifeBar"))
             {
                 if (GameObject.Find(lifebar.name.Replace("LifeBar", "")) == null)
                 {
-                    Destroy(lifebar);
+                    PhotonNetwork.Destroy(lifebar);
                 }
             }
         }
