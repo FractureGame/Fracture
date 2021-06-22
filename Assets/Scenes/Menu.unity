@@ -1943,7 +1943,7 @@ MonoBehaviour:
     loopable: 1
     canOverlap: 0
   - name: LevelMusic1
-    sound: {fileID: 8300000, guid: 576b204ec4f41234b840a6c8a066e12b, type: 3}
+    sound: {fileID: 8300000, guid: f200eafab98198445a0900655ab35996, type: 3}
     volume: 1
     pitch: 1
     source: {fileID: 0}
@@ -1969,6 +1969,27 @@ MonoBehaviour:
     pitch: 1
     source: {fileID: 0}
     loopable: 0
+    canOverlap: 0
+  - name: BossIntro
+    sound: {fileID: 8300000, guid: 2e75f841781739847b0e649c050df8e9, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loopable: 0
+    canOverlap: 0
+  - name: BossLoop
+    sound: {fileID: 8300000, guid: 0697df972d08d9b4fbeeeb7c80581beb, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loopable: 1
+    canOverlap: 0
+  - name: LevelMusic2
+    sound: {fileID: 8300000, guid: 801d1231068fb464a8883aa01d00c704, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loopable: 1
     canOverlap: 0
 --- !u!4 &757473733
 Transform:
