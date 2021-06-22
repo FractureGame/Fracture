@@ -660,7 +660,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
             try
             {
-                fouet.GetComponent<Animator>().SetTrigger("extendWhip");
+                // fouet.GetComponent<Animator>().SetTrigger("extendWhip");
             }
             catch (Exception e)
             {

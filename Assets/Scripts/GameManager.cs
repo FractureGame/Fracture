@@ -173,7 +173,7 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(22f, 2.5f,0f), Quaternion.identity, 0);
                 }
             }
-            else if (SceneManager.GetActiveScene().name == "VLevel4")
+            else if (SceneManager.GetActiveScene().name == "Level4")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -184,7 +184,7 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(-7.4f, 0f,0f), Quaternion.identity, 0);
                 }
             }
-            else if (SceneManager.GetActiveScene().name == "HLevel5")
+            else if (SceneManager.GetActiveScene().name == "Level5")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -193,17 +193,6 @@ namespace Com.MyCompany.MyGame
                 else
                 {
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(2.6f, 1.37f,0f), Quaternion.identity, 0);
-                }
-            }
-            else if (SceneManager.GetActiveScene().name == "VLevel8")
-            {
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(6.5f, 2.5f,0f), Quaternion.identity, 0);
-                }
-                else
-                {
-                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(22f, 2.5f,0f), Quaternion.identity, 0);
                 }
             }
             else if (SceneManager.GetActiveScene().name == "BossRoom")
