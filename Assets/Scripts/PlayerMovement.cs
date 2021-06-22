@@ -60,8 +60,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private float dashCooldownStatus;
     public GameObject dashParticleRight;
     public GameObject dashParticleLeft;
-    
-    [Header("Attack")]
+
+    [Header("Attack")] 
+    public GameObject fouet;
     private bool isAttacking = false;
     public Transform attackPoint;
     public float attackRange = 1.4f;
@@ -657,6 +658,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             animator.SetTrigger("attack");
 
+            try
+            {
+                fouet.GetComponent<Animator>().SetTrigger("extendWhip");
+            }
+            catch (Exception e)
+            {
+                Debug.LogFormat("pb avec le fouet : {0}", e);
+                throw;
+            }
+            
+            
             // animator.ResetTrigger("attack");
             animator.SetBool("isAttacking", true);
             animator.SetTrigger("attack");
@@ -1200,5 +1212,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         return boxCastHit.collider;
     }
+
+    public bool GetAttack()
+    {
+        return isAttacking;
+    }
+    
 }
 
