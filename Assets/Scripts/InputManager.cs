@@ -29,6 +29,8 @@ public class InputManager : MonoBehaviour
         {
             actionKeys = new Dictionary<string, KeyCode>
             {
+                ["Left"] = KeyCode.LeftArrow,
+                ["Right"] = KeyCode.RightArrow,
                 ["Jump"] = KeyCode.Space,
                 ["Switch"] = KeyCode.S,
                 ["Climb"] = KeyCode.C,

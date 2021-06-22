@@ -413,8 +413,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (onGround)
             animator.SetBool("isJumping", false);
 
-        direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0);;
-
+        //direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0);;
+        if (inputManager.GetKeyDown("Left"))
+        {
+            direction = new Vector2(-1, 0);
+        }
+        else if (inputManager.GetKeyDown("Right"))
+        {
+            direction = new Vector2(1, 0);
+        }
+        else
+        {
+            direction = Vector2.zero;
+        }
         
 
         if (direction != oldDirection && direction != Vector2.zero && oldDirection != Vector2.zero)
