@@ -14,7 +14,7 @@ public class FollowKing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        blobPos = GameObject.Find("RoiBlob").transform.Find("Graphics").transform.position;
-        transform.position = new Vector3(blobPos.x, blobPos.y, -10);
+        // blobPos = GameObject.Find("RoiBlob").transform.Find("Graphics").transform.position;
+        // transform.position = new Vector3(blobPos.x, blobPos.y, -10);
     }
 }

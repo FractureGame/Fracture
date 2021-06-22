@@ -118,6 +118,10 @@ public class BossAI : MonoBehaviourPunCallbacks
         {
             Destroy(GameObject.Find("Grid").transform.Find(castleTilemap.name).gameObject);
             Destroy(GameObject.Find("Grid").transform.Find(castleGround.name).gameObject);
+            GameObject.Find("PlayerTop(Clone)").GetComponentInChildren<Animator>().SetBool("isJumping", true);
+            GameObject.Find("PlayerTop(Clone)").GetComponentInChildren<Animator>().SetTrigger("jump");
+            GameObject.Find("PlayerBot(Clone)").GetComponentInChildren<Animator>().SetBool("isJumping", true);
+            GameObject.Find("PlayerBot(Clone)").GetComponentInChildren<Animator>().SetTrigger("jump");
         }
         catch (Exception)
         {
@@ -255,6 +259,7 @@ public class BossAI : MonoBehaviourPunCallbacks
         else if (phase2 && nbJump >= nbJumpBeforeDestruction && isGrounded && !hasdestroyedCastleAndGround)
         {
             photonView.RPC("DestroyCastleAndGround", RpcTarget.All);
+ 
             phase2 = false;
             isCastlePhasePlaying = true;
             movingToPhase3 = true;

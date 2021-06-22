@@ -189,9 +189,9 @@ public class Enemy : MonoBehaviourPunCallbacks
     void Die()
     {
         Debug.Log("Enemy Died " + gameObject.name);
-        // Destroy(gameObject.transform.parent.gameObject);
+        Destroy(gameObject.transform.parent.gameObject);
         Destroy(gameObject);
-        // PhotonNetwork.Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
     
 }

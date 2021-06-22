@@ -737,6 +737,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                     cameras[0].SetActive(false);
                     cameras[3].SetActive(false);
                     cameras[6].SetActive(false);
+                    GameObject.Find("CameraOnBlob").transform.position = new Vector3(blobking.transform.position.x, blobking.transform.position.y, -10);
                     GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
                     GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
                 }
