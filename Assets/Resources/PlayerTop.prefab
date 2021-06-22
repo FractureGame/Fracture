@@ -1310,6 +1310,7 @@ GameObject:
   - component: {fileID: 7731106241343368436}
   - component: {fileID: 1498757154590033033}
   - component: {fileID: 4450953988222515999}
+  - component: {fileID: 6558839225141719841}
   m_Layer: 14
   m_Name: pieds
   m_TagString: Pieds
@@ -1369,6 +1370,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea78de549f297c74d8737f41533b559f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6558839225141719841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7938102563990109380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &8288507334146833246
 GameObject:
   m_ObjectHideFlags: 0

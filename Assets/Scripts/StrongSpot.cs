@@ -18,6 +18,13 @@ public class StrongSpot : MonoBehaviourPunCallbacks
         
     }
     
+    [PunRPC]
+    private void KillEnemy(string enemyName)
+    {
+        GameObject bar = GameObject.Find("LifeBars").transform.Find(enemyName + "LifeBar").gameObject;
+        bar.GetComponent<HPBar>().SetHealth(0);
+        Destroy(bar);
+    }
     
     private void OnTriggerEnter2D(Collider2D collision)
     {

@@ -257,7 +257,7 @@ namespace Com.MyCompany.MyGame
             {
                 if (GameObject.Find(lifebar.name.Replace("LifeBar", "")) == null)
                 {
-                    PhotonNetwork.Destroy(lifebar);
+                    Destroy(lifebar);
                 }
             }
         }

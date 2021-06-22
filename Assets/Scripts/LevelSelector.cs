@@ -77,8 +77,16 @@ public class LevelSelector : MonoBehaviour
     {
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == 1)
         {
-            GameObject.Find("LevelButtons").SetActive(false);
-            GameObject.Find("WaitingMaster").SetActive(false);
+            if (GameObject.Find("LevelButtons") != null)
+            {
+                GameObject.Find("LevelButtons").SetActive(false);
+            }
+
+            if (GameObject.Find("WaitingMaster") != null)
+            {
+                GameObject.Find("WaitingMaster").SetActive(false);
+            }
+            
         }
     }
 }

@@ -129,7 +129,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void OnDestroy()
     {
-        am.StopSound("Walk");
+        try
+        {
+            am.StopSound("Walk");
+        }
+        catch (Exception)
+        {
+        }
+        
     }
 
     
@@ -304,7 +311,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             {
             }
         }
-        else if (PhotonNetwork.PlayerList.Length == 1)
+        else if (PhotonNetwork.PlayerList.Length == 1 && GameObject.Find("Change Level").activeSelf)
         {
 
             // Hide Lelvels button + replace Leave button
@@ -1141,13 +1148,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
     }
 
-    [PunRPC]
-    private void KillEnemy(string enemyName)
-    {
-        GameObject bar = GameObject.Find("LifeBars").transform.Find(enemyName + "LifeBar").gameObject;
-        bar.GetComponent<HPBar>().SetHealth(0);
-        Destroy(bar);
-    }
+
 
     private void OnDrawGizmos()
     {

@@ -146,7 +146,7 @@ public class HarpieAI : MonoBehaviourPunCallbacks
                 }
                 catch (Exception)
                 {
-
+                    return;
                 }
 
 
@@ -250,7 +250,11 @@ public class HarpieAI : MonoBehaviourPunCallbacks
                         }
                     }
 
-                    playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
+                    if (playerToFollow != null)
+                    {
+                        playerToFollowPos = playerToFollow.GetComponent<Transform>().position;
+                    }
+                    
                 }
 
                 

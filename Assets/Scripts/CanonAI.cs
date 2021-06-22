@@ -1,3 +1,4 @@
+using System;
 using Photon.Pun;
 using UnityEngine;
 
@@ -53,8 +54,16 @@ public class CanonAI : MonoBehaviour
     void Update()
     {
 
-        playerTopPos = GameObject.Find("PlayerTop(Clone)").transform.position;
-        playerBotPos = GameObject.Find("PlayerBot(Clone)").transform.position;
+        try
+        {
+            playerTopPos = GameObject.Find("PlayerTop(Clone)").transform.position;
+            playerBotPos = GameObject.Find("PlayerBot(Clone)").transform.position;
+        }
+        catch (Exception e)
+        {
+            return;
+        }
+        
 
         if (freeCanon)
         {

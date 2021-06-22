@@ -181,10 +181,18 @@ public class BossAI : MonoBehaviourPunCallbacks
     private void Update()
     {
 
-        playerTop = GameObject.Find("PlayerTop(Clone)");
-        playerBot = GameObject.Find("PlayerBot(Clone)");
-        playerTopPos = playerTop.transform.position;
-        playerBotPos = playerBot.transform.position;
+        try
+        {
+            playerTop = GameObject.Find("PlayerTop(Clone)");
+            playerBot = GameObject.Find("PlayerBot(Clone)");
+            playerTopPos = playerTop.transform.position;
+            playerBotPos = playerBot.transform.position;
+        }
+        catch (Exception e)
+        {
+            return;
+        }
+
 
 
         if (transform.position.y > -10)
@@ -403,14 +411,13 @@ public class BossAI : MonoBehaviourPunCallbacks
         {
             try
             {
-                if (harpie.name == "Graphics")
+                if (GameObject.Find(harpie.transform.parent.name) != null)
                 {
                     return false;
                 }
             }
-            catch (MissingReferenceException)
+            catch (Exception)
             {
-
             }
         }
         return true;
