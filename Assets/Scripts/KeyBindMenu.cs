@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,22 +40,78 @@ public class KeyBindMenu : MonoBehaviour
                 {
                     if (Input.GetKeyDown(kc))
                     {
-                        SetKeyForAction(actionToRebind,kc);
+                        bool successfullyBound = SetKeyForAction(actionToRebind,kc);
                         actionToRebind = null;
+                        if (successfullyBound)
+                        {
+                            GameObject.Find("Key Already Bound Msg").GetComponent<Text>().text = "";
+                        }
                         break;
                     }
                 }
             }
         }
     }
-    void SetKeyForAction(string action, KeyCode key)
+    bool SetKeyForAction(string action, KeyCode key)
     {
+        if (inputManager.actionKeys.ContainsValue(key))
+        {
+            
+            GameObject.Find("Key Already Bound Msg").GetComponent<Text>().text = "The key " + key + " is already bound to " + GetActionForKey(key);
+            return false;
+        }
         Debug.Log(action + " should now be bound to " + key.ToString());
         inputManager.actionKeys[action] = key;
         buttonToLabel[action].text = key.ToString();
+        return true;
     }
     void StartRebindFor(string action)
     {
         actionToRebind = action;
+    }
+
+    public void Serialize()
+    {
+        if (!Directory.Exists("FractureConfig"))
+        {
+            Directory.CreateDirectory("FractureConfig");
+        }
+
+        using (StreamWriter sw = new StreamWriter("FractureConfig/keyconfig.txt", false))
+        { 
+            foreach (var kvp in inputManager.actionKeys) 
+            { 
+                sw.WriteLine(kvp.Key + ":" + kvp.Value);
+            }
+        }
+    }
+    public static Dictionary<string,KeyCode> Deserialize(string path)
+    {
+        Dictionary<string, KeyCode> res = new Dictionary<string, KeyCode>();
+        using (StreamReader sr = new StreamReader(path))
+        {
+            string l;
+            while ((l = sr.ReadLine()) != null)
+            {
+                string[] actionKey = l.Split(':');
+                Enum.TryParse(actionKey[1], out KeyCode key);
+                res.Add(actionKey[0], key);
+            }
+        }
+        return res;
+    }
+
+    private string GetActionForKey(KeyCode key)
+    {
+        string s = "";
+        foreach (var kvp in inputManager.actionKeys)
+        {
+            if (kvp.Value == key)
+            {
+                s = kvp.Key;
+                break;
+            }
+        }
+        return s;
     }
 }
