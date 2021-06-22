@@ -303,8 +303,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             catch (Exception)
             {
             }
+        }
+        else if (PhotonNetwork.PlayerList.Length == 1)
+        {
 
-
+            // Hide Lelvels button + replace Leave button
+            GameObject.Find("Change Level").SetActive(false);
+            GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            
         }
 
         if (SceneManager.GetActiveScene().name == "BossRoom")

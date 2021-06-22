@@ -2077,9 +2077,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe4e3f429f22ff45a3c8e7361d275ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalWithMaxDistance: 1
+  horizontalWithMaxDistance: 0
   horizontalLeft: 0
-  horizontalRight: 0
+  horizontalRight: 1
   verticalUp: 0
   verticalDown: 0
   endTilePos: 100
@@ -45405,9 +45405,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe4e3f429f22ff45a3c8e7361d275ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalWithMaxDistance: 1
+  horizontalWithMaxDistance: 0
   horizontalLeft: 0
-  horizontalRight: 0
+  horizontalRight: 1
   verticalUp: 0
   verticalDown: 0
   endTilePos: 1000
@@ -132303,6 +132303,11 @@ PrefabInstance:
         type: 3}
       propertyPath: beginningSpacing
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2805702020968458369, guid: 4979a4f6a19da13ab98b5b4007b4739c,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -201
       objectReference: {fileID: 0}
     - target: {fileID: 5879582749818478484, guid: 4979a4f6a19da13ab98b5b4007b4739c,
         type: 3}

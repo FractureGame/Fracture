@@ -57,7 +57,7 @@ public class Enemy : MonoBehaviourPunCallbacks
         }
         
         
-        if (transform.parent.name != "RoiBlob" && transform.parent.name != "BomberHarpie")
+        if (transform.parent.name != "RoiBlob" && !transform.parent.name.StartsWith("Bomber"))
         {
             try
             {

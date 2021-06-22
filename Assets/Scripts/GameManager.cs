@@ -214,7 +214,7 @@ namespace Com.MyCompany.MyGame
         {
 
 
-            if (PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length > 1)
             {
                 if (GameObject.Find("Change Level").GetComponentInChildren<Text>().text == "Levels")
                 {
@@ -232,6 +232,7 @@ namespace Com.MyCompany.MyGame
                 }
 
             }
+
         }
         
         
