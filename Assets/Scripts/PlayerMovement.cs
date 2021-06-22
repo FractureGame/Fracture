@@ -124,19 +124,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         attackCooldownStatus = 0f;
         animator = GetComponentInChildren<Animator>();
         switchCooldownStatus = 0f;
-        // if (SceneManager.GetActiveScene().name[0] == 'H')
-        // {
-        //     horizontal = true;
-        // }
-        // else if (SceneManager.GetActiveScene().name[0] == 'V')
-        // {
-        //     horizontal = false;
-        // }
-        // else
-        // {
-        //     both = true;
-        // }
-
         cameras = Camera.main.GetComponent<CameraMovement>().cameras;
     }
 
@@ -146,7 +133,25 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     }
 
     
-    
+    private bool CheckWinCondition()
+    {
+        HarpieAI[] rocketHarpies = GameObject.Find("RoiBlob").GetComponentInChildren<BossAI>().rocketHarpies;
+        foreach (var harpie in rocketHarpies)
+        {
+            try
+            {
+                if (harpie.name == "Graphics")
+                {
+                    return false;
+                }
+            }
+            catch (MissingReferenceException)
+            {
+
+            }
+        }
+        return true;
+    }
     
     
     
@@ -169,6 +174,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
     }
 
+
+    [PunRPC]
+
+    private void KingBLobFalls()
+    {
+        GameObject.Find("RoiBlob").GetComponentInChildren<Rigidbody2D>().isKinematic = false;
+        GameObject.Find("RoiBlob").GetComponentInChildren<Rigidbody2D>().simulated = true;
+    }
+    
+    
     private void Update()
     {        
         
@@ -291,6 +306,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
 
         }
+
+        if (CheckWinCondition() && GameObject.Find("Grid").transform.Find("Destroy2") != null)
+        {
+            photonView.RPC("KingBLobFalls", RpcTarget.All);
+        }
+        
         
         
         if (inputManager.GetKeyDown("Jump") && nbJump < nbJumpsAllowed)
@@ -435,6 +456,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
     }
 
+    
     
     public void TakeDamage(int dmg)
     {

@@ -317,8 +317,8 @@ public class BossAI : MonoBehaviourPunCallbacks
                 abdcef = true;
                 photonView.RPC("callPlayers", RpcTarget.All);
 
-                rigidbody2d.isKinematic = false;
-                rigidbody2d.simulated = true;
+                // rigidbody2d.isKinematic = false;
+                // rigidbody2d.simulated = true;
                 if (isGrounded && !hasDestroyedlast)
                 {
                     // Shake Camera
@@ -335,7 +335,7 @@ public class BossAI : MonoBehaviourPunCallbacks
                 {
                     if (isTouchingDanger())
                     {
-                        GetComponent<Enemy>().TakeDamage(150);
+                        GetComponent<Enemy>().TakeDamage(167);
                     }
                 }
                 else

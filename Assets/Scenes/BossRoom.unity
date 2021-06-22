@@ -133009,7 +133009,6 @@ MonoBehaviour:
   maxHealth: 500
   currentHealth: 0
   enemyDamage: 0
-  bloodParticle: {fileID: 0}
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 512
