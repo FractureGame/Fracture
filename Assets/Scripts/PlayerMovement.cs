@@ -726,15 +726,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
 
         
-        if (blobking == null)
-        {
-            blobking = GameObject.Find("RoiBlob").transform.Find("Graphics").gameObject;
-        }
+
         
         if (photonView.IsMine)
         {
             if (SceneManager.GetActiveScene().name == "BossRoom")
             {
+                if (blobking == null)
+                {
+                    blobking = GameObject.Find("RoiBlob").transform.Find("Graphics").gameObject;
+                }
+                
                 if (blobking.GetComponent<BossAI>().abdcef)
                 {
                     Debug.Log("YES SIR");
