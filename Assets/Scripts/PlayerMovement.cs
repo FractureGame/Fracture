@@ -438,6 +438,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     public void TakeDamage(int dmg)
     {
+        dmg = 0;
         if(!isInvincible)
         {
             ApplyDamage(dmg);
