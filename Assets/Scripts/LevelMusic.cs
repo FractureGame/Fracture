@@ -14,7 +14,7 @@ public class LevelMusic : MonoBehaviour
     {
         audioManager = FindObjectOfType<AudioManager>();
         
-        audioManager.StopSound("MenuTheme");
+        audioManager.StopAllSounds();
         level = SceneManager.GetActiveScene().buildIndex - 2;
         if (level >= 1 && level <= 3)
         {
