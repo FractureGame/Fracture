@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class InputManager : MonoBehaviour
 {
@@ -11,7 +13,7 @@ public class InputManager : MonoBehaviour
     public Dictionary<string, KeyCode> actionKeys;
 
 
-    private void Awake()
+    private void OnEnable()
     {
         if (instance == null)
         {
@@ -23,14 +25,21 @@ public class InputManager : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(gameObject);
-        actionKeys = new Dictionary<string, KeyCode>
+        if (!File.Exists("keyconfig.txt"))
         {
-            ["Jump"] = KeyCode.Space,
-            ["Switch"] = KeyCode.S,
-            ["Climb"] = KeyCode.C,
-            ["Attack"] = KeyCode.A,
-            ["Dash"] = KeyCode.LeftShift
-        };
+            actionKeys = new Dictionary<string, KeyCode>
+            {
+                ["Jump"] = KeyCode.Space,
+                ["Switch"] = KeyCode.S,
+                ["Climb"] = KeyCode.C,
+                ["Attack"] = KeyCode.A,
+                ["Dash"] = KeyCode.LeftShift
+            };
+        }
+        else
+        {
+            actionKeys = KeyBindMenu.Deserialize("keyconfig.txt");
+        }
     }
 
     private void Update()
