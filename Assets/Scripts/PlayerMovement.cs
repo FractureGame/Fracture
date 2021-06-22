@@ -417,12 +417,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (inputManager.GetKeyDown("Left"))
         {
             direction = new Vector2(-1, 0);
+            
         }
-        else if (inputManager.GetKeyDown("Right"))
+        if (inputManager.GetKey("Right"))
         {
             direction = new Vector2(1, 0);
         }
-        else
+        if (!inputManager.GetKey("Left") && !inputManager.GetKey("Right"))
         {
             direction = Vector2.zero;
         }

@@ -1,7 +1,0 @@
-Left:A
-Right:D
-Jump:Space
-Switch:S
-Climb:C
-Attack:RightShift
-Dash:LeftShift

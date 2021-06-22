@@ -62,4 +62,25 @@ public class InputManager : MonoBehaviour
 
         return Input.GetKeyDown(actionKeys[action]);
     }
+    
+    public bool GetKeyUp(string action)
+    {
+        if (!actionKeys.ContainsKey(action))
+        {
+            Debug.LogError("GetKeyUp: " + action + " is not an existing action");
+            return false;
+        }
+
+        return Input.GetKeyUp(actionKeys[action]);
+    }
+    public bool GetKey(string action)
+    {
+        if (!actionKeys.ContainsKey(action))
+        {
+            Debug.LogError("GetKeyUp: " + action + " is not an existing action");
+            return false;
+        }
+
+        return Input.GetKey(actionKeys[action]);
+    }
 }
