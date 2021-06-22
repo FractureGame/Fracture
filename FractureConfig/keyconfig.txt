@@ -1,5 +1,5 @@
 Jump:Space
 Switch:S
 Climb:C
-Attack:L
+Attack:A
 Dash:LeftShift

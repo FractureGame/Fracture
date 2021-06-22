@@ -40,19 +40,30 @@ public class KeyBindMenu : MonoBehaviour
                 {
                     if (Input.GetKeyDown(kc))
                     {
-                        SetKeyForAction(actionToRebind,kc);
+                        bool successfullyBound = SetKeyForAction(actionToRebind,kc);
                         actionToRebind = null;
+                        if (successfullyBound)
+                        {
+                            GameObject.Find("Key Already Bound Msg").GetComponent<Text>().text = "";
+                        }
                         break;
                     }
                 }
             }
         }
     }
-    void SetKeyForAction(string action, KeyCode key)
+    bool SetKeyForAction(string action, KeyCode key)
     {
+        if (inputManager.actionKeys.ContainsValue(key))
+        {
+            
+            GameObject.Find("Key Already Bound Msg").GetComponent<Text>().text = "The key " + key + " is already bound to " + GetActionForKey(key);
+            return false;
+        }
         Debug.Log(action + " should now be bound to " + key.ToString());
         inputManager.actionKeys[action] = key;
         buttonToLabel[action].text = key.ToString();
+        return true;
     }
     void StartRebindFor(string action)
     {
@@ -88,5 +99,19 @@ public class KeyBindMenu : MonoBehaviour
             }
         }
         return res;
+    }
+
+    private string GetActionForKey(KeyCode key)
+    {
+        string s = "";
+        foreach (var kvp in inputManager.actionKeys)
+        {
+            if (kvp.Value == key)
+            {
+                s = kvp.Key;
+                break;
+            }
+        }
+        return s;
     }
 }
