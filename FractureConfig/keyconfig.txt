@@ -1,0 +1,5 @@
+Jump:Space
+Switch:S
+Climb:C
+Attack:L
+Dash:LeftShift

@@ -61,10 +61,15 @@ public class KeyBindMenu : MonoBehaviour
 
     public void Serialize()
     {
-        using (StreamWriter sw = new StreamWriter("keyconfig.txt",false))
+        if (!Directory.Exists("FractureConfig"))
         {
-            foreach (var kvp in inputManager.actionKeys)
-            {
+            Directory.CreateDirectory("FractureConfig");
+        }
+
+        using (StreamWriter sw = new StreamWriter("FractureConfig/keyconfig.txt", false))
+        { 
+            foreach (var kvp in inputManager.actionKeys) 
+            { 
                 sw.WriteLine(kvp.Key + ":" + kvp.Value);
             }
         }

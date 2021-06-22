@@ -25,7 +25,7 @@ public class InputManager : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(gameObject);
-        if (!File.Exists("keyconfig.txt"))
+        if (!File.Exists("FractureConfig/keyconfig.txt"))
         {
             actionKeys = new Dictionary<string, KeyCode>
             {
@@ -38,7 +38,7 @@ public class InputManager : MonoBehaviour
         }
         else
         {
-            actionKeys = KeyBindMenu.Deserialize("keyconfig.txt");
+            actionKeys = KeyBindMenu.Deserialize("FractureConfig/keyconfig.txt");
         }
     }
 
