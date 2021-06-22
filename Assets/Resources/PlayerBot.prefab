@@ -1192,6 +1192,7 @@ MonoBehaviour:
     type: 3}
   dashParticleLeft: {fileID: 1693074252123155176, guid: a6d439f38bf3adddebc5a742c1a4ad88,
     type: 3}
+  fouet: {fileID: 0}
   attackPoint: {fileID: 3263385813041290757}
   attackRange: 1.4
   enemyLayers:

@@ -13,6 +13,8 @@ TagManager:
   - Platform
   - Button
   - FireBall
+  - ScreenShake
+  - fouet
   layers:
   - Default
   - TransparentFX
