@@ -64,10 +64,11 @@ public class Enemy : MonoBehaviourPunCallbacks
                 lifebar = GameObject.Find("LifeBars").transform.Find(transform.parent.name + "LifeBar").gameObject;
                 lifebar.transform.position = new Vector3(transform.position.x - 1, transform.position.y + 1, 0);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Debug.Log("NOT FOUND");
-                Destroy(gameObject);
+                photonView.RPC("DestroyLifeBar", RpcTarget.All, lifebar.name);
+                // Destroy(gameObject);
             }
             
         }
@@ -78,6 +79,12 @@ public class Enemy : MonoBehaviourPunCallbacks
 
         
         
+    }
+
+    [PunRPC]
+    private void DestroyLifeBar(string lifebarName)
+    {
+        Destroy(GameObject.Find("LifeBars").transform.Find(lifebarName).gameObject);
     }
     
     private bool IsGrounded()
@@ -193,5 +200,9 @@ public class Enemy : MonoBehaviourPunCallbacks
         Destroy(gameObject);
         PhotonNetwork.Destroy(gameObject);
     }
-    
+
+    private void OnDestroy()
+    {
+        photonView.RPC("DestroyLifeBar", RpcTarget.All, lifebar.name);
+    }
 }

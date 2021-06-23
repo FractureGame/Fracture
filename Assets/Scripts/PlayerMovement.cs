@@ -897,25 +897,33 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                             cameras[4].GetComponent<Camera>();
                     }
                 }
-                if (Camera.current.GetComponent<CameraMovement>().horizontalLeft)
+
+                try
                 {
-                    Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyLeft(gameObject);
-                }
+                    if (Camera.current.GetComponent<CameraMovement>().horizontalLeft)
+                    {
+                        Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyLeft(gameObject);
+                    }
 
 
-                if (Camera.current.GetComponent<CameraMovement>().horizontalRight)
-                {
-                    Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyRight(gameObject);
+                    if (Camera.current.GetComponent<CameraMovement>().horizontalRight)
+                    {
+                        Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyRight(gameObject);
+                    }
+                    else if (Camera.current.GetComponent<CameraMovement>().verticalUp)
+                    {
+                        Debug.Log("HIIIIIIIIII");
+                        Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
+                    }
+                    else if (Camera.current.GetComponent<CameraMovement>().verticalDown)
+                    {
+                        Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
+                    }
                 }
-                else if (Camera.current.GetComponent<CameraMovement>().verticalUp)
+                catch (Exception)
                 {
-                    Debug.Log("HIIIIIIIIII");
-                    Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
                 }
-                else if (Camera.current.GetComponent<CameraMovement>().verticalDown)
-                {
-                    Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
-                }
+
             }
             else
             {
