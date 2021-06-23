@@ -188,11 +188,11 @@ namespace Com.MyCompany.MyGame
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(2.3f, 11f,0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(0f, 11f,0f), Quaternion.identity, 0);
                 }
                 else
                 {
-                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(2.6f, 1.37f,0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(0f, 0f,0f), Quaternion.identity, 0);
                 }
             }
             else if (SceneManager.GetActiveScene().name == "BossRoom")

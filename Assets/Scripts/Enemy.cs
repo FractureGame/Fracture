@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
@@ -67,8 +67,8 @@ public class Enemy : MonoBehaviourPunCallbacks
             catch (Exception)
             {
                 Debug.Log("NOT FOUND");
-                photonView.RPC("DestroyLifeBar", RpcTarget.All, lifebar.name);
-                // Destroy(gameObject);
+                // photonView.RPC("DestroySelf", RpcTarget.All, transform.parent.name);
+                Destroy(gameObject);
             }
             
         }
@@ -80,6 +80,13 @@ public class Enemy : MonoBehaviourPunCallbacks
         
         
     }
+    //
+    // [PunRPC]
+    // private void DestroySelf()
+    // {
+    //     
+    // }
+    
 
     [PunRPC]
     private void DestroyLifeBar(string lifebarName)
@@ -203,6 +210,6 @@ public class Enemy : MonoBehaviourPunCallbacks
 
     private void OnDestroy()
     {
-        photonView.RPC("DestroyLifeBar", RpcTarget.All, lifebar.name);
+        photonView.RPC("DestroyLifeBar", RpcTarget.All, transform.parent.name + "LifeBar");
     }
 }
