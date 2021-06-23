@@ -18,6 +18,13 @@ public class StrongSpot : MonoBehaviourPunCallbacks
         
     }
     
+    [PunRPC]
+    private void KillEnemy(string enemyName)
+    {
+        GameObject bar = GameObject.Find("LifeBars").transform.Find(enemyName + "LifeBar").gameObject;
+        bar.GetComponent<HPBar>().SetHealth(0);
+        Destroy(bar);
+    }
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -44,6 +51,17 @@ public class StrongSpot : MonoBehaviourPunCallbacks
         {
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
         }
+        
+        if (other.gameObject.CompareTag("Danger"))
+        {
+            Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+        }
+        
+        if (other.gameObject.CompareTag("Platform"))
+        {
+            Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+        }
+        
     }
 }
 

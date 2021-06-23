@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
@@ -15,6 +16,8 @@ namespace Com.MyCompany.MyGame
         public GameObject playerTopPrefab;
         public GameObject playerBotPrefab;
         public GameObject Enemylifebar;
+        public GameObject BossLifeBar;
+        private bool hasTransitionned;
         
         
         #endregion
@@ -80,7 +83,7 @@ namespace Com.MyCompany.MyGame
         {
             Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName);
             
-            // So that the player leave alone and the player who did not left is not brutally kicked of the game
+            // So that the player leaves alone and the player who did not leave is not brutally kicked of the game
             PhotonNetwork.AutomaticallySyncScene = false;
             if (PhotonNetwork.IsMasterClient)
             {
@@ -115,16 +118,29 @@ namespace Com.MyCompany.MyGame
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
             foreach (var enemy in enemies)
             {
-                GameObject e = Instantiate(Enemylifebar, GameObject.Find("Canvas").transform);
-                e.name = enemy.name + "LifeBar";
-                e.tag = "LifeBar";
-                e.transform.position = new Vector3(enemy.GetComponentInChildren<BoxCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
+                Debug.Log(enemy.name);
+                if (enemy.name == "RoiBlob")
+                {
+                    // GameObject e = Instantiate(BossLifeBar, GameObject.Find("Canvas").transform);
+                    // e.name = enemy.name + "LifeBar";
+                    // e.tag = "LifeBar";
+                    // // e.transform.position = BossLifeBar.transform.position;
+                    // e.transform.position = new Vector3(enemy.GetComponentInChildren<PolygonCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
+                }
+                else
+                {
+                    GameObject e = Instantiate(Enemylifebar, GameObject.Find("LifeBars").transform);
+                    e.name = enemy.name + "LifeBar";
+                    e.tag = "LifeBar";
+                    e.transform.position = new Vector3(enemy.GetComponentInChildren<BoxCollider2D>().transform.position.x, enemy.transform.position.y + 0.5f, 0);
+                }
+                
             }
             
             
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            if (SceneManager.GetActiveScene().name == "HLevel1")
+            if (SceneManager.GetActiveScene().name == "Level1")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -135,7 +151,7 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(8f, 2f,0f), Quaternion.identity, 0);
                 } 
             }
-            else if (SceneManager.GetActiveScene().name == "HLevel2")
+            else if (SceneManager.GetActiveScene().name == "Level2")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -146,7 +162,7 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(6f, 1f,0f), Quaternion.identity, 0);
                 }
             }
-            else if (SceneManager.GetActiveScene().name == "VLevel3")
+            else if (SceneManager.GetActiveScene().name == "Level3")
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -157,27 +173,104 @@ namespace Com.MyCompany.MyGame
                     PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(22f, 2.5f,0f), Quaternion.identity, 0);
                 }
             }
-        }
-
-        private void Update()
-        {
-            foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
+            else if (SceneManager.GetActiveScene().name == "Level4")
             {
-                if (GameObject.Find(enemy.name + "LifeBar") == null)
+                if (PhotonNetwork.IsMasterClient)
                 {
-                    PhotonNetwork.Destroy(enemy);
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(12f, 0f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(-7.4f, 0f,0f), Quaternion.identity, 0);
                 }
             }
+            else if (SceneManager.GetActiveScene().name == "Level5")
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(0f, 11f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(0f, 0f,0f), Quaternion.identity, 0);
+                }
+            }
+            else if (SceneManager.GetActiveScene().name == "BossRoom")
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(-35, 8.5f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(-35, -5f,0f), Quaternion.identity, 0);
+                }
+            }
+            else if (SceneManager.GetActiveScene().name == "Transition" && PhotonNetwork.PlayerList.Length > 1)
+            {
+
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Instantiate(playerTopPrefab.name, new Vector3(33, 4f,0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate(playerBotPrefab.name, new Vector3(26f, 6f,0f), Quaternion.identity, 0);
+                }
+            }
+        }
+
+
+        public void DisplayLevels()
+        {
+
+
+            if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length > 1)
+            {
+                if (GameObject.Find("Change Level").GetComponentInChildren<Text>().text == "Levels")
+                {
+                    GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                    gameoverPanel.SetActive(true);
+                    GameObject.Find("gameover Label").GetComponent<Text>().text = "";
+                    GameObject.Find("gameover Reason").GetComponent<Text>().text = "";
+                    GameObject.Find("Change Level").GetComponentInChildren<Text>().text = "Back";
+                }
+                else
+                {
+                    GameObject gameoverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                    gameoverPanel.SetActive(false);
+                    GameObject.Find("Change Level").GetComponentInChildren<Text>().text = "Levels";
+                }
+
+            }
+
+        }
+        
+        
+        
+        
+        private void Update()
+        {
+
+            // foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemies"))
+            // {
+            //     if (enemy.GetComponentInChildren<Enemy>().currentHealth <= 0)
+            //     {
+            //         PhotonNetwork.Destroy(enemy);
+            //     }
+            //     if (GameObject.Find(enemy.name + "LifeBar") == null)
+            //     {
+            //         PhotonNetwork.Destroy(enemy);
+            //     }
+            // }
             
             foreach (var lifebar in GameObject.FindGameObjectsWithTag("LifeBar"))
             {
                 if (GameObject.Find(lifebar.name.Replace("LifeBar", "")) == null)
                 {
-                    PhotonNetwork.Destroy(lifebar);
+                    Destroy(lifebar);
                 }
             }
-            
-            
         }
     }
 }

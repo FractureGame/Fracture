@@ -1,10 +1,12 @@
 ﻿using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class VictoryChecker : MonoBehaviour
 {
-
+    public GameObject buttonPrefab;
     public Activation victory1;
     public Activation victory2;
 
@@ -23,6 +25,7 @@ public class VictoryChecker : MonoBehaviour
         if (victory1.isActivated && victory2.isActivated && !yet)
         {
             Victory();
+            //ChooseLevel();
         }
     }
     
@@ -42,5 +45,24 @@ public class VictoryChecker : MonoBehaviour
         
         GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
         yet = true;
+    }
+
+    private void ChooseLevel()
+    {
+        GameObject parent = GameObject.Find("GameOverPanel");
+        parent.SetActive(true);
+        int i = 0;
+        foreach (KeyValuePair<string,int> kvp in Levels.scenes)
+        {
+            
+            GameObject button2 = Instantiate(buttonPrefab,parent.transform) as GameObject;
+            button2.name = kvp.Key + " Button";
+            button2.GetComponentInChildren<TextMeshProUGUI>().text = kvp.Key;
+            button2.GetComponent<LevelButton>().buildIndex = kvp.Value;
+            Vector3 pos = button2.transform.position;
+            //change x position
+            button2.transform.position = pos;
+            i++;
+        }
     }
 }

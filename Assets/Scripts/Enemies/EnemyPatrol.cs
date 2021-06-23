@@ -1,15 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class EnemyPatrol : MonoBehaviour
 {
     public float speed;
     public Transform[] waypoints;
-
-    public SpriteRenderer graphics;
+    
     private Transform target;
     private int destPoint;
     
-    public int enemyDamage = 30;
 
     // Start is called before the first frame update
     void Start()
@@ -22,12 +21,12 @@ public class EnemyPatrol : MonoBehaviour
     {
         Vector3 dir = target.position - transform.position;
         transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
-
+        
         if(Vector3.Distance(transform.position,target.position)<0.3f)
         {
             destPoint = (destPoint + 1) % waypoints.Length;
             target = waypoints[destPoint];
-            graphics.flipX = !graphics.flipX;
+            transform.Rotate(0, 180, 0);
         }
     }
 }

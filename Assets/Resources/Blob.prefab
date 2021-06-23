@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6642292017263949504}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Blob
   m_TagString: Enemies
   m_Icon: {fileID: 0}
@@ -140,8 +140,6 @@ MonoBehaviour:
   waypoints:
   - {fileID: 6642292018173894505}
   - {fileID: 6642292017638194478}
-  graphics: {fileID: 6642292017535822514}
-  enemyDamage: 30
 --- !u!95 &6642292017535822512
 Animator:
   serializedVersion: 3
@@ -175,6 +173,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 150
   currentHealth: 0
+  enemyDamage: 30
+  bloodParticle: {fileID: 1242838869165408022, guid: 937499e39a50e6832a0634db6ac798bb,
+    type: 3}
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -219,7 +220,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 7.4999995, y: 9.027099}
+    oldSize: {x: 7.5033584, y: 9}
     newSize: {x: 7.4999995, y: 9.027099}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -310,7 +311,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6642292017638194478}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Waypoint2
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
@@ -340,7 +341,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6642292018173894505}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Waypoint1
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
@@ -372,7 +373,7 @@ GameObject:
   - component: {fileID: 6642292018439548280}
   - component: {fileID: 6642292018439548166}
   - component: {fileID: 6642292018439548281}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: WeakSpot
   m_TagString: WeakSpot
   m_Icon: {fileID: 0}

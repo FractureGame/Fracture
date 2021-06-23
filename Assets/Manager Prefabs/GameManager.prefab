@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 304907754040616940}
   m_Layer: 0
-  m_Name: GameManager (Missing Prefab)
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

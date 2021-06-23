@@ -15,15 +15,24 @@ EditorBuildSettings:
     path: Assets/Scenes/LevelSelector.unity
     guid: e7aaa42f60d15d64386e1caeb59488f4
   - enabled: 1
-    path: Assets/Scenes/HLevel1.unity
+    path: Assets/Scenes/Level1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/HLevel2.unity
+    path: Assets/Scenes/Level2.unity
     guid: 11000840b23596d46ae49c7c962a0437
   - enabled: 1
-    path: Assets/Scenes/VLevel3.unity
+    path: Assets/Scenes/Level3.unity
     guid: 77fdf9724a9e9eca3a8a98376722e5a5
   - enabled: 1
-    path: Assets/Scenes/VLevel8.unity
+    path: Assets/Scenes/Level4.unity
     guid: 933e68904feafbf489beef80289f20f5
+  - enabled: 1
+    path: Assets/Scenes/Level5.unity
+    guid: 7ae9798a731e2854a82147ceff54c6a1
+  - enabled: 1
+    path: Assets/Scenes/BossRoom.unity
+    guid: b5246143e52e52af5a0b2a74dcdc37bf
+  - enabled: 1
+    path: Assets/Scenes/Transition.unity
+    guid: b1fccc31cf7661cfea2649d006c08000
   m_configObjects: {}

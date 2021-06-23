@@ -1,21 +1,22 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using Photon.Pun;
-using UnityEditor.Experimental;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
+    private InputManager inputManager;
     [Header("Health")]
     public int maxHealth;
     private int currentHealth;
     public bool isDead;
     public GameObject thisBar;
     public GameObject otherBar;
+    private bool hasPlayedDeathAnim;
 
     [Header("Abilities")]
     public bool canDash;
@@ -26,11 +27,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private BoxCollider2D boxCollider2d;
     [SerializeField] private LayerMask platformLayerMask;
     [SerializeField] private LayerMask dangerLayerMask;
+    [SerializeField] private LayerMask laddersLayerMask;
     
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
     private Vector2 direction;
-    private Vector2 oldDirection = Vector2.right;
+    public Vector2 oldDirection = Vector2.right;
     private bool facingRight = true;
     private Vector2 lastInterestingDir;
 
@@ -58,11 +60,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private float dashCooldownStatus;
     public GameObject dashParticleRight;
     public GameObject dashParticleLeft;
-    
-    [Header("Attack")]
+
+    [Header("Attack")] 
+    public GameObject fouet;
     private bool isAttacking = false;
     public Transform attackPoint;
-    public float attackRange = 0.5f;
+    public float attackRange;
     public LayerMask enemyLayers;
     public int attackDamage = 40;
     private float ATTACK_COOLDOWN = 0.3f;
@@ -88,23 +91,31 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public Animator animator;
     
     [Header("Scene")]
-    private float beginX;
-    private float endX;
-    private float beginY;
-    private float endY;
     private bool horizontal;
+    private bool both;
 
     [Header("Particles Systems")] 
     public ParticleSystem bloodEffect;
     
     
-    [Header(("Damaege"))]
+    [Header(("Damage"))]
     private bool isInvincible = false; // triggered when enemy contact
     private int dangerousTilesDmg = 30;
 
+    [Header("Cameras")] 
+    public GameObject[] cameras;
+    private int cameraIndex;
+    public bool focusOnKingBlob;
+    
+    [Header("BossRoom")]
+    GameObject blobking;
+
     public AudioManager am;
+    private bool hastransitioned;
+    
     private void Start()
     {
+        inputManager = FindObjectOfType<InputManager>();
         am = FindObjectOfType<AudioManager>();
         currentHealth = maxHealth;
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
@@ -114,34 +125,73 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         attackCooldownStatus = 0f;
         animator = GetComponentInChildren<Animator>();
         switchCooldownStatus = 0f;
-        if (SceneManager.GetActiveScene().name[0] == 'H')
-        {
-            horizontal = true;
-        }
-        else if (SceneManager.GetActiveScene().name[0] == 'V')
-        {
-            horizontal = false;
-        }
-
+        cameras = Camera.main.GetComponent<CameraMovement>().cameras;
     }
 
     private void OnDestroy()
     {
-        am.StopSound("Walk");
+        try
+        {
+            am.StopSound("Walk");
+        }
+        catch (Exception)
+        {
+        }
+        
     }
 
+    
+    private bool CheckWinCondition()
+    {
+        HarpieAI[] rocketHarpies = GameObject.Find("RoiBlob").GetComponentInChildren<BossAI>().rocketHarpies;
+        foreach (var harpie in rocketHarpies)
+        {
+            try
+            {
+                if (harpie.name == "Graphics")
+                {
+                    return false;
+                }
+            }
+            catch (MissingReferenceException)
+            {
+
+            }
+        }
+        return true;
+    }
+    
+    
+    
     private void OnCollisionEnter2D(Collision2D other)
     {
+        
+        
+        
         if (other.gameObject.CompareTag("Player")) {
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
         }
 
         if (other.gameObject.CompareTag("Pieds"))
         {
+            Debug.LogFormat("COLLISION : {0}", other.gameObject.transform.parent.parent.name);
+
             Physics2D.IgnoreCollision(other.collider, boxCollider2d);
+            
+        
         }
     }
 
+
+    [PunRPC]
+
+    private void KingBLobFalls()
+    {
+        GameObject.Find("RoiBlob").GetComponentInChildren<Rigidbody2D>().isKinematic = false;
+        GameObject.Find("RoiBlob").GetComponentInChildren<Rigidbody2D>().simulated = true;
+    }
+    
+    
     private void Update()
     {        
         
@@ -163,6 +213,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             return;
         }
 
+
+        if (SceneManager.GetActiveScene().name == "Transition" && !hastransitioned)
+        {
+            if (PhotonNetwork.IsMasterClient && playerBot != null)
+            {
+                PhotonNetwork.AutomaticallySyncScene = true;
+                hastransitioned = true;
+                StreamReader sr = new StreamReader("transition.txt");
+
+                int redirectIndex = Int32.Parse(sr.ReadLine());
+                sr.Close();
+                PhotonNetwork.LoadLevel(redirectIndex);
+            }
+
+            return;
+        }
+        
+        
         GameObject playerTopsign = GameObject.Find("playertop_label");
         if (playerTopsign == null)
         {
@@ -204,25 +272,73 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                 playerTopsign.transform.position = playerTop.transform.position + Vector3.up * 1.5f;
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
             
         }
         
         if (isDead)
         {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                try
+                {
+                    GameObject.Find("Change Level").SetActive(false);
+                    GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+                }
+                catch (Exception)
+                {
+                }
+
+            }
+            if (!hasPlayedDeathAnim && currentHealth <= 0)
+            {
+                animator.SetBool("isDead", true);
+                hasPlayedDeathAnim = true;
+            }
             // PhotonNetwork.Destroy(gameObject);
             return;
         }
-            
 
-        if (Input.GetKeyDown(KeyCode.Space) && nbJump < nbJumpsAllowed)
+
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            try
+            {
+                GameObject.Find("Change Level").SetActive(false);
+                GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            }
+            catch (Exception)
+            {
+            }
+        }
+        else if (PhotonNetwork.PlayerList.Length == 1 && GameObject.Find("Change Level").activeSelf)
+        {
+
+            // Hide Lelvels button + replace Leave button
+            GameObject.Find("Change Level").SetActive(false);
+            GameObject.Find("Leave Button").GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            
+        }
+
+        // if (SceneManager.GetActiveScene().name == "BossRoom")
+        // {
+        //     if (CheckWinCondition() && GameObject.Find("Grid").transform.Find("Destroy2") != null)
+        //     {
+        //         photonView.RPC("KingBLobFalls", RpcTarget.All);
+        //     }
+        // }
+
+        
+        
+        
+        if (inputManager.GetKeyDown("Jump") && nbJump < nbJumpsAllowed)
         {
             jumpTimer = Time.time + jumpDelay;
             nbJump += 1;
         }
 
-        if (canDash && Input.GetKeyDown(KeyCode.LeftShift) && dashCooldownStatus <= 0f)
+        if (canDash && inputManager.GetKeyDown("Dash") && dashCooldownStatus <= 0f)
         {
             isDashing = true;
             dashTime = startDashTime;
@@ -246,7 +362,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
 
 
-        if (Input.GetKeyDown(KeyCode.A) && attackCooldownStatus <= 0f)
+        if (inputManager.GetKeyDown("Attack") && attackCooldownStatus <= 0f)
         {
             Debug.Log("Attacking");
             isAttacking = true;
@@ -259,7 +375,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             switchCooldownStatus -= Time.deltaTime;
         }
         
-        if (Input.GetKeyDown(KeyCode.S) && switchCooldownStatus <= 0f)
+        if (inputManager.GetKeyDown("Switch") && switchCooldownStatus <= 0f)
         {
             Debug.Log("Switching");
             isSwitching = true;
@@ -273,7 +389,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                 playerBot.GetComponent<TrailRenderer>().time = 0.6f;
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 
             }
@@ -310,7 +426,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
 
         
-        if (isWallSliding && Input.GetKeyDown(KeyCode.Space))
+        if (isWallSliding && inputManager.GetKeyDown("Jump"))
         {
             isWallJumping = true;
             isWallSliding = false;
@@ -322,9 +438,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             oldDirection = direction;
         }
-        
+
         if (direction != Vector2.zero)
+        {
             animator.SetBool("isWalking", true);
+            animator.SetTrigger("walk");
+        }
         else
         {
             animator.SetBool("isWalking", false);
@@ -351,16 +470,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (direction != Vector2.zero)
             orientation = direction;
 
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Debug.Log("Damage");
-            TakeDamage(20);
-        }
+        
+        
     }
 
     
+    
     public void TakeDamage(int dmg)
     {
+        dmg /= 2;
         if(!isInvincible)
         {
             ApplyDamage(dmg);
@@ -376,10 +494,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void ChangeBodyVisibility(string playerName, float r, float g, float b, float a)
     {
         GameObject playerSprite = GameObject.Find(playerName).transform.GetChild(1).gameObject;
-        for (int i = 1; i <= 6; i++)
+        for (int i = 0; i < 6; i++)
         {
             playerSprite.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
         }
+
+        if (playerName.StartsWith("PlayerTop"))
+        {
+            for (int i = 1; i < 60; i++)
+            {
+                GameObject.Find("PlayerTop(Clone)").transform.GetChild(1).transform.Find("bone_1").transform.Find("bone_2").transform.Find("bone_4").transform.Find("bone_5").transform.Find("fouet").transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
+            }
+                
+        }
+        else
+        {
+            playerSprite.transform.GetChild(6).GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
+        }
+        
     }
     
     public IEnumerator InvincibilityFlash(string playerName)
@@ -483,7 +615,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public void SetHealthBar(int value, string barName)
     {
         GameObject bar = GameObject.Find(barName);
-        bar.GetComponent<HPBar>().SetHealth(value);
+        if (value < bar.GetComponent<HPBar>().slider.value)
+        {
+            bar.GetComponent<HPBar>().SetHealth(value);
+        }
+        
     }
 
     private void Flip()
@@ -496,13 +632,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void FixedUpdate()
     {
         if (isDead)
+        {
             return;
+        }
 
-
-
-        
-        
-        
         // Check the view
         if (photonView.IsMine == false && PhotonNetwork.IsConnected)
         {
@@ -512,12 +645,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle Movement
         if (!isWallSliding)
         {
-            
             Move();
             modifyPhysics();
         }
         else
         {
+            am.StopSound("Walk");
+            if (nbJump < 2)
+            {
+                nbJump = 0;
+            }
             WallSlide();
         }
         
@@ -533,8 +670,23 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle attack
         if (isAttacking && !isWallSliding)
         {
-            animator.SetTrigger("attack");
+            // animator.SetTrigger("attack");
+            if (PhotonNetwork.IsMasterClient)
+            {
+                try
+                {
+                    // fouet.GetComponent<Animator>().SetTrigger(0);
+                    GameObject.Find("PlayerTop(Clone)").transform.GetChild(1).transform.Find("bone_1").transform.Find("bone_2").transform.Find("bone_4").transform.Find("bone_5").transform.Find("fouet").GetComponent<Animator>().SetTrigger("extendWhip");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogFormat("pb avec le fouet : {0}", e);
+                }
+            }
+            
+            // animator.ResetTrigger("attack");
             animator.SetBool("isAttacking", true);
+            animator.SetTrigger("attack");
             Attack();
             attackCooldownStatus = ATTACK_COOLDOWN;
             isAttacking = false;
@@ -564,33 +716,240 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
 
         Collider2D onTouchEnemy = IsTouchingEnemy();
-        if (onTouchEnemy != null)
+        if (onTouchEnemy != null && onTouchEnemy.gameObject.name != "RoiBlob" && onTouchEnemy.gameObject.transform.parent.name != "RoiBlob")
         {
-            if (onTouchEnemy.transform.parent.name.StartsWith("Harpie"))
-            {
-                TakeDamage(onTouchEnemy.transform.GetComponentInChildren<HarpieAI>().enemyDamage);
-            }
-            else
-            {
-                TakeDamage(onTouchEnemy.transform.GetComponentInChildren<EnemyPatrol>().enemyDamage);
-            }
-            
+            TakeDamage(onTouchEnemy.transform.GetComponentInChildren<Enemy>().enemyDamage);
         }
-        
-        
     }
-    
+
+    private void OnParticleCollision(GameObject other)
+    {
+        TakeDamage(30);
+    }
+
+
+    // [PunRPC]
+    // private void FocusOnBlob()
+    // {
+    //     GameObject[] cameras = GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().cameras;
+    //     if (cameras[5].activeSelf == false)
+    //     {
+    //         cameras[4].SetActive(false);
+    //         cameras[2].SetActive(false);
+    //         cameras[1].SetActive(false);
+    //         cameras[0].SetActive(false);
+    //         cameras[3].SetActive(false);
+    //         cameras[5].SetActive(true);
+    //         GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+    //         GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+    //     }
+    // }
+
     private void LateUpdate()
     {
         if (isDead)
+        {
             return;
-        
+        }
+
+
+
+
         if (photonView.IsMine)
         {
-            if (!horizontal)
+            if (SceneManager.GetActiveScene().name == "BossRoom")
             {
-                Camera.main.GetComponent<CameraMovement>().FollowPlayer(gameObject);
+                if (blobking == null)
+                {
+                    blobking = GameObject.Find("RoiBlob").transform.Find("Graphics").gameObject;
+                }
+
+                if (blobking.GetComponent<BossAI>().abdcef)
+                {
+                    Debug.Log("YES SIR");
+                    cameras[5].SetActive(true);
+                    cameras[4].SetActive(false);
+                    cameras[2].SetActive(false);
+                    cameras[1].SetActive(false);
+                    cameras[0].SetActive(false);
+                    cameras[3].SetActive(false);
+                    cameras[6].SetActive(false);
+                    GameObject.Find("CameraOnBlob").transform.position = new Vector3(blobking.transform.position.x,
+                        blobking.transform.position.y, -10);
+                    GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+                    GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[5].GetComponent<Camera>();
+                }
+                else if (blobking.GetComponent<BossAI>().isEscaping)
+                {
+                    cameras[6].SetActive(true);
+                    cameras[4].SetActive(false);
+                    cameras[2].SetActive(false);
+                    cameras[1].SetActive(false);
+                    cameras[0].SetActive(false);
+                    cameras[3].SetActive(false);
+                    cameras[5].SetActive(false);
+
+                    GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
+                    GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera = cameras[6].GetComponent<Camera>();
+
+                    // YOU LOSE
+                    GameObject gameOverPanel = GameObject.Find("Canvas").transform.Find("GameOverPanel").gameObject;
+                    gameOverPanel.transform.Find("gameover Label").GetComponent<Text>().text = "Game over !";
+                    gameOverPanel.transform.Find("gameover Reason").GetComponent<Text>().text =
+                        "The Blob king escaped !";
+                    gameOverPanel.SetActive(true);
+                    GameObject.Find("PlayerTop(Clone)").GetComponent<PlayerMovement>().NowDead();
+                    GameObject.Find("PlayerBot(Clone)").GetComponent<PlayerMovement>().NowDead();
+                }
+                else if (transform.position.x > 184)
+                {
+                    if (cameras[3].activeSelf == false)
+                    {
+                        cameras[4].SetActive(false);
+                        cameras[2].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[3].SetActive(true);
+                        cameras[5].SetActive(false);
+                        cameras[6].SetActive(false);
+
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera =
+                            cameras[3].GetComponent<Camera>();
+                        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera =
+                            cameras[3].GetComponent<Camera>();
+                    }
+                }
+
+                else if (transform.position.y < -62)
+                {
+                    if (cameras[2].activeSelf == false)
+                    {
+                        cameras[4].SetActive(false);
+                        cameras[3].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[2].SetActive(true);
+                        cameras[5].SetActive(false);
+                        cameras[6].SetActive(false);
+
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera =
+                            cameras[2].GetComponent<Camera>();
+                        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera =
+                            cameras[2].GetComponent<Camera>();
+                    }
+                }
+
+
+                else if (transform.position.y < -11)
+                {
+                    if (cameras[1].activeSelf == false)
+                    {
+                        cameras[4].SetActive(false);
+                        cameras[3].SetActive(false);
+                        cameras[2].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[1].SetActive(true);
+                        cameras[5].SetActive(false);
+                        cameras[6].SetActive(false);
+
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera =
+                            cameras[1].GetComponent<Camera>();
+                        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera =
+                            cameras[1].GetComponent<Camera>();
+                    }
+                }
+
+                else if (transform.position.x > 82)
+                {
+                    if (cameras[0].activeSelf == false)
+                    {
+                        cameras[4].SetActive(false);
+                        cameras[3].SetActive(false);
+                        cameras[2].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(true);
+                        cameras[5].SetActive(false);
+                        cameras[6].SetActive(false);
+
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera =
+                            cameras[0].GetComponent<Camera>();
+                        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera =
+                            cameras[0].GetComponent<Camera>();
+                    }
+                }
+
+                else
+                {
+                    if (cameras[4].activeSelf == false)
+                    {
+
+                        cameras[3].SetActive(false);
+                        cameras[2].SetActive(false);
+                        cameras[1].SetActive(false);
+                        cameras[0].SetActive(false);
+                        cameras[4].SetActive(true);
+                        cameras[5].SetActive(false);
+                        cameras[6].SetActive(false);
+
+                        GameObject.Find("Canvas").GetComponent<Canvas>().worldCamera =
+                            cameras[4].GetComponent<Camera>();
+                        GameObject.Find("LifeBars").GetComponent<Canvas>().worldCamera =
+                            cameras[4].GetComponent<Camera>();
+                    }
+                }
+
+                try
+                {
+                    if (Camera.current.GetComponent<CameraMovement>().horizontalLeft)
+                    {
+                        Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyLeft(gameObject);
+                    }
+
+
+                    if (Camera.current.GetComponent<CameraMovement>().horizontalRight)
+                    {
+                        Camera.current.GetComponent<CameraMovement>().FollowPlayerHorizontallyRight(gameObject);
+                    }
+                    else if (Camera.current.GetComponent<CameraMovement>().verticalUp)
+                    {
+                        Debug.Log("HIIIIIIIIII");
+                        Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
+                    }
+                    else if (Camera.current.GetComponent<CameraMovement>().verticalDown)
+                    {
+                        Camera.current.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+
             }
+            else
+            {
+                if (GameObject.Find("Main Camera").GetComponent<CameraMovement>().horizontalLeft)
+                {
+                    GameObject.Find("Main Camera").GetComponent<CameraMovement>().FollowPlayerHorizontallyLeft(gameObject);
+                }
+
+
+                else if (GameObject.Find("Main Camera").GetComponent<CameraMovement>().horizontalRight)
+                {
+                    GameObject.Find("Main Camera").GetComponent<CameraMovement>().FollowPlayerHorizontallyRight(gameObject);
+                }
+                else if (GameObject.Find("Main Camera").GetComponent<CameraMovement>().verticalUp)
+                {
+                    // Debug.Log("HIIIIIIIIII");
+                    GameObject.Find("Main Camera").GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
+                }
+                else if (GameObject.Find("Main Camera").GetComponent<CameraMovement>().verticalDown)
+                {
+                    GameObject.Find("Main Camera").GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
+                }
+            }
+
+
+
         }
     }
 
@@ -604,6 +963,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
                 extraHeightText, dangerLayerMask);
         }
+        if (boxCastHit.collider == null)
+        { 
+            boxCastHit = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.down,
+                extraHeightText, laddersLayerMask);
+        }
         
         return boxCastHit.collider != null;
     }
@@ -612,11 +976,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         float extraHeightText = 0.2f;
         RaycastHit2D boxCastHitRight = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.right,
-            extraHeightText, platformLayerMask);
+            extraHeightText, laddersLayerMask);
         if (boxCastHitRight.collider != null)
             return Vector2.right;
         RaycastHit2D boxCastHitLeft = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f,Vector2.left,
-            extraHeightText, platformLayerMask);
+            extraHeightText, laddersLayerMask);
         if (boxCastHitLeft.collider != null)
             return Vector2.left;
 
@@ -695,6 +1059,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    // public void SetCamToVerticalUp()
+    // {
+    //     Camera.main.GetComponent<CameraMovement>().FollowPlayerVerticallyUp(gameObject);
+    // }
+    // public void SetCamToVerticalDown()
+    // {
+    //     Camera.main.GetComponent<CameraMovement>().FollowPlayerVerticallyDown(gameObject);
+    // }
     
     public void Jump()
     {
@@ -722,7 +1095,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         jumpTimer = 0;
         lastInterestingDir = direction;
-        am.PlaySound("Jump");
+        try
+        {
+            am.PlaySound("Jump");
+
+        }
+        catch (Exception)
+        {
+        }
     }
 
     [PunRPC]
@@ -794,14 +1174,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Instantiate(bloodEffect, pos, Quaternion.identity);
     }
 
-
-    // private void OnCollisionStay2D(Collision2D other)
-    // {
-    //     if (other.transform.parent.CompareTag("Enemies"))
-    //     {
-    //         animator.ResetTrigger("attack");
-    //     }
-    // }
+    
 
     private void Attack()
     {
@@ -809,27 +1182,21 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
         // Damage them
-
-        List<string> enemyNames = new List<string>();
         
-        Debug.Log(hitEnemies.Length);
+        
+        // Debug.Log(hitEnemies.Length);
         foreach (var enemy in hitEnemies)
         {
-            if (enemyNames.Contains(enemy.name) == false)
+            Debug.Log("We hit " + enemy.transform.parent.name);
+            if (!hasAttacked)
             {
-                enemyNames.Add(enemy.name);
-
-                Debug.Log("We hit " + enemy.transform.parent.name);
-
-                if (!hasAttacked)
-                {
-                    int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
-                    photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
-                    photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
-                    hasAttacked = true;
-                }
+                int enemyHealth =  enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                
+                photonView.RPC("InstantiateAttackParticle", RpcTarget.All, enemy.transform.position);
+                photonView.RPC("DmgEnemy", RpcTarget.All, enemy.transform.parent.gameObject.name, enemyHealth);
             }
         }
+        hasAttacked = true;
     }
 
     [PunRPC]
@@ -843,22 +1210,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
-            Debug.Log(enemyName);
-            GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
+            GameObject bar = GameObject.Find("LifeBars").transform.Find(enemyName + "LifeBar").gameObject;
             bar.GetComponent<HPBar>().SetHealth(0);
             Destroy(bar);
         }
         
     }
 
-    [PunRPC]
-    private void KillEnemy(string enemyName)
-    {
-        Debug.Log(enemyName);
-        GameObject bar = GameObject.Find("Canvas").transform.Find(enemyName + "LifeBar").gameObject;
-        bar.GetComponent<HPBar>().SetHealth(0);
-        Destroy(bar);
-    }
+
 
     private void OnDrawGizmos()
     {
@@ -907,5 +1266,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         
         return boxCastHit.collider;
     }
+
+    public bool GetAttack()
+    {
+        return isAttacking;
+    }
+    
 }
 
