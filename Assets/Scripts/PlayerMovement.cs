@@ -65,7 +65,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public GameObject fouet;
     private bool isAttacking = false;
     public Transform attackPoint;
-    public float attackRange = 1.4f;
+    public float attackRange;
     public LayerMask enemyLayers;
     public int attackDamage = 40;
     private float ATTACK_COOLDOWN = 0.3f;
@@ -498,6 +498,20 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             playerSprite.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
         }
+
+        if (playerName.StartsWith("PlayerTop"))
+        {
+            for (int i = 1; i < 60; i++)
+            {
+                GameObject.Find("PlayerTop(Clone)").transform.GetChild(1).transform.Find("bone_1").transform.Find("bone_2").transform.Find("bone_4").transform.Find("bone_5").transform.Find("fouet").transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
+            }
+                
+        }
+        else
+        {
+            playerSprite.transform.GetChild(6).GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
+        }
+        
     }
     
     public IEnumerator InvincibilityFlash(string playerName)
@@ -656,18 +670,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // Handle attack
         if (isAttacking && !isWallSliding)
         {
-            animator.SetTrigger("attack");
-
-            try
+            // animator.SetTrigger("attack");
+            if (PhotonNetwork.IsMasterClient)
             {
-                // fouet.GetComponent<Animator>().SetTrigger("extendWhip");
+                try
+                {
+                    // fouet.GetComponent<Animator>().SetTrigger(0);
+                    GameObject.Find("PlayerTop(Clone)").transform.GetChild(1).transform.Find("bone_1").transform.Find("bone_2").transform.Find("bone_4").transform.Find("bone_5").transform.Find("fouet").GetComponent<Animator>().SetTrigger("extendWhip");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogFormat("pb avec le fouet : {0}", e);
+                }
             }
-            catch (Exception e)
-            {
-                Debug.LogFormat("pb avec le fouet : {0}", e);
-                throw;
-            }
-            
             
             // animator.ResetTrigger("attack");
             animator.SetBool("isAttacking", true);
